@@ -146,7 +146,9 @@ P1–P3 sit 120° apart around the body's rewind bore and act on the rewind knob
 
 The holes are drawn Ø2.2 × 3.1 mm with a Ø2.7 × 0.57 mm flange seat. With a 0.4 mm nozzle they print close to Ø2.0, which gives a press fit. Push the plunger body-first from inside the bore with a flat-ended rod until the flange sits in its seat and is level with the bore wall. If one is loose, put a small drop of CA on its body before pressing it in. Keep glue away from the flange and the ball, or the ball will stick.
 
-![Take-up bore in the top cover with three plunger holes](docs/fig2_cover_plungers.png)
+![Rewind bore in the body, three plunger holes 120 degrees apart](docs/fig3_rewind_plungers.png)
+
+![Take-up bore in the top cover, the same pattern in the cover](docs/fig2_cover_plungers.png)
 
 ### Magnets
 
