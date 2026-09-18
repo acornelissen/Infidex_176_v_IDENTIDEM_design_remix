@@ -8,6 +8,10 @@
 >
 > Print the original first if you want the camera as Denis designed it. Attribution stays with him; please keep it with any further remix.
 
+## Focusing scale generator
+
+**[infidex176v-focus-scale.identidem.design](https://infidex176v-focus-scale.identidem.design/)** makes a focusing scale for your own lens. Give it the focal length, the helicoid thread lead and your focus ring diameter, and it returns the scale as SVG or Gerber, marked from infinity down to 1.44 m, ready to print as a decal or etch as a plate.
+
 ## What this remix is
 
 The camera is unchanged where it counts: same 3:1 panoramic frame on 35mm film, same Mamiya TLR taking lens, same overall shape. What changed is how it goes together and how you know where you are on the roll.
