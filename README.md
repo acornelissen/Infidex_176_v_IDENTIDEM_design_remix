@@ -47,10 +47,11 @@ Specific to this remix:
 
 | File | What it is |
 |---|---|
-| `Infidex176V-IDENTIDEM.design-remix.step` | Full assembly, STEP, for any CAD package |
-| `Infidex176V-IDENTIDEM.design-remix.f3d` | Fusion source for the camera |
-| `Infidex176V-IDENTIDEM.design-remix-counter-train.f3d` | Fusion source for the parametric counter gear train |
-| `Infidex176V-IDENTIDEM.design-remix.3mf` | Print-ready project, parts laid out |
+| `cad/Infidex176V-IDENTIDEM.design-remix.step` | Full assembly, STEP, for any CAD package |
+| `cad/Infidex176V-IDENTIDEM.design-remix.f3d` | Fusion source for the camera |
+| `cad/Infidex176V-IDENTIDEM.design-remix-counter-train.f3d` | Fusion source for the parametric counter gear train |
+| `3mf/Infidex176V-IDENTIDEM.design-remix.3mf` | Print-ready project, all parts laid out across nine plates |
+| `3mf/parts/` | One 3MF per part, for reprinting a single part |
 | `Infidex-Hardware-Map.pdf` | Hardware placement and assembly guide, 6 pages |
 | `tools/InfidexCounterTrain/` | Fusion script that rebuilds the counter train from parameters, see [`tools/README.md`](tools/README.md) |
 | `docs/` | Section drawings used in this README |
@@ -67,6 +68,20 @@ Print settings follow the original profile and work well in PETG:
 - The one-piece body prints as in the original if you would rather not glue
 
 The counter train gears are the finest parts in the model. Print them with the rest of the camera, check the teeth before assembly, and reprint if a tooth is short.
+
+### Parts
+
+Print the whole camera from the project file in `3mf/`, which has everything arranged across nine plates with the per-part settings already set. `3mf/parts/` holds the same 32 parts one to a file, each in the orientation it is meant to print in and sitting on the bed, for when you only need to reprint one.
+
+Some parts are a choice rather than a set. Print one from each of these:
+
+- **Body:** `body-solid`, or `body-top` and `body-bottom` together
+- **Door:** `door-var-1` to `door-var-4`
+- **Viewfinder:** `viewfinder-var-1` or `viewfinder-var-2`
+- **Focus ring:** `helicoid-focus-ring-ribs` or `helicoid-focus-ring-no-ribs`
+- **Helicoid inner ring:** `helicoid-inner-ring-for-80mm-lens` or `helicoid-inner-ring-for-55mm-lens`, to suit your taking lens
+
+Two file names differ from the words used in the hardware guide: the ratchet-inner is `inner-ratchet`, and the split collar is `takeup-washer-stopper`.
 
 ## Hardware
 
