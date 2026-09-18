@@ -8,8 +8,6 @@
 >
 > Print the original first if you want the camera as Denis designed it. Attribution stays with him; please keep it with any further remix.
 
-![The remixed camera, back three-quarter view](docs/hero_iso.png)
-
 ## What this remix is
 
 The camera is unchanged where it counts: same 3:1 panoramic frame on 35mm film, same Mamiya TLR taking lens, same overall shape. What changed is how it goes together and how you know where you are on the roll.
@@ -24,8 +22,6 @@ The camera is unchanged where it counts: same 3:1 panoramic frame on 35mm film, 
 | Pressure plate | Foam | Printed leaf-spring platen, bonded to the door at both ends |
 | Fixings | Glue and press fits | Heat-set inserts and screws throughout |
 | Viewfinder | Separate | Cold-shoe viewfinder coupled to the focus helicoid |
-
-![Front three-quarter view with the lens standard and viewfinder](docs/hero_back.png)
 
 ## Specifications
 
