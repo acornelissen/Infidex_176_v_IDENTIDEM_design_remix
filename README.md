@@ -17,7 +17,7 @@ The camera is unchanged where it counts: same 3:1 panoramic frame on 35mm film, 
 | Body | One piece | Reworked, and supplied two ways: in one piece, or as two halves glued together with a light-tight lip and alignment pegs |
 | Frame counting | Count as you wind | Sprocket-driven gear train and a numbered counter face, starting at 25 |
 | Rewind knob | Spring detent | Three ball plungers |
-| Take-up coupling | Dog coupling | Ratchet-inner with three ball plungers for wind and rewind, magnets optional |
+| Take-up coupling | Dog coupling | Inner-ratchet with three ball plungers for wind and rewind, magnets optional |
 | Spool retention | Glued washer | Printed split collar (`takeup-washer-stopper`) that clicks into the groove |
 | Pressure plate | Foam | Printed leaf-spring platen, bonded to the door at both ends |
 | Fixings | Glue and press fits | Heat-set inserts and screws throughout |
@@ -81,7 +81,9 @@ One file name differs from the words used in the hardware guide: the split colla
 
 ## Hardware
 
-Full placement, hole sizes and fitting order are in [`Infidex-Hardware-Map.pdf`](Infidex-Hardware-Map.pdf). In short:
+Everything below was measured from the CAD. [`Infidex-Hardware-Map.pdf`](Infidex-Hardware-Map.pdf) is the same information with section drawings and the exact position of every hole; this README carries the procedure, the PDF carries the coordinates.
+
+### What to buy
 
 | Item | Qty | Where |
 |---|---|---|
@@ -93,51 +95,141 @@ Full placement, hole sizes and fitting order are in [`Infidex-Hardware-Map.pdf`]
 | M2 × 6 cap or countersunk screw | 1 | Sprocket gear to sprocket |
 | M2 × 4 thumbscrew | 1 | Counter face |
 | D2×3 flanged ball plungers | 6 | Rewind bore ×3, take-up bore ×3 |
-| Ø5 × 2 magnet | 1 | Ratchet-inner (optional, recommended) |
+| Ø5 × 2 magnet | 1 | Inner-ratchet (optional, recommended) |
 | Ø4 × 2 magnets | 2 | Take-up spool head (optional, recommended) |
 | 3/8" to 1/4" tripod bushing | 1 | Base, in the printed 3/8"-16 socket |
 
-Fit the inserts first, then the plungers, then the magnets, so the soldering iron never reaches a magnet or a pressed-in plunger.
+Carried over from Denis's build, not in the printed files, and still needed:
 
-These are carried over from Denis's build and are not in the printed files, but the remix still needs all of them: black flocked self-adhesive paper for the film chambers and the inside of the door, black light-seal foam where the door closes, 0.6–0.8 mm rigid stainless wire for the springs and linkages, and superglue. Flocking and foam go on last, after a dry run with the back open.
+| Item | What for |
+|---|---|
+| Black flocked self-adhesive paper | Lining the film chambers and the inside of the door to kill reflections and stray light |
+| Black light-seal foam | Sealing the door where it closes onto the body |
+| Rigid stainless wire, 0.6–0.8 mm | Springs and linkages in the original mechanism |
+| Superglue (CA) | Magnets, the pressure plate pads, and the body seam on the two-piece body |
+
+## Assembly
+
+### Fitting order
+
+1. **All heat-set inserts first** (I1–I11 in the body, I12 in the counter gear, I13 in the inner-ratchet, I14 in the sprocket), before anything else is fitted to those parts. The soldering iron can't then hurt a magnet or loosen a plunger.
+2. **Ball plungers** once the body and cover have cooled: P1–P3 in the body's rewind bore, P4–P6 in the cover's take-up bore.
+3. **Magnets** (optional, highly recommended), checking polarity before gluing. M1 goes into the inner-ratchet from below, after I13 is in.
+4. **Pressure plate into the door.** Let the glue cure before closing the door on it.
+5. **Take-up spool and printed collar:** hold the split collar inside the body under the take-up bore, then lower the spool from the top through it until the collar clicks into the groove.
+6. **Two-piece body only:** glue the halves together once their inserts, plungers and magnets are in.
+7. **Screws:** top cover, cold shoe, lens standard, advance knob, then the counter face.
+8. **Flocking and foam last,** after a dry run with the back open. The tripod bushing can go in whenever.
+
+### Heat-set inserts
+
+Fourteen in all, every one 4 mm long in a hole 4.0 mm deep. Buy M3 × 4, not the common 5.7 mm length.
+
+- **I1–I5**, M2, top face, for the top cover
+- **I6–I7**, M2, top face, for the cold shoe
+- **I8–I11**, M3, front face, for the lens standard
+- **I12**, M2, counter gear hub
+- **I13**, M2, top of the inner-ratchet
+- **I14**, M2, top of the sprocket
+
+For PETG, start the insert tip at about 230 °C. Let the insert sink under its own weight with light pressure, keep it square, and stop when it's flush. Face-down on a flat plate while it's still warm is an easy way to square it up. Stand the body on its base for I1–I7 and lay it on its door side for I8–I11.
+
+I14 goes into the top of the sprocket, and the sprocket gear screws down onto it. I13's hole goes right through into the M1 magnet pocket underneath, so press it flush with the top and check from below that no melted plastic has pushed into the magnet pocket.
 
 ![Body from above with insert and plunger positions](docs/fig1_body_top.png)
 
-### Screws and inserts in section
-
-Each screw length is the longest that stays inside its insert without bottoming out. The guide shows the head seats and hole bottoms taken straight from the CAD.
-
-![Screws seated in their inserts](docs/fig9_screws.png)
-
-### Take-up axis
-
-The advance knob screws down into the inner-ratchet, which sits over the spool head. The optional magnets hold the two together, and the split collar under the body stops the spool lifting.
-
-![Section through the take-up axis](docs/fig5_takeup_stack.png)
-
 ### Ball plungers
 
-Three plungers around the rewind bore and three around the take-up bore, each fitted from inside the bore with the ball pointing at the shaft.
+All six are D2×3 flanged plungers (Ø2 body, Ø2.5 nose flange, Ø1.5 ball) in radial holes. Each hole opens into a shaft bore and stops short of the outside wall, so **every plunger goes in from inside the bore**, flange in its seat flush with the bore wall and ball pointing at the shaft.
+
+P1–P3 sit 120° apart around the body's rewind bore and act on the rewind knob. P4–P6 repeat the pattern in the top cover's take-up bore and ride in the inner-ratchet's W and R detent grooves.
+
+The holes are drawn Ø2.2 × 3.1 mm with a Ø2.7 × 0.57 mm flange seat. With a 0.4 mm nozzle they print close to Ø2.0, which gives a press fit. Push the plunger body-first from inside the bore with a flat-ended rod until the flange sits in its seat and is level with the bore wall. If one is loose, put a small drop of CA on its body before pressing it in. Keep glue away from the flange and the ball, or the ball will stick.
 
 ![Take-up bore in the top cover with three plunger holes](docs/fig2_cover_plungers.png)
 
+### Magnets
+
+Optional, but highly recommended. The camera works without them; they hold the inner-ratchet firmly down on the spool head. All three sit on the take-up axis, and when the camera is assembled the Ø5×2 faces the Ø4×2 stack across a gap of about 0.2 mm.
+
+| Ref | Magnet | Pocket | Fits from |
+|---|---|---|---|
+| M1 | Ø5 × 2 | Ø5.1 × 2.1 | Underside of the inner-ratchet, pressed to the pocket floor |
+| M2 | Ø4 × 2 | Ø4.1 × 4.2 | Top of the spool head, at the bottom of the pocket |
+| M3 | Ø4 × 2 | same pocket | On top of M2, level with the head |
+
+**Polarity.** The top face of the M2/M3 stack has to *attract* the exposed face of M1. Let M2 and M3 snap together into a stack first. Then touch M1 to the top of the stack and mark M1's exposed face with a pen dot before separating them. Glue M1 with the dot facing out of its pocket and the stack with its free face up, then check the attraction with the parts dry-fitted before the glue cures.
+
+### Screws
+
+Each length is the longest standard screw that stays inside its insert without bottoming out, worked out from the head seat, the clamped part and the depth of the hole below.
+
+| Ref | Screw | Qty | Holds | Into | Room below the tip | Thread in insert |
+|---|---|---|---|---|---|---|
+| S1–S5 | M2×6 countersunk (ISO 10642) | 5 | Top cover to body | I1–I5 | 0.3 mm | 3.7 mm |
+| S6–S7 | M2×4 countersunk (ISO 10642) | 2 | Cold shoe to body | I6–I7 | 1.3 mm | 2.7 mm |
+| S8–S11 | M3×4 socket cap (ISO 4762) or countersunk | 4 | Lens standard to body | I8–I11 | 1.5 mm | 2.5 mm |
+| S12 | M2×6 countersunk (ISO 10642) | 1 | Advance knob to inner-ratchet | I13 | 1.65 mm to M1 | 2.35 mm |
+| S13 | M2×4 thumbscrew, flat underside | 1 | Counter face to counter gear | I12 | 1.1 mm | 2.9 mm |
+| S14 | M2×6 socket cap (ISO 4762) or countersunk | 1 | Sprocket gear to sprocket | I14 | 0.25 mm | 4.0 mm |
+
+The cold shoe (M2×4) and lens standard (M3×4) lengths are proven on the printed camera and leave plenty of clearance. The M2×6 cover and sprocket screws are the longest that fit: the next size up bottoms out. S14 takes the full depth of its insert either way, so run it down gently and stop when it seats. Don't go longer on S12 either, as an M2×8 would reach 0.35 mm into the M1 magnet pocket.
+
+On heads: the knob's seat for S12 is a Ø3.7 × 90° countersink 0.75 mm deep, so a standard M2 flat head (Ø3.8) finishes level with the knob face. The countersinks in the cover and cold shoe are Ø3.7–3.8 at 90°, so M2 flat heads finish flush or a hair proud. The lens-standard counterbores are Ø7.3 × 3.1 deep, so either an M3 cap head (Ø5.5 × 3) or an M3 countersunk head sits below the surface.
+
+![Screws seated in their inserts](docs/fig9_screws.png)
+
+### Counter face
+
+The face starts at 25 and counts up: 25 is the loading position, then winding on takes you to 1, 2, 3 and so on. There is no zero. Lay the face on the hub with 25 against the body marker and finger-tighten S13. The face grips on friction, so to reset it for a new roll you loosen the thumbscrew, turn 25 back to the marker, and tighten again. Don't use thread lock. The head sits in a Ø5.8 × 0.5 mm recess, so a head no bigger than Ø5.8 sits down in the face.
+
+### Take-up spool and collar
+
+C1 is a printed part, not a bought one, named `takeup-washer-stopper` in the files. It is a split ring (Ø9.45 bore × Ø12.95 × 1.7 mm) that stops the take-up spool lifting out of the body, sitting in the groove just below the spool head (Ø9.3 at the root), directly under the body's take-up bore. The collar is wider than the bore, so once it's in, the spool can't pull up through the top.
+
+1. Open the body and hold the collar inside it, directly under the take-up bore, with the split facing the lens side.
+2. Lower the take-up spool into the body from the top. As it comes down, its bottom end passes through the collar, and the split lets the collar open over the Ø10.8 barrel.
+3. Keep lowering the spool until the collar snaps closed in the groove below the head, then spin the spool to check it turns freely without lifting.
+
+The advance knob screws down into the inner-ratchet, which sits over the spool head. The optional magnets hold the two together, and the collar under the body stops the spool lifting.
+
+![Section through the take-up axis](docs/fig5_takeup_stack.png)
+
 ### Pressure plate
 
-One printed part: a rigid platen on a single thin leaf, glued to the door at the two end pads only. Closing the door flexes the leaf and that flex is the pressure on the film.
+G1 is one printed part: a rigid platen on a single thin leaf. The leaf joins the platen in the middle and has a bond pad at each end. **Glue only the two end pads to the door**, never the platen or the middle of the leaf. The door's inside face has a shallow 0.2 mm recess (83.6 × 33.5 mm) that locates the plate, leaving about 1 mm spare at each end and 0.25 mm top and bottom.
+
+Clean both surfaces with IPA. Put a thin line of CA or a strip of thin double-sided tape on each end pad only. Seat the plate square in the recess with the platen facing the film, and press on the pads alone for 30 seconds. Keep glue out of the gap under the leaf, or the plate stops flexing.
+
+With the door open, the leaf holds the platen 1.65 mm proud of its working position. Closing the door on loaded film pushes the platen back onto the film rails and flexes the leaf by about 0.8 mm, which gives the pressure on the film. Don't shim or glue anything under the leaf to take up that gap.
 
 ![Pressure plate in the door](docs/fig10_pressure_plate.png)
 
+### Two-piece body seam
+
+Skip this if you printed the one-piece body. The two halves meet on a flat seam about 34 mm above the base. A 2 mm ridge on the bottom half runs right around the film chambers and the film path; the top half has the matching groove. Light arriving along the glue line has to climb over that step to reach the film, which is why only the chambers and the path are ridged and the rest of the seam is plain.
+
+Four alignment pegs set the halves: Ø3.8 × 2 mm posts inside the top half's groove, dropping into Ø4 mm holes in the ridge. Dry-fit before any glue. The halves should sit down with no rock and no light gap at the seam; if they rock, the ridge is not seating and the groove needs a clean-up rather than more clamp.
+
+Fit every insert, plunger and magnet first, while the halves are still separate and easy to hold. Then run a thin bead of CA or epoxy on the flat land outside the ridge, press the halves together on the pegs, and clamp lightly until it cures. Keep glue off the ridge crest and out of the groove, or the halves will stand proud and leave the gap you were trying to close.
+
+### Tripod socket
+
+The socket is printed, not an insert: a 3/8"-16 thread moulded straight into the base on the centreline, five turns and 8.5 mm deep. Nothing is pressed or glued into it. Most tripods and quick-release plates are 1/4"-20, so fit a 3/8" to 1/4" bushing and leave it in.
+
+Start the bushing by hand and stop as soon as it seats. A printed thread strips if you drive it with a tool, and a 1/4" screw run straight into the 3/8" hole will tear it out. If the thread is tight from the print, run the bushing in and out a couple of times to clear it rather than cutting it.
+
+### Light seals and wire
+
+Flocking and foam go in last, after everything else is fitted and the camera has been dry-run with the back open. They are the one thing you cannot fit around.
+
 ## Body: one piece or two
 
-Both bodies are remixed parts, not the original. The one-piece body carries all the changes above and needs no gluing. The two-piece body is the same part split horizontally through the middle, which suits a smaller printer and puts both halves flat on the bed, seam face down.
-
-If you print the two-piece body, the halves meet on a flat seam about 34 mm above the base. A 2 mm ridge on the bottom half runs into a groove in the top half all the way around the film chambers and the film path, so light coming in along the glue line has to climb over a step to reach the film. Four Ø3.8 × 2 mm pegs in the top half's groove drop into Ø4 mm holes in the ridge and set the halves. Fit every insert, plunger and magnet while the halves are still apart, then glue on the flat land outside the ridge. Dry-fit first: if the halves rock, the ridge is not seating.
-
-The hardware is the same either way.
+Both bodies are remixed parts, not the original. The one-piece body carries all the changes above and needs no gluing. The two-piece body is the same part split horizontally through the middle, which suits a smaller printer and puts both halves flat on the bed, seam face down. See [Two-piece body seam](#two-piece-body-seam) for how the halves go together. The hardware is the same either way.
 
 ## Parametric counter train
 
-`Infidex176V-IDENTIDEM.design-remix-counter-train.f3d` holds the counter gear train as a parametric model, so you can change it without redrawing the gears. The sprocket and dial axes stay fixed where the body needs them; the two idler axes follow from the centre distances. Module, tooth counts, profile shift, backlash, face width and bores are all parameters, so a different reduction or a coarser module is a table edit and a rebuild.
+`cad/Infidex176V-IDENTIDEM.design-remix-counter-train.f3d` holds the counter gear train as a parametric model, so you can change it without redrawing the gears. The sprocket and dial axes stay fixed where the body needs them; the two idler axes follow from the centre distances. Module, tooth counts, profile shift, backlash, face width and bores are all parameters, so a different reduction or a coarser module is a table edit and a rebuild.
 
 Start from the values in the file if you are only nudging it: the train is 50:1 in four meshes and the gears are already near the limit of what a 0.4 mm nozzle resolves.
 
