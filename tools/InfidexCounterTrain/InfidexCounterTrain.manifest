@@ -1,0 +1,8 @@
+{
+  "autodeskProduct": "Fusion360",
+  "type": "script",
+  "author": "Albert Cornelissen",
+  "description": {"": "Parametric Infidex frame-counter gear train (ct_* user parameters)"},
+  "supportedOS": "windows|mac",
+  "editEnabled": true
+}
