@@ -20,7 +20,7 @@ The camera is unchanged where it counts: same 3:1 panoramic frame on 35mm film, 
 | Frame counting | Count as you wind | Sprocket-driven gear train and a numbered counter face, starting at 25 |
 | Rewind knob | Spring detent | Three ball plungers |
 | Take-up coupling | Dog coupling | Ratchet-inner with three ball plungers for wind and rewind, magnets optional |
-| Spool retention | Glued washer | Printed split collar that clicks into the groove |
+| Spool retention | Glued washer | Printed split collar (`takeup-washer-stopper`) that clicks into the groove |
 | Pressure plate | Foam | Printed leaf-spring platen, bonded to the door at both ends |
 | Fixings | Glue and press fits | Heat-set inserts and screws throughout |
 | Viewfinder | Separate | Cold-shoe viewfinder coupled to the focus helicoid |
@@ -81,7 +81,7 @@ Some parts are a choice rather than a set. Print one from each of these:
 - **Focus ring:** `helicoid-focus-ring-ribs` or `helicoid-focus-ring-no-ribs`
 - **Helicoid inner ring:** `helicoid-inner-ring-for-80mm-lens` or `helicoid-inner-ring-for-55mm-lens`, to suit your taking lens
 
-Two file names differ from the words used in the hardware guide: the ratchet-inner is `inner-ratchet`, and the split collar is `takeup-washer-stopper`.
+One file name differs from the words used in the hardware guide: the split collar is `takeup-washer-stopper`.
 
 ## Hardware
 
@@ -89,7 +89,7 @@ Full placement, hole sizes and fitting order are in [`Infidex-Hardware-Map.pdf`]
 
 | Item | Qty | Where |
 |---|---|---|
-| M2 × 4 heat-set inserts | 10 | Top cover ×5, cold shoe ×2, counter gear, ratchet-inner, sprocket |
+| M2 × 4 heat-set inserts | 10 | Top cover ×5, cold shoe ×2, counter gear, inner-ratchet, sprocket |
 | M3 × 4 heat-set inserts | 4 | Lens standard, front face |
 | M2 × 6 countersunk screws | 6 | Top cover ×5, advance knob |
 | M2 × 4 countersunk screws | 2 | Cold shoe |
@@ -115,7 +115,7 @@ Each screw length is the longest that stays inside its insert without bottoming 
 
 ### Take-up axis
 
-The advance knob screws down into the ratchet-inner, which sits over the spool head. The optional magnets hold the two together, and the split collar under the body stops the spool lifting.
+The advance knob screws down into the inner-ratchet, which sits over the spool head. The optional magnets hold the two together, and the split collar under the body stops the spool lifting.
 
 ![Section through the take-up axis](docs/fig5_takeup_stack.png)
 
