@@ -83,6 +83,17 @@ Some parts are a choice rather than a set. Print one from each of these:
 
 One file name differs from the words used in the hardware guide: the split collar is `takeup-washer-stopper`.
 
+### Lens mount alternatives
+
+The helicoid in this repo is one of four mounts Denis offers, and the others are worth a look before you commit: **[STL/Lens mount](https://github.com/max05210238/Infidex_176_V/tree/Main/STL/Lens%20mount)** has a classic cone, a tube mount, and an older cone for the T-22 lens alongside the focusing helicoid. The cone and tube install the same way as each other, so swapping is not a big job.
+
+Inside **[STL/Lens mount/Focusing Helicoid](https://github.com/max05210238/Infidex_176_V/tree/Main/STL/Lens%20mount/Focusing%20Helicoid)** there is also a **blue dot set, the `shorter-2mm` files**, which take 2 mm out of the helicoid:
+
+- `Helicoid_FOCUS_ring_ribs_shorter-2mm.stl` or `Helicoid_FOCUS_ring_NO_ribs_shorter-2mm.stl`
+- `Helicoid_INNER_ring_80mm_shorter-2mm.stl`
+
+Print the shortened focus ring and inner ring as a pair, not mixed with the full-length ones. The same folder has taller and lower lens boards if your lens will not reach infinity on the standard one.
+
 ## Hardware
 
 Everything below was measured from the CAD. [`Infidex-Hardware-Map.pdf`](Infidex-Hardware-Map.pdf) is the same information with section drawings and the exact position of every hole; this README carries the procedure, the PDF carries the coordinates.
@@ -113,6 +124,8 @@ Carried over from Denis's build, not in the printed files, and still needed:
 | Superglue (CA) | Magnets, the pressure plate pads, and the body seam on the two-piece body |
 
 ## Assembly
+
+**Read [Denis's assembly guide](https://github.com/max05210238/Infidex_176_V/blob/Main/docs/ASSEMBLY.md) first.** It is the build, start to finish: body, lens mount, film transport, rewind spring and door, finishing parts. What follows here covers only what this remix changes, and assumes you have his guide open beside it.
 
 ### Fitting order
 
