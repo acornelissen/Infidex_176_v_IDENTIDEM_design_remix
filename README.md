@@ -249,10 +249,11 @@ The remix chamber is a different size from the original, so the templates in Den
 | B | 1 | 70.60 × 23.28 | Floor, tab towards the lens |
 | R1 | 1 | 70.60 × 9.10 | Rear wall below the film gate (optional) |
 | R2 | 1 | 70.60 × 4.75 | Rear wall above the film gate (optional) |
+| P | 1 | 77.08 × 32.63 | Pressure plate, on the platen's film face |
 
 The chamber is 72.0 mm wide, 39.6 mm high and 21.2 mm deep at the corners, with a 58.5 mm recess at the front centre that the tabs on T and B reach into. The pieces allow for 0.5 mm flocked paper and 0.2 mm clearance per edge, so fit them in the order above: the sides first, then T and B between them, then R1 and R2. Leave the film gate opening and its throat bare, or the paper will crop the frame. Both bodies have the same chamber, and on the two-piece body the side pieces also cover the seam.
 
-There is no pressure plate piece. The printed platen presses directly on the film, and flocking on it would add its thickness to the leaf's designed flex.
+P covers the film face of the pressure plate platen (77.48 × 33.03 mm), leaving 0.2 mm of platen showing all round so no edge overhangs to catch the film. Stick it on before the plate goes into the door, and press it flat so the edges don't lift.
 
 ### Light seals and wire
 
