@@ -198,6 +198,12 @@ On heads: the knob's seat for S12 is a Ø3.7 × 90° countersink 0.75 mm deep, s
 
 ![Screws seated in their inserts](docs/fig9_screws.png)
 
+### Counter train
+
+The four counter gears drop onto printed pins in the body, and each pin runs nearly the full height of its gear so a gear cannot tilt out of mesh. The top cover sits on the floor of its recess once it is screwed down, and every gear keeps at least 0.3 mm of end float in that position. The dial wheel is centred on the counter face by its hub, and the face turns in the cover on a close-running step.
+
+Before fitting the counter face, screw the cover down and turn the sprocket by hand. The train should run freely with no tight spots. If it only binds with the cover on, look for sagged bridging on the cover's pocket ceilings and clean it up rather than backing the screws off.
+
 ### Counter face
 
 The face starts at 25 and counts up: 25 is the loading position, then winding on takes you to 1, 2, 3 and so on. There is no zero. Lay the face on the hub with 25 against the body marker and finger-tighten S13. The face grips on friction, so to reset it for a new roll you loosen the thumbscrew, turn 25 back to the marker, and tighten again. Don't use thread lock. The head sits in a Ø5.8 × 0.5 mm recess, so a head no bigger than Ø5.8 sits down in the face.
