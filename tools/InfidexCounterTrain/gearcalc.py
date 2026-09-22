@@ -32,9 +32,9 @@ class TrainSpec:
     pressure_angle_deg: float = 20.0
     pinion_teeth: int = 12
     wheel_teeth: tuple = (32, 30, 30, 36)       # one per mesh, sprocket -> dial
-    thinning: float = 0.125
+    thinning: float = 0.10
     pinion_shift: float = 0.4                    # wheels get the opposite shift
-    pinion_tip_reduction: float = 0.21
+    pinion_tip_reduction: float = 0.10
     wheel_tip_reduction: float = 0.04
     sprocket_axis: tuple = (73.20, -45.21)
     dial_axis: tuple = (67.70, -63.94)
@@ -131,6 +131,18 @@ def collisions(t: TrainSpec):
             if gap < t.clearance:
                 problems.append((ai, ki, aj, kj, round(gap, 3)))
     return problems
+
+
+def contact_ratio(t: TrainSpec, stage, spread=0.0):
+    """Transverse contact ratio of mesh `stage`, with the axes `spread` mm further
+    apart than designed (print and fit tolerance). Below 1.0 the teeth lose contact."""
+    p, w = t.pinion(), t.wheel(stage)
+    alpha = math.radians(t.pressure_angle_deg)
+    a0 = centre_distances(t)[stage]
+    a = a0 + spread
+    alpha_w = math.acos(a0 / a * math.cos(alpha))
+    reach = sum(math.sqrt((tip_diameter(g) / 2) ** 2 - (g.pitch_r * math.cos(alpha)) ** 2) for g in (p, w))
+    return (reach - a * math.sin(alpha_w)) / (math.pi * t.module * math.cos(alpha))
 
 
 def backlash(t: TrainSpec, stage):

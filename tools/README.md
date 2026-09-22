@@ -50,4 +50,4 @@ pip install pytest shapely
 pytest
 ```
 
-27 tests cover the ratio, centre distances, the solved axis positions, clash detection, tooth geometry, and that meshing outlines do not overlap through a full pitch.
+40 tests cover the ratio, centre distances, the solved axis positions, clash detection, tooth geometry, the contact ratio of every mesh (at least 1.3 as drawn, and still 1.0 with the axes 0.2 mm apart), and that meshing outlines do not overlap through a full pitch.

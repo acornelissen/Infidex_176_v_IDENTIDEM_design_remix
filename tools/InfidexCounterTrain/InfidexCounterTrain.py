@@ -1,6 +1,6 @@
 """Fusion script: build the Infidex counter gear train from the ct_* user parameters.
 
-First run creates the parameters with the rev5 values. Edit them in
+First run creates the parameters with the values of the train in this repository. Edit them in
 Modify > Change Parameters, then run the script again to rebuild.
 """
 import importlib
