@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Infidex Hardware Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<style>
+  /* Source for Infidex-Hardware-Map.pdf. Build with: python3 docs/hardware-map/build.py */
+  @page { size: A4; margin: 14mm 19.4mm 17mm; }
+  :root {
+    --ink: #121212; --text: #3a3a3a; --muted: #6b6b6b; --rule: #dcdcdc; --panel: #f2f2f2;
+    --i: #0072b2; --s: #7f8a93; --p: #e69f00; --m: #009e73; --c: #f2c49b; --g: #cc79a7; --t: #56b4e9; --o: #d55e00;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; background: #fff; color: var(--text); font: 6.67pt/1.58 Inter, sans-serif; }
+  a { color: var(--ink); text-decoration: underline; text-underline-offset: 1.5pt; text-decoration-thickness: 0.5pt; }
+  p { margin: 0 0 6pt; }
+  b, strong { color: var(--ink); font-weight: 600; }
+  .page { break-after: page; }
+  .page:last-child { break-after: auto; }
+
+  .masthead { display: flex; justify-content: space-between; align-items: baseline; padding: 0 0 5pt; border-bottom: 0.75pt solid var(--rule); }
+  .brand { color: var(--ink); font-size: 8.5pt; text-decoration: none; letter-spacing: 0.02em; }
+  .brand b { font-weight: 600; }
+  .masthead .tag { font-size: 6pt; color: var(--muted); }
+  .eyebrow { margin: 8pt 0 0; font-size: 5.5pt; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  h1 { margin: 1pt 0 2pt; font-size: 15pt; font-weight: 400; color: var(--ink); line-height: 1.25; }
+  h1 .x { color: var(--muted); }
+  .lede { margin: 0 0 6pt; font-size: 7.5pt; color: var(--ink); }
+  .credit { background: var(--panel); border-radius: 2pt; padding: 5pt 7pt; margin-bottom: 7pt; font-size: 6.5pt; color: var(--text); }
+
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4pt; margin: 9pt 0 9pt; }
+  .card { background: var(--panel); border-radius: 2pt; padding: 5pt 6pt 6pt; }
+  .card .t { margin-top: 3pt; font-size: 7.5pt; font-weight: 600; color: var(--ink); line-height: 1.35; }
+  .card .d { margin-top: 1.5pt; font-size: 6.5pt; color: var(--muted); line-height: 1.55; }
+
+  .badge { display: inline-flex; align-items: center; justify-content: center; min-width: 22pt; height: 10pt; padding: 0 5pt;
+           font-size: 6pt; font-weight: 600; line-height: 1; border: 0.75pt solid var(--ink); color: #fff; vertical-align: middle; white-space: nowrap; }
+  .pill { border-radius: 6pt; }
+  .rect { border-radius: 0; }
+  .round { border-radius: 2.5pt; }
+  .leaf { border-radius: 100% 60% 0 0 / 100% 100% 0 0; border-bottom-right-radius: 2pt; }
+  .b-i { background: var(--i); } .b-s { background: var(--s); } .b-p { background: var(--p); color: var(--ink); }
+  .b-m { background: var(--m); } .b-c { background: var(--c); color: var(--ink); } .b-g { background: var(--g); }
+  .b-t { background: var(--t); color: var(--ink); } .b-o { background: var(--o); }
+  td .badge { min-width: 26pt; }
+
+  hr.major { border: 0; border-top: 0.75pt solid var(--ink); margin: 9pt 0 6pt; }
+  h2 { margin: 7pt 0 5pt; font-size: 11pt; font-weight: 400; color: var(--ink); display: flex; align-items: center; gap: 6pt; line-height: 1.2; }
+  h2.plain { margin-top: 0; }
+  h2 .note { font-size: 6pt; font-weight: 500; border: 0.75pt solid var(--ink); border-radius: 6pt; padding: 1pt 5pt; color: var(--ink); }
+
+  ol.steps { margin: 0 0 6pt; padding: 0; list-style: none; counter-reset: s; }
+  ol.steps li { position: relative; padding-left: 12pt; margin: 0 0 3.5pt; counter-increment: s; break-inside: avoid; }
+  ol.steps li::before { content: counter(s) "."; position: absolute; left: 0; top: -0.5pt; font-size: 8pt; font-weight: 600; color: var(--ink); }
+  .cols2 { column-count: 2; column-gap: 16pt; }
+
+  .btn { display: inline-block; border: 0.75pt solid var(--ink); border-radius: 2pt; padding: 0 3.5pt; font-size: 6pt; line-height: 1.55;
+         color: var(--ink); text-decoration: none; white-space: nowrap; }
+  td .btn { margin: 1pt 0; }
+
+  .callout { border-left: 1.5pt solid var(--ink); padding: 1pt 0 1pt 8pt; margin: 6pt 0; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  figure { margin: 0 0 6pt; border: 0.75pt solid #e3e3e3; border-radius: 2pt; padding: 4pt 4pt 3pt; break-inside: avoid; background: #fff; }
+  figure img { display: block; max-width: 100%; max-height: 212pt; width: auto; height: auto; margin: 0 auto; }
+  figure img.short { max-height: 160pt; }
+  figure img.tall { max-height: 186pt; }
+  figure img.mid { max-height: 150pt; }
+  figure img.low { max-height: 132pt; }
+  figcaption { margin-top: 3pt; font-size: 6.67pt; color: var(--muted); line-height: 1.55; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8pt; align-items: start; margin-bottom: 6pt; }
+  .row.center { align-items: center; }
+
+  table { width: 100%; border-collapse: collapse; margin: 3pt 0 6pt; font-size: 6.5pt; break-inside: avoid; }
+  th { text-align: left; font-size: 5.5pt; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+       padding: 3pt 3pt 2pt; border-top: 0.5pt solid var(--rule); border-bottom: 0.5pt solid var(--rule); line-height: 1.3; vertical-align: bottom; }
+  td { padding: 2.2pt 3pt; border-bottom: 0.5pt solid var(--rule); vertical-align: top; color: var(--text); line-height: 1.5; }
+  td.n { white-space: nowrap; font-feature-settings: "tnum"; }
+
+  code { font-family: inherit; }
+  .footer-note { margin-top: 14pt; padding-top: 7pt; border-top: 0.75pt solid var(--ink); }
+  .footer-note p { font-size: 6.5pt; }
+  .footer-note .small { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- Page 1 -->
+<section class="page">
+  <div class="masthead">
+    <a class="brand" href="https://identidem.design/"><b>IDENTIDEM</b>.design</a>
+    <span class="tag">Hardware placement guide</span>
+  </div>
+  <p class="eyebrow">Hardware placement guide</p>
+  <h1>Infidex 176 V <span class="x">x</span> IDENTIDEM.design Remix</h1>
+  <p class="lede">Where every heat-set insert, screw, ball plunger, magnet and bonded part goes.</p>
+  <div class="credit">Camera: <a href="https://github.com/max05210238/Infidex_176_V">Infidex 176 V</a>, an open source project by <a href="https://www.youtube.com/@time_to_waste">Denis Aminev (Time to Waste)</a>. Remix by <a href="https://identidem.design/">IDENTIDEM.design</a>.</div>
+  <p>Every location and screw length below was measured from the remix CAD assembly. Reference codes match the drawings. The remixed body comes two ways, in one piece or as two glued halves, and the hardware is the same for both. Positions are in the CAD assembly frame in millimetres: X runs front (lens) to back (door), Y runs from the take-up end (0) towards the rewind end (−178), Z is up.</p>
+
+  <div class="cards">
+    <div class="card"><span class="badge pill b-i">I</span><div class="t">10 × M2×4 · 4 × M3×4</div><div class="d">Heat-set inserts, I1–I14</div></div>
+    <div class="card"><span class="badge rect b-s">S</span><div class="t">14 screws</div><div class="d">6 × M2×6 CSK · 2 × M2×4 CSK · 4 × M3×4 cap or CSK · 1 × M2×6 cap or CSK · 1 × M2×4 thumbscrew</div></div>
+    <div class="card"><span class="badge rect b-p">P</span><div class="t">6 × D2×3</div><div class="d">Flanged ball plungers, P1–P6</div></div>
+    <div class="card"><span class="badge round b-m">M</span><div class="t">1 × Ø5×2 · 2 × Ø4×2</div><div class="d">Magnets, M1–M3 · optional, highly recommended</div></div>
+    <div class="card"><span class="badge leaf b-c">C</span><div class="t">Split collar</div><div class="d">Take-up spool retainer, C1 · printed part, takeup-washer-stopper</div></div>
+    <div class="card"><span class="badge leaf b-g">G</span><div class="t">Pressure plate</div><div class="d">Glued into the door, G1</div></div>
+    <div class="card"><span class="badge pill b-t">T</span><div class="t">3/8" to 1/4" bush</div><div class="d">Tripod adapter, T1 · the socket is printed 3/8"-16</div></div>
+    <div class="card"><span class="badge leaf b-o">O</span><div class="t">Seals and wire</div><div class="d">Flocked paper, foam, 0.6–0.8 mm stainless wire · from the original build</div></div>
+  </div>
+
+  <hr class="major">
+  <h2 class="plain">Fitting order</h2>
+  <ol class="steps cols2">
+    <li><b>All heat-set inserts first</b> (I1–I11 in the body, I12 in the counter gear, I13 in the inner-ratchet, I14 in the sprocket), before anything else is fitted to those parts. The soldering iron can't then hurt a magnet or loosen a plunger.</li>
+    <li><b>Ball plungers</b> once the body and cover have cooled: P1–P3 in the body's rewind bore, P4–P6 in the cover's take-up bore.</li>
+    <li><b>Magnets</b> (optional, highly recommended), checking polarity before gluing. M1 goes into the inner-ratchet from below, after I13 is in.</li>
+    <li><b>Pressure plate into the door.</b> Let the glue cure before closing the door on it.</li>
+    <li><b>Take-up spool and printed collar</b> (takeup-washer-stopper in the files): hold the split collar inside the body under the take-up bore, then lower the spool from the top through it until the collar clicks into the groove.</li>
+    <li><b>Two-piece body only:</b> glue the halves together once their inserts, plungers and magnets are in.</li>
+    <li><b>Counter gears</b> onto their pins in the gear bay, before the top cover goes on.</li>
+    <li><b>Screws:</b> top cover, cold shoe, lens standard, advance knob, then the counter face. With the cover screwed down, turn the sprocket by hand and check the counter train runs freely.</li>
+    <li><b>Flocking and foam last,</b> after a dry run with the back open. The tripod bushing can go in whenever.</li>
+  </ol>
+
+  <h2><span class="badge pill b-i">I</span>Heat-set inserts</h2>
+  <p>Eleven inserts go into the body: seven M2 in the top face (five for the top cover, two for the cold shoe) and four M3 in the front face for the lens standard. Three more M2 inserts go into moving parts: I12 in the counter gear hub, I13 in the top of the inner-ratchet and I14 in the top of the sprocket. Use 4 mm long inserts everywhere. Every hole is 4.0 mm deep. Buy: <a class="btn" href="https://www.amazon.co.uk/s?k=M2+x+4+heat+set+insert+brass">Amazon ↗</a> (M2×4), <a class="btn" href="https://www.amazon.co.uk/s?k=M3+x+4+heat+set+insert+brass">Amazon ↗</a> (M3×4, not the common 5.7 mm length).</p>
+</section>
+
+<!-- Page 2 -->
+<section class="page">
+  <figure>
+    <img src="../fig1_body_top.png" alt="Body from above with insert and plunger positions">
+    <figcaption>Figure 1 · Body seen from above, lens side at the bottom. I1–I7 are pressed in from the top face.</figcaption>
+  </figure>
+  <figure>
+    <img src="img/front-face.png" alt="Front face with the lens standard inserts">
+    <figcaption>Figure 2 · Front face seen from the lens side, lens standard removed. I8–I11 are pressed in from the front, level with the face.</figcaption>
+  </figure>
+  <table>
+    <thead><tr><th>Ref</th><th>Holds</th><th>Where</th><th>Hole Ø × depth</th><th>Insert</th><th>X / Y / Z</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge pill b-i">I1</span></td><td>Top cover</td><td>Top face, take-up end, front corner</td><td class="n">3.2 × 4.0</td><td>M2</td><td class="n">53.4 / −9.1 / 41.1</td></tr>
+      <tr><td><span class="badge pill b-i">I2</span></td><td>Top cover</td><td>Top face, take-up end, back corner</td><td class="n">3.2 × 4.0</td><td>M2</td><td class="n">76.4 / −7.8 / 41.1</td></tr>
+      <tr><td><span class="badge pill b-i">I3</span></td><td>Top cover</td><td>Top face, front edge beside the take-up bore</td><td class="n">3.2 × 4.0</td><td>M2</td><td class="n">53.6 / −40.1 / 41.1</td></tr>
+      <tr><td><span class="badge pill b-i">I4</span></td><td>Top cover</td><td>Top face, front edge past the gear bay</td><td class="n">3.2 × 4.0</td><td>M2</td><td class="n">53.1 / −74.7 / 41.1</td></tr>
+      <tr><td><span class="badge pill b-i">I5</span></td><td>Top cover</td><td>Top face, back edge past the gear bay</td><td class="n">3.2 × 4.0</td><td>M2</td><td class="n">80.2 / −73.7 / 41.1</td></tr>
+      <tr><td><span class="badge pill b-i">I6</span></td><td>Cold shoe</td><td>Top face, centre of camera, front</td><td class="n">3.3 × 4.0</td><td>M2</td><td class="n">56.4 / −98.8 / 42.1</td></tr>
+      <tr><td><span class="badge pill b-i">I7</span></td><td>Cold shoe</td><td>Top face, centre of camera, back</td><td class="n">3.3 × 4.0</td><td>M2</td><td class="n">73.4 / −99.2 / 42.1</td></tr>
+      <tr><td><span class="badge pill b-i">I8</span></td><td>Lens standard</td><td>Front face, upper, take-up side</td><td class="n">4.2 × 4.0</td><td>M3</td><td class="n">49.1 / −52.2 / 35.3</td></tr>
+      <tr><td><span class="badge pill b-i">I9</span></td><td>Lens standard</td><td>Front face, upper, rewind side</td><td class="n">4.2 × 4.0</td><td>M3</td><td class="n">49.1 / −133.5 / 35.3</td></tr>
+      <tr><td><span class="badge pill b-i">I10</span></td><td>Lens standard</td><td>Front face, lower, take-up side</td><td class="n">4.2 × 4.0</td><td>M3</td><td class="n">49.1 / −52.3 / −12.5</td></tr>
+      <tr><td><span class="badge pill b-i">I11</span></td><td>Lens standard</td><td>Front face, lower, rewind side</td><td class="n">4.2 × 4.0</td><td>M3</td><td class="n">49.1 / −133.6 / −12.5</td></tr>
+      <tr><td><span class="badge pill b-i">I12</span></td><td>Counter face</td><td>Counter gear hub, top</td><td class="n">3.2 × 4.0</td><td>M2</td><td class="n">67.7 / −63.9 / 48.0</td></tr>
+      <tr><td><span class="badge pill b-i">I13</span></td><td>Advance knob</td><td>Ratchet-inner, top hole</td><td class="n">3.2 × 4.0</td><td>M2</td><td class="n">64.0 / −25.0 / 44.0</td></tr>
+      <tr><td><span class="badge pill b-i">I14</span></td><td>Sprocket gear</td><td>Sprocket, top of the shaft</td><td class="n">3.2 × 4.0</td><td>M2</td><td class="n">73.2 / −45.2 / 30.0</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><p><b>Fitting.</b> For PETG, start the insert tip at about 230 °C. Let the insert sink under its own weight with light pressure, keep it square, and stop when it's flush. Face-down on a flat plate while it's still warm is an easy way to square it up. Stand the body on its base for I1–I7 and lay it on its door side for I8–I11.</p></div>
+</section>
+
+<!-- Page 3 -->
+<section class="page">
+  <div class="callout" style="margin-top:0"><p><b>I12 and I13.</b> I12's pocket is 4.0 mm deep, so press the insert flush with the top of the hub. I14 goes into the top of the sprocket, and the sprocket gear screws down onto it. I13's hole goes right through into the M1 magnet pocket underneath, so press it flush with the top and check from below that no melted plastic has pushed into the magnet pocket.</p></div>
+
+  <h2><span class="badge rect b-p">P</span>Ball plungers</h2>
+  <p>All six are D2×3 flanged plungers (Ø2 body, Ø2.5 nose flange, Ø1.5 ball) fitted in radial holes. <a class="btn" href="https://www.amazon.co.uk/s?k=2mm+x+3mm+press+fit+flanged+spring+ball+plunger">Amazon ↗</a>. Each hole opens into a shaft bore and stops short of the outside wall, so every plunger goes in <i>from inside the bore</i>. The flange sits in its seat flush with the bore wall and the ball points at the shaft.</p>
+  <div class="row">
+    <figure>
+      <img src="../fig3_rewind_plungers.png" alt="Rewind bore in the body with plungers P1 to P3">
+      <figcaption>Figure 3 · Rewind bore in the body, 2.8 mm below the top face. Three plungers 120° apart act on the rewind knob.</figcaption>
+    </figure>
+    <figure>
+      <img src="../fig2_cover_plungers.png" alt="Take-up bore in the top cover with plungers P4 to P6">
+      <figcaption>Figure 4 · Take-up bore in the top cover. Three plungers 120° apart, the same pattern as the rewind side, ride in the inner-ratchet's W and R detent grooves.</figcaption>
+    </figure>
+  </div>
+  <div class="row">
+    <figure>
+      <img class="mid" src="img/plunger-section.png" alt="One plunger in its hole, in section">
+      <figcaption>Figure 5 · Cross-section of one plunger in its hole (same for all six)</figcaption>
+    </figure>
+    <table>
+      <thead><tr><th>Ref</th><th>Part</th><th>Points from</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge rect b-p">P1</span></td><td>Body</td><td>Back of the rewind bore</td></tr>
+        <tr><td><span class="badge rect b-p">P2</span></td><td>Body</td><td>Front, take-up side of the rewind bore</td></tr>
+        <tr><td><span class="badge rect b-p">P3</span></td><td>Body</td><td>Front, rewind-end side of the rewind bore</td></tr>
+        <tr><td><span class="badge rect b-p">P4</span></td><td>Top cover</td><td>Back of the take-up bore</td></tr>
+        <tr><td><span class="badge rect b-p">P5</span></td><td>Top cover</td><td>Front, take-up end side of the bore</td></tr>
+        <tr><td><span class="badge rect b-p">P6</span></td><td>Top cover</td><td>Front, gear-bay side of the bore</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout"><p><b>Fitting.</b> The holes are drawn Ø2.2 × 3.1 mm with a Ø2.7 × 0.57 mm flange seat. With a 0.4 mm nozzle they print close to Ø2.0, which gives a press fit. Push the plunger body-first from inside the bore with a flat-ended rod until the flange sits in its seat and is level with the bore wall. If one is loose, put a small drop of CA on its body before pressing it in. Keep glue away from the flange and the ball, or the ball will stick.</p></div>
+
+  <h2><span class="badge round b-m">M</span>Magnets <span class="note">Optional, highly recommended</span></h2>
+  <p>The camera works without them, but they hold the inner-ratchet firmly down on the spool head, so fit them if you can. Buy: <a class="btn" href="https://www.amazon.co.uk/s?k=5x2mm+neodymium+magnet">Amazon ↗</a> (Ø5×2), <a class="btn" href="https://www.amazon.co.uk/s?k=4x2mm+neodymium+magnet">Amazon ↗</a> (Ø4×2). All three sit on the take-up axis and hold the inner-ratchet down on the take-up spool head. When the camera is assembled, the Ø5×2 magnet faces the Ø4×2 stack across a gap of about 0.2 mm.</p>
+</section>
+
+<!-- Page 4 -->
+<section class="page">
+  <div class="row">
+    <figure>
+      <img class="tall" src="../fig5_takeup_stack.png" alt="Section through the take-up axis">
+      <figcaption>Figure 6 · Take-up axis cut front to back: countersunk knob screw S12 into I13, magnet M1 directly below it, M2 and M3 in the spool head, and collar C1 under the body.</figcaption>
+    </figure>
+    <table>
+      <thead><tr><th>Ref</th><th>Magnet</th><th>Pocket</th><th>Fits from</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge round b-m">M1</span></td><td class="n">Ø5 × 2</td><td class="n">Ø5.1 × 2.1</td><td>Underside of the inner-ratchet, pressed to the pocket floor</td></tr>
+        <tr><td><span class="badge round b-m">M2</span></td><td class="n">Ø4 × 2</td><td class="n">Ø4.1 × 4.2</td><td>Top of the spool head, at the bottom of the pocket</td></tr>
+        <tr><td><span class="badge round b-m">M3</span></td><td class="n">Ø4 × 2</td><td class="n">same pocket</td><td>On top of M2, level with the head</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout"><p><b>Polarity.</b> The top face of the M2/M3 stack has to <i>attract</i> the exposed face of M1. Let M2 and M3 snap together into a stack first. Then touch M1 to the top of the stack and mark M1's exposed face with a pen dot before separating them. Glue M1 with the dot facing out of its pocket and the stack with its free face up, then check the attraction with the parts dry-fitted before the glue cures.</p></div>
+
+  <h2><span class="badge rect b-s">S</span>Screws</h2>
+  <p>Each length is the longest standard screw that stays inside its insert without bottoming out. It was worked out from the head seat, the clamped part and the depth of the hole below.</p>
+  <figure>
+    <img src="../fig9_screws.png" alt="Screws seated in their inserts">
+    <figcaption>Figure 7 · Screws in their inserts, shown in section. The head seats and hole bottoms are taken from the model.</figcaption>
+  </figure>
+  <table>
+    <thead><tr><th>Ref</th><th>Screw</th><th>Qty</th><th>Holds</th><th>Into</th><th>Room below the tip</th><th>Thread in insert</th><th>Buy</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge rect b-s">S1–S5</span></td><td>M2×6 countersunk (ISO 10642)</td><td>5</td><td>Top cover to body</td><td class="n">I1–I5</td><td>0.2 mm</td><td>3.8 mm</td><td><a class="btn" href="https://www.amazon.co.uk/s?k=M2+x+6+countersunk+socket+screw+ISO+10642+stainless">Amazon ↗</a></td></tr>
+      <tr><td><span class="badge rect b-s">S6–S7</span></td><td>M2×4 countersunk (ISO 10642)</td><td>2</td><td>Cold shoe to body</td><td class="n">I6–I7</td><td>1.3 mm</td><td>2.7 mm</td><td><a class="btn" href="https://www.amazon.co.uk/s?k=M2+x+4+countersunk+socket+screw+ISO+10642+stainless">Amazon ↗</a></td></tr>
+      <tr><td><span class="badge rect b-s">S8–S11</span></td><td>M3×4 socket cap (ISO 4762) or countersunk (ISO 10642)</td><td>4</td><td>Lens standard to body</td><td class="n">I8–I11</td><td>1.5 mm</td><td>2.5 mm</td><td><a class="btn" href="https://www.amazon.co.uk/s?k=M3+x+4+socket+cap+screw+ISO+4762+stainless">Cap ↗</a><br><a class="btn" href="https://www.amazon.co.uk/s?k=M3+x+4+countersunk+socket+screw+ISO+10642+stainless">CSK ↗</a></td></tr>
+      <tr><td><span class="badge rect b-s">S12</span></td><td>M2×6 countersunk (ISO 10642)</td><td>1</td><td>Advance knob to inner-ratchet</td><td class="n">I13</td><td>1.65 mm to M1</td><td>2.35 mm</td><td><a class="btn" href="https://www.amazon.co.uk/s?k=M2+x+6+countersunk+socket+screw+ISO+10642+stainless">Amazon ↗</a></td></tr>
+      <tr><td><span class="badge rect b-s">S13</span></td><td>M2×4 thumbscrew, flat underside</td><td>1</td><td>Counter face to counter gear</td><td class="n">I12</td><td>0.9 mm</td><td>3.1 mm</td><td><a class="btn" href="https://www.amazon.co.uk/s?k=M2+x+4+knurled+thumb+screw">Amazon ↗</a></td></tr>
+      <tr><td><span class="badge rect b-s">S14</span></td><td>M2×6 socket cap (ISO 4762) or countersunk (ISO 10642)</td><td>1</td><td>Sprocket gear to sprocket</td><td class="n">I14</td><td>0.25 mm</td><td>4.0 mm</td><td><a class="btn" href="https://www.amazon.co.uk/s?k=M2+x+6+socket+cap+screw+ISO+4762+stainless">Cap ↗</a><br><a class="btn" href="https://www.amazon.co.uk/s?k=M2+x+6+countersunk+socket+screw+ISO+10642+stainless">CSK ↗</a></td></tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="callout" style="margin:0"><p><b>Lengths.</b> The cold shoe (M2×4) and lens standard (M3×4) lengths are proven on the printed camera and leave plenty of clearance. The M2×6 cover and sprocket screws are the longest that fit: the next size up bottoms out. The S1–S5 figures are with the cover screwed down, which seats it 0.1 mm below its drawn height. S14 works as a socket cap or a countersunk head, whichever you have, and either way it takes the full depth of its insert, so run it down gently and stop when it seats. Don't go longer on S12 either: an M2×8 would reach 0.35 mm into the M1 magnet pocket.</p></div>
+    <div class="callout" style="margin:0"><p><b>Heads.</b> The knob's seat for S12 is a Ø3.7 × 90° countersink 0.75 mm deep, so a standard M2 flat head (Ø3.8) finishes level with the knob face and takes 2.35 mm of thread. The countersinks in the cover and cold shoe are Ø3.7–3.8 at 90°, so M2 flat heads finish flush or a hair proud. The lens-standard counterbores are Ø7.3 × 3.1 deep, so either an M3 cap head (Ø5.5 × 3) or an M3 countersunk head sits below the surface.</p></div>
+  </div>
+</section>
+
+<!-- Page 5 -->
+<section class="page">
+  <div class="row center">
+    <figure>
+      <img class="low" src="img/counter-face.png" alt="Counter face on the counter gear, in section">
+      <figcaption>Figure 8 · Counter face held by thumbscrew S13 in insert I12. The head sits in a Ø6.0 × 0.5 mm recess, so a head up to about Ø5.8 sits down in the face.</figcaption>
+    </figure>
+    <div class="callout"><p><b>Counter face.</b> The face starts at 25 and counts up: 25 is the loading position, then winding on takes you to 1, 2, 3 and so on. There is no zero. Lay the face on the hub with 25 against the body marker and finger-tighten S13. The face grips on friction, so to reset it for a new roll you loosen the thumbscrew, turn 25 back to the marker, and tighten again. Don't use thread lock.</p></div>
+  </div>
+
+  <h2><span class="badge leaf b-c">C</span>Take-up spool collar <span class="note">Printed part, in the files</span></h2>
+  <p>C1 is a printed part, not a bought one: print it with the rest of the camera from the files in the repo, where it is named takeup-washer-stopper. It is a split ring (Ø9.45 bore × Ø12.95 × 1.7 mm) that stops the take-up spool lifting out of the body. It sits in the groove just below the spool head (Ø9.3 at the root), directly under the body's take-up bore. The collar is wider than the bore, so once it's in, the spool can't pull up through the top.</p>
+  <div class="row center">
+    <figure>
+      <img src="img/collar.png" alt="Collar in the spool groove, from above">
+      <figcaption>Figure 9 · Collar in the groove, from above. The split is about 0.15 mm wide.</figcaption>
+    </figure>
+    <ol class="steps">
+      <li>Open the body and hold the collar inside it, directly under the take-up bore, with the split facing the lens side.</li>
+      <li>Lower the take-up spool into the body from the top. As it comes down, its bottom end passes through the collar, and the split lets the collar open over the Ø10.8 barrel.</li>
+      <li>Keep lowering the spool until the collar snaps closed in the groove below the head, then spin the spool to check it turns freely without lifting.</li>
+    </ol>
+  </div>
+
+  <h2><span class="badge leaf b-g">G</span>Pressure plate</h2>
+  <p>G1 is one printed part: a rigid platen on a single thin leaf. The leaf joins the platen in the middle and has a bond pad at each end. Glue only the two end pads to the door, never the platen or the middle of the leaf. The door's inside face has a shallow 0.2 mm recess (83.6 × 33.5 mm) that locates the plate, leaving about 1 mm spare at each end and 0.25 mm top and bottom.</p>
+  <figure>
+    <img class="short" src="../fig10_pressure_plate.png" alt="Pressure plate in the door">
+    <figcaption>Figure 10 · Pressure plate in the door. Glue goes only on the two end pads, each about 14 × 33 mm, seated on the door face. The lower cut shows the door open, with the platen free.</figcaption>
+  </figure>
+</section>
+
+<!-- Page 6 -->
+<section class="page">
+  <div class="callout" style="margin-top:0"><p><b>Gluing.</b> Clean both surfaces with IPA. Put a thin line of CA or a strip of thin double-sided tape on each end pad only. Seat the plate square in the recess with the platen facing the film, and press on the pads alone for 30 seconds. Keep glue out of the gap under the leaf, or the plate stops flexing.</p></div>
+  <div class="callout"><p><b>Seating and preload.</b> Both pads sit flat on the door's inside face in the recess. With the door open, the leaf holds the platen 1.65 mm proud of its working position. Closing the door on loaded film pushes the platen back onto the film rails and flexes the leaf by about 0.8 mm, which gives the pressure on the film. Don't shim or glue anything under the leaf to take up that gap.</p></div>
+
+  <h2><span class="badge leaf b-g">G2</span>Two-piece body seam <span class="note">Two-piece body only</span></h2>
+  <p>Skip this if you printed the one-piece body. The two halves meet on a flat seam about 34 mm above the base. The bottom half carries a 2 mm ridge that runs right around the film chambers and the film path; the top half has the matching groove. Light arriving along the glue line has to climb over that step to reach the film, which is why only the chambers and the path are ridged and the rest of the seam is plain.</p>
+  <p>Four alignment pegs set the halves: Ø3.8 × 2 mm posts inside the top half's groove, dropping into Ø4 mm holes in the ridge. Dry-fit before any glue. The halves should sit down with no rock and no light gap at the seam; if they rock, the ridge is not seating and the groove needs a clean-up rather than more clamp.</p>
+  <div class="callout"><p><b>Gluing.</b> Fit every insert, plunger and magnet first, while the halves are still separate and easy to hold. Then run a thin bead of CA or epoxy on the flat land outside the ridge, press the halves together on the pegs, and clamp lightly until it cures. Keep glue off the ridge crest and out of the groove, or the halves will stand proud and leave the gap you were trying to close.</p></div>
+
+  <h2><span class="badge pill b-t">T</span>Tripod socket</h2>
+  <p>The socket is printed, not an insert: a <b>3/8"-16 thread</b> moulded straight into the base on the centreline, five turns and 8.5 mm deep, at 67.4 / −86.1 / −23.5. Nothing is pressed or glued into it.</p>
+  <p>Most tripods and quick-release plates are 1/4"-20, so fit a <b>3/8" to 1/4" bushing</b> and leave it in. <a class="btn" href="https://www.amazon.co.uk/s?k=3%2F8+to+1%2F4+tripod+bushing+adapter+screw">Amazon ↗</a></p>
+  <div class="callout"><p><b>First thread.</b> Start the bushing by hand and stop as soon as it seats. A printed thread strips if you drive it with a tool, and a 1/4" screw run straight into the 3/8" hole will tear it out. If the thread is tight from the print, run the bushing in and out a couple of times to clear it rather than cutting it.</p></div>
+
+  <h2><span class="badge leaf b-o">O</span>From the original build</h2>
+  <p>These are unchanged from Denis's build and are not in the printed files. The remix needs all of them.</p>
+  <table>
+    <thead><tr><th>Item</th><th>What for</th><th>Buy</th></tr></thead>
+    <tbody>
+      <tr><td>Black flocked self-adhesive paper</td><td>Lining the film chambers and the inside of the door to kill reflections and stray light. Full-size templates are in <code>flocking/</code> in the repo.</td><td><a class="btn" href="https://www.amazon.co.uk/s?k=self+adhesive+flock+paper+black+light+trap">Amazon ↗</a></td></tr>
+      <tr><td>Black light-seal foam</td><td>Sealing the door where it closes onto the body</td><td><a class="btn" href="https://www.amazon.co.uk/s?k=camera+light+seal+foam+kit+black">Amazon ↗</a></td></tr>
+      <tr><td>Rigid stainless wire, 0.6–0.8 mm</td><td>Springs and linkages in the original mechanism</td><td><a class="btn" href="https://www.amazon.co.uk/s?k=0.8mm+stainless+steel+spring+wire">Amazon ↗</a></td></tr>
+      <tr><td>Superglue (CA)</td><td>Magnets, the pressure plate pads, and the body seam on the two-piece body</td><td><a class="btn" href="https://www.amazon.co.uk/s?k=cyanoacrylate+superglue+gel">Amazon ↗</a></td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><p><b>Order.</b> Flocking and foam go in last, after everything else is fitted and the camera has been dry-run with the back open. They are the one thing you cannot fit around.</p></div>
+
+  <div class="footer-note">
+    <p><b>Infidex 176 V x IDENTIDEM.design Remix.</b> Camera: <a href="https://github.com/max05210238/Infidex_176_V">Infidex 176 V</a>, an open source project by <a href="https://www.youtube.com/@time_to_waste">Denis Aminev (Time to Waste)</a>. Remix and guide by <a href="https://identidem.design/">IDENTIDEM.design</a>.</p>
+    <p class="small">Buy links open an Amazon UK search for that exact part rather than one listing, so check the size, head type and length before ordering. Measured from the remix CAD assembly for release 2.0.0, 24 September 2026. Where the CAD and a printed part disagree, go by the print.</p>
+  </div>
+</section>
+
+</body>
+</html>

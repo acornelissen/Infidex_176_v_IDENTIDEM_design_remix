@@ -25,7 +25,7 @@ The notice above is reproduced unchanged from the
 repository as well.
 
 This repository is the **Infidex 176 V x IDENTIDEM.design Remix**: modified CAD, a hardware
-placement guide (`Infidex-Hardware-Map.pdf`) and the drawings in `docs/`, by
+placement guide (`Infidex-Hardware-Map.pdf`, built from `docs/hardware-map/`) and the drawings in `docs/`, by
 [IDENTIDEM.design](https://IDENTIDEM.design). The camera design it builds on is Denis Aminev's
 and all design credit for it remains his.
 
