@@ -56,6 +56,7 @@ Specific to this remix:
 | `tools/InfidexCounterTrain/` | Fusion script that rebuilds the counter train from parameters, see [`tools/README.md`](tools/README.md) |
 | `docs/` | Section drawings used in this README |
 | `NOTICE.md` | Denis's redistribution notice, and the remix notice |
+| `CHANGELOG.md` | Releases, the commits behind them and which parts to reprint |
 
 ## Printing
 
