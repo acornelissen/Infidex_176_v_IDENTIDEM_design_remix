@@ -12,6 +12,20 @@ Versions follow [Semantic Versioning](https://semver.org), read for printed part
 
 Releases are tagged `vX.Y.Z`. Changes that only touch the documentation go into the next release rather than getting a release of their own.
 
+## [Unreleased]
+
+Documentation only. **Reprint:** nothing.
+
+### Changed
+
+- The hardware guide is rebuilt from a source in `docs/hardware-map/`, and its fitting order and the README's now include the counter gears. Figure 8 is redrawn from the current counter face.
+- The README documents the cover's locating boss, the two-colour counter face and the flocking templates.
+
+### Fixed
+
+- I12 sits at Z 48.0, not 47.8, so S13 has 0.9 mm below its tip and 3.1 mm of thread. The thumbscrew recess is Ø6.0, not Ø5.8.
+- S1–S5 figures are given with the cover screwed down: 0.2 mm below the tip and 3.8 mm of thread.
+
 ## [2.0.0] - 2026-09-24
 
 The counter gear train is reworked so it turns freely with the cover screwed down. The body, the cover and the counter gears change together, so reprint them as a set.
@@ -71,6 +85,7 @@ First release of the remix.
 - README with parts, hardware and the full assembly procedure. [`96984c0`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/96984c0), [`238e9ea`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/238e9ea)
 - Attribution notice for the original project. [`f6cef08`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/f6cef08)
 
+[Unreleased]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.0.0...HEAD
 [2.0.0]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v1.0.0...v1.0.1
