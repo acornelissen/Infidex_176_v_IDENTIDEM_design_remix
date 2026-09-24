@@ -52,9 +52,10 @@ Specific to this remix:
 | `cad/Infidex176V-IDENTIDEM.design-remix-counter-train.f3d` | Fusion source for the parametric counter gear train |
 | `3mf/Infidex176V-IDENTIDEM.design-remix.3mf` | Print-ready project, all parts laid out across nine plates |
 | `3mf/parts/` | One 3MF per part, for reprinting a single part |
-| `Infidex-Hardware-Map.pdf` | Hardware placement and assembly guide, 6 pages |
+| `Infidex-Hardware-Map.pdf` | Hardware placement and assembly guide, 6 pages, built from `docs/hardware-map/` |
 | `tools/InfidexCounterTrain/` | Fusion script that rebuilds the counter train from parameters, see [`tools/README.md`](tools/README.md) |
-| `docs/` | Section drawings used in this README |
+| `flocking/` | Full-size flocking templates, PDF and DXF |
+| `docs/` | Section drawings used in this README, and the source of the hardware guide |
 | `NOTICE.md` | Denis's redistribution notice, and the remix notice |
 | `CHANGELOG.md` | Releases, the commits behind them and which parts to reprint |
 
@@ -72,7 +73,7 @@ The counter train gears are the finest parts in the model. Print them with the r
 
 ### Parts
 
-Print the whole camera from the project file in `3mf/`, which has everything arranged across nine plates with the per-part settings already set. `3mf/parts/` holds the same 32 parts one to a file, each in the orientation it is meant to print in and sitting on the bed, for when you only need to reprint one.
+Print the whole camera from the project file in `3mf/`, which has everything arranged across nine plates with the per-part settings already set. `3mf/parts/` holds the same 32 parts one to a file, plus a two-colour version of the counter face, each in the orientation it is meant to print in and sitting on the bed, for when you only need to reprint one. Updating an earlier build? [`CHANGELOG.md`](CHANGELOG.md) lists the parts to reprint for each release.
 
 Some parts are a choice rather than a set. Print one from each of these:
 
@@ -81,6 +82,7 @@ Some parts are a choice rather than a set. Print one from each of these:
 - **Viewfinder:** `viewfinder-var-1` or `viewfinder-var-2`
 - **Focus ring:** `helicoid-focus-ring-ribs` or `helicoid-focus-ring-no-ribs`
 - **Helicoid inner ring:** `helicoid-inner-ring-for-80mm-lens` or `helicoid-inner-ring-for-55mm-lens`, to suit your taking lens
+- **Counter face:** `counter-face` in one colour, or `counter-face-two-colour` for markers in a second filament
 
 One file name differs from the words used in the hardware guide: the split collar is `takeup-washer-stopper`.
 
@@ -136,8 +138,9 @@ Carried over from Denis's build, not in the printed files, and still needed:
 4. **Pressure plate into the door.** Let the glue cure before closing the door on it.
 5. **Take-up spool and printed collar:** hold the split collar inside the body under the take-up bore, then lower the spool from the top through it until the collar clicks into the groove.
 6. **Two-piece body only:** glue the halves together once their inserts, plungers and magnets are in.
-7. **Screws:** top cover, cold shoe, lens standard, advance knob, then the counter face.
-8. **Flocking and foam last,** after a dry run with the back open. The tripod bushing can go in whenever.
+7. **Counter gears** onto their pins in the gear bay, before the top cover goes on.
+8. **Screws:** top cover, cold shoe, lens standard, advance knob, then the counter face. With the cover screwed down, turn the sprocket by hand and check the counter train runs freely.
+9. **Flocking and foam last,** after a dry run with the back open. The tripod bushing can go in whenever.
 
 ### Heat-set inserts
 
@@ -186,14 +189,14 @@ Each length is the longest standard screw that stays inside its insert without b
 
 | Ref | Screw | Qty | Holds | Into | Room below the tip | Thread in insert |
 |---|---|---|---|---|---|---|
-| S1–S5 | M2×6 countersunk (ISO 10642) | 5 | Top cover to body | I1–I5 | 0.3 mm | 3.7 mm |
+| S1–S5 | M2×6 countersunk (ISO 10642) | 5 | Top cover to body | I1–I5 | 0.2 mm | 3.8 mm |
 | S6–S7 | M2×4 countersunk (ISO 10642) | 2 | Cold shoe to body | I6–I7 | 1.3 mm | 2.7 mm |
 | S8–S11 | M3×4 socket cap (ISO 4762) or countersunk | 4 | Lens standard to body | I8–I11 | 1.5 mm | 2.5 mm |
 | S12 | M2×6 countersunk (ISO 10642) | 1 | Advance knob to inner-ratchet | I13 | 1.65 mm to M1 | 2.35 mm |
-| S13 | M2×4 thumbscrew, flat underside | 1 | Counter face to counter gear | I12 | 1.1 mm | 2.9 mm |
+| S13 | M2×4 thumbscrew, flat underside | 1 | Counter face to counter gear | I12 | 0.9 mm | 3.1 mm |
 | S14 | M2×6 socket cap (ISO 4762) or countersunk | 1 | Sprocket gear to sprocket | I14 | 0.25 mm | 4.0 mm |
 
-The cold shoe (M2×4) and lens standard (M3×4) lengths are proven on the printed camera and leave plenty of clearance. The M2×6 cover and sprocket screws are the longest that fit: the next size up bottoms out. S14 takes the full depth of its insert either way, so run it down gently and stop when it seats. Don't go longer on S12 either, as an M2×8 would reach 0.35 mm into the M1 magnet pocket.
+The cold shoe (M2×4) and lens standard (M3×4) lengths are proven on the printed camera and leave plenty of clearance. The M2×6 cover and sprocket screws are the longest that fit: the next size up bottoms out. The S1–S5 figures are with the cover screwed down, which seats it 0.1 mm below its drawn height. S14 takes the full depth of its insert either way, so run it down gently and stop when it seats. Don't go longer on S12 either, as an M2×8 would reach 0.35 mm into the M1 magnet pocket.
 
 On heads: the knob's seat for S12 is a Ø3.7 × 90° countersink 0.75 mm deep, so a standard M2 flat head (Ø3.8) finishes level with the knob face. The countersinks in the cover and cold shoe are Ø3.7–3.8 at 90°, so M2 flat heads finish flush or a hair proud. The lens-standard counterbores are Ø7.3 × 3.1 deep, so either an M3 cap head (Ø5.5 × 3) or an M3 countersunk head sits below the surface.
 
@@ -201,13 +204,15 @@ On heads: the knob's seat for S12 is a Ø3.7 × 90° countersink 0.75 mm deep, s
 
 ### Counter train
 
-The four counter gears drop onto printed pins in the body. The idler 1 and 2 pins run up to the top of their gears so they cannot tilt out of mesh, and the idler 3 pin stops level with the body's top face, which is the face the two-piece top half prints on. The top cover sits on the floor of its recess once it is screwed down, and every gear keeps at least 0.3 mm of end float in that position. The dial wheel is centred on the counter face by its hub, and the face turns in the cover on a close-running step.
+The four counter gears drop onto printed pins in the body. The idler 1 and 2 pins run up to the top of their gears so they cannot tilt out of mesh, and the idler 3 pin stops level with the body's top face, which is the face the two-piece top half prints on. The top cover sits on the floor of its recess once it is screwed down, and every gear keeps at least 0.3 mm of end float in that position. A 25 mm boss on the body around the dial locates the cover in a 25.2 mm recess, so the cover sits concentric with the dial. The dial wheel is centred on the counter face by its hub, and the face turns in the cover on a close-running step.
 
 Before fitting the counter face, screw the cover down and turn the sprocket by hand. The train should run freely with no tight spots. If it only binds with the cover on, look for sagged bridging on the cover's pocket ceilings and clean it up rather than backing the screws off.
 
 ### Counter face
 
-The face starts at 25 and counts up: 25 is the loading position, then winding on takes you to 1, 2, 3 and so on. There is no zero. Lay the face on the hub with 25 against the body marker and finger-tighten S13. The face grips on friction, so to reset it for a new roll you loosen the thumbscrew, turn 25 back to the marker, and tighten again. Don't use thread lock. The head sits in a Ø5.8 × 0.5 mm recess, so a head no bigger than Ø5.8 sits down in the face.
+The face starts at 25 and counts up: 25 is the loading position, then winding on takes you to 1, 2, 3 and so on. There is no zero. Lay the face on the hub with 25 against the body marker and finger-tighten S13. The face grips on friction, so to reset it for a new roll you loosen the thumbscrew, turn 25 back to the marker, and tighten again. Don't use thread lock. The head sits in a Ø6.0 × 0.5 mm recess, so a head up to about Ø5.8 sits down in the face.
+
+![Counter face on the counter gear, in section](docs/hardware-map/img/counter-face.png)
 
 Every frame has its own marker on the rim, 0.9 × 1.7 mm and 0.4 mm deep, with a wider one beside each number, so you can see at a glance when a frame lines up with the body marker. Print the face dial-down. In one colour the recesses read on their own, and a little paint or wax crayon wiped across them makes them stand out further. For two colours, open `3mf/parts/counter-face-two-colour.3mf`, load it as one object with two parts, and give `counter-face-inlay` the second filament. Only the first two layers change colour.
 
@@ -278,7 +283,7 @@ Both bodies are remixed parts, not the original. The one-piece body carries all 
 
 Start from the values in the file if you are only nudging it: the train is 50:1 in four meshes and the gears are already near the limit of what a 0.4 mm nozzle resolves.
 
-`tools/InfidexCounterTrain/` is a Fusion script that builds the same train from a table of `ct_*` user parameters, so you can change module, tooth counts, backlash or the idler positions and rerun it rather than redrawing the gears. It refuses to build a layout that cannot close or that would clash with the sprocket hub or the dial disc. The gear maths sits in plain Python next to it with tests you can run outside Fusion. See [`tools/README.md`](tools/README.md).
+`tools/InfidexCounterTrain/` is a Fusion script that builds the same train from a table of `ct_*` user parameters, so you can change module, tooth counts, backlash or the idler positions and rerun it rather than redrawing the gears. It refuses to build a layout that cannot close, that would clash with the sprocket hub or the dial disc, or that would stack two gears too close. The gear maths sits in plain Python next to it with tests you can run outside Fusion. See [`tools/README.md`](tools/README.md).
 
 ## Credits and licence
 
