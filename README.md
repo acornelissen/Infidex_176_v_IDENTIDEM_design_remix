@@ -273,7 +273,7 @@ Both bodies are remixed parts, not the original. The one-piece body carries all 
 
 ## Parametric counter train
 
-`cad/Infidex176V-IDENTIDEM.design-remix-counter-train.f3d` holds the counter gear train as a parametric model, so you can change it without redrawing the gears. The sprocket and dial axes stay fixed where the body needs them; the two idler axes follow from the centre distances. Module, tooth counts, profile shift, backlash, face width and bores are all parameters, so a different reduction or a coarser module is a table edit and a rebuild.
+`cad/Infidex176V-IDENTIDEM.design-remix-counter-train.f3d` holds the counter gear train as a parametric model, so you can change it without redrawing the gears. The sprocket and dial axes stay fixed where the body needs them; the two idler axes follow from the centre distances. Module, tooth counts, profile shift, backlash, the height of every gear face and the stepped bores are all parameters, and the defaults rebuild the idlers exactly as the main model has them, so a different reduction or a coarser module is a table edit and a rebuild.
 
 Start from the values in the file if you are only nudging it: the train is 50:1 in four meshes and the gears are already near the limit of what a 0.4 mm nozzle resolves.
 
