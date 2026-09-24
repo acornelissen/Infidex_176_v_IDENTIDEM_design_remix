@@ -127,3 +127,88 @@ def test_contact_ratio_of_a_standard_20_degree_pair():
     t = gc.TrainSpec(module=1.0, wheel_teeth=(32, 30, 30, 36), thinning=0.0, pinion_shift=0.0,
                      pinion_tip_reduction=0.0, wheel_tip_reduction=0.0)
     assert gc.contact_ratio(t, 3) == pytest.approx(1.56, abs=0.01)
+
+
+# ---------- the train as built: face heights, bores and tooth phases ----------
+
+BUILT_LAYERS = [(0, "pinion", 36.8, 40.8),
+                (1, "wheel", 36.8, 38.5), (1, "pinion", 38.5, 40.8),
+                (2, "wheel", 39.0, 40.8), (2, "pinion", 40.8, 43.0),
+                (3, "wheel", 41.2, 43.0), (3, "pinion", 43.0, 45.4),
+                (4, "wheel", 43.4, 45.9)]
+
+
+def _span(axis, kind, spec=TRAIN):
+    return next((z0, z1) for a, k, g, z0, z1 in gc.layers(spec) if a == axis and k == kind)
+
+
+def test_layers_reproduce_the_built_stack():
+    got = [(a, k, round(z0, 3), round(z1, 3)) for a, k, g, z0, z1 in gc.layers(TRAIN)]
+    assert got == BUILT_LAYERS
+
+
+@pytest.mark.parametrize("axis", [1, 2, 3])
+def test_every_idler_is_one_continuous_body(axis):
+    assert _span(axis, "wheel")[1] == pytest.approx(_span(axis, "pinion")[0])
+
+
+@pytest.mark.parametrize("stage", range(4))
+def test_meshing_faces_overlap_by_at_least_1_7_mm(stage):
+    p0, p1 = _span(stage, "pinion")
+    w0, w1 = _span(stage + 1, "wheel")
+    assert min(p1, w1) - max(p0, w0) >= 1.7 - 1e-9
+
+
+def test_axial_clash_is_reported_when_stacked_gears_come_too_close():
+    import dataclasses
+    spans = list(TRAIN.wheel_spans)
+    spans[1] = (38.6, spans[1][1])          # idler 2's wheel 0.1 mm above idler 1's
+    spec = dataclasses.replace(TRAIN, wheel_spans=tuple(spans))
+    assert any({a, b} == {1, 2} for a, _, b, _, _ in gc.collisions(spec))
+
+
+@pytest.mark.parametrize("axis, want", [
+    (0, []),
+    (1, [(4.4, 36.8, 38.8), (3.6, 38.8, 40.8)]),
+    (2, [(3.61, 39.0, 43.0)]),
+    (3, [(3.6, 41.2, 45.4)]),
+    (4, [(3.2, 43.4, 45.9)]),
+])
+def test_bore_segments_match_the_built_gears(axis, want):
+    got = gc.bore_segments(TRAIN, axis)
+    assert len(got) == len(want)
+    for g, w in zip(got, want):
+        assert g == pytest.approx(w)
+
+
+@pytest.mark.parametrize("axis", [1, 2, 3])
+def test_bores_leave_at_least_0_8_mm_of_wall_under_the_pinion_teeth(axis):
+    p0, p1 = _span(axis, "pinion")
+    root_r = gc.root_diameter(TRAIN.pinion()) / 2
+    for d, z0, z1 in gc.bore_segments(TRAIN, axis):
+        if min(z1, p1) > max(z0, p0):
+            assert root_r - d / 2 >= 0.8
+
+
+def test_pinions_are_drawn_at_the_built_phase():
+    ph = gc.phases(TRAIN)
+    assert [ph[a]["pinion"] for a in range(4)] == pytest.approx([15.0] * 4)
+
+
+@pytest.mark.parametrize("stage", range(4))
+def test_built_phases_mesh_without_overlap_with_the_backlash_centred(stage):
+    from shapely.geometry import Polygon
+    axes, ph = gc.layout(TRAIN), gc.phases(TRAIN)
+    pin = Polygon(gc.placed_profile(TRAIN.pinion(), axes[stage], ph[stage]["pinion"]))
+    whl = Polygon(gc.placed_profile(TRAIN.wheel(stage), axes[stage + 1], ph[stage + 1]["wheel"]))
+    assert pin.intersection(whl).area < 1e-4
+    assert pin.distance(whl) > 0.05           # clear of both flanks, not resting on one
+
+
+def test_placed_profile_rotates_about_the_gear_centre_then_moves_it():
+    g = TRAIN.pinion()
+    pts = gc.placed_profile(g, (10.0, -5.0), 90.0)
+    tip = max(pts, key=lambda p: p[1])
+    assert tip[0] == pytest.approx(10.0, abs=0.2)          # tooth 0 now points along +Y
+    assert tip[1] == pytest.approx(-5.0 + gc.tip_diameter(g) / 2, abs=0.01)
+    assert len(pts) == len(gc.profile(g))

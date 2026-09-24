@@ -55,6 +55,7 @@ def run(context):
 
 def _read_parameters(design):
     params = design.userParameters
+    _remove_stale_parameters(params)
     values = {}
     for p in pm.PARAMETERS:
         existing = params.itemByName(p.name)
@@ -67,28 +68,35 @@ def _read_parameters(design):
     return values
 
 
+def _remove_stale_parameters(params):
+    """Drop ct_* parameters an older version of this script created and nothing uses now."""
+    current = {p.name for p in pm.PARAMETERS}
+    for p in [params.item(i) for i in range(params.count)]:
+        if p.name.startswith("ct_") and p.name not in current and p.dependentParameters.count == 0:
+            p.deleteMe()
+
+
 def _build(design, spec, axes):
     root = design.rootComponent
     _remove_previous(design)
     first = design.timeline.count
     names = ["CT sprocket pinion (tool body)", "CT idler 1", "CT idler 2", "CT idler 3", "CT dial wheel (tool body)"]
+    phases = gc.phases(spec)
     by_axis = {}
     for axis, kind, gear, z0, z1 in gc.layers(spec):
         by_axis.setdefault(axis, []).append((kind, gear, z0, z1))
     for axis, layers in by_axis.items():
         comp = _target_component(root, names[axis])
-        bore = spec.bores[axis - 1] if axis >= 1 else 0.0
         body = None
         for kind, gear, z0, z1 in layers:
-            b = _gear_layer(comp, gear, axes[axis], z0, z1 - z0, bore, f"{names[axis]} {kind}")
-            if body is None:
-                body = b
-            else:
-                tools = adsk.core.ObjectCollection.create()
-                tools.add(b)
-                comb = comp.features.combineFeatures.createInput(body, tools)
-                comb.operation = adsk.fusion.FeatureOperations.JoinFeatureOperation
-                comp.features.combineFeatures.add(comb)
+            pts = gc.placed_profile(gear, axes[axis], phases[axis][kind])
+            b = _extrude(comp, _polyline_profile(comp, z0, pts), z1 - z0,
+                         adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
+            b.name = f"{names[axis]} {kind}"
+            body = b if body is None else _join(comp, body, b)
+        for d, z0, z1 in gc.bore_segments(spec, axis):
+            _extrude(comp, _circle_profile(comp, z0, axes[axis], d), z1 - z0,
+                     adsk.fusion.FeatureOperations.CutFeatureOperation, body)
         body.name = names[axis]
     if design.timeline.count > first:
         design.timeline.timelineGroups.add(first, design.timeline.count - 1).name = GROUP
@@ -115,31 +123,49 @@ def _remove_previous(design):
             g.deleteMe(True)
 
 
-def _gear_layer(comp, gear, centre, z0, height, bore, label):
-    planes = comp.constructionPlanes
-    pin = planes.createInput()
-    pin.setByOffset(comp.xYConstructionPlane, adsk.core.ValueInput.createByReal(z0 * CM))
-    plane = planes.add(pin)
+def _sketch_at(comp, z):
+    pin = comp.constructionPlanes.createInput()
+    pin.setByOffset(comp.xYConstructionPlane, adsk.core.ValueInput.createByReal(z * CM))
+    plane = comp.constructionPlanes.add(pin)
     plane.isLightBulbOn = False
-    sk = comp.sketches.add(plane)
+    return comp.sketches.add(plane)
+
+
+def _polyline_profile(comp, z, pts):
+    sk = _sketch_at(comp, z)
     sk.isComputeDeferred = True
-    cx, cy = centre
-    pts = [adsk.core.Point3D.create((cx + x) * CM, (cy + y) * CM, 0) for x, y in gc.profile(gear)]
+    pts = [adsk.core.Point3D.create(x * CM, y * CM, 0) for x, y in pts]
     lines = sk.sketchCurves.sketchLines
     first = prev = lines.addByTwoPoints(pts[0], pts[1])
     for p in pts[2:]:
         prev = lines.addByTwoPoints(prev.endSketchPoint, p)
     lines.addByTwoPoints(prev.endSketchPoint, first.startSketchPoint)
-    if bore > 0:
-        sk.sketchCurves.sketchCircles.addByCenterRadius(
-            adsk.core.Point3D.create(cx * CM, cy * CM, 0), bore / 2 * CM)
     sk.isComputeDeferred = False
-    profile = max(sk.profiles, key=lambda pr: pr.areaProperties().area)
-    ext = comp.features.extrudeFeatures.addSimple(
-        profile, adsk.core.ValueInput.createByReal(height * CM),
-        adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
-    body = ext.bodies.item(0)
-    body.name = label
+    return sk.profiles.item(0)
+
+
+def _circle_profile(comp, z, centre, diameter):
+    sk = _sketch_at(comp, z)
+    sk.sketchCurves.sketchCircles.addByCenterRadius(
+        adsk.core.Point3D.create(centre[0] * CM, centre[1] * CM, 0), diameter / 2 * CM)
+    return sk.profiles.item(0)
+
+
+def _extrude(comp, profile, height, operation, target=None):
+    ext_in = comp.features.extrudeFeatures.createInput(profile, operation)
+    ext_in.setDistanceExtent(False, adsk.core.ValueInput.createByReal(height * CM))
+    if target is not None:
+        ext_in.participantBodies = [target]
+    ext = comp.features.extrudeFeatures.add(ext_in)
+    return ext.bodies.item(0) if ext.bodies.count else target
+
+
+def _join(comp, body, tool):
+    tools = adsk.core.ObjectCollection.create()
+    tools.add(tool)
+    comb = comp.features.combineFeatures.createInput(body, tools)
+    comb.operation = adsk.fusion.FeatureOperations.JoinFeatureOperation
+    comp.features.combineFeatures.add(comb)
     return body
 
 

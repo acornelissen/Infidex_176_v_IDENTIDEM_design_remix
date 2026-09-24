@@ -41,14 +41,19 @@ class TrainSpec:
     idler1_angle_deg: float = -90.74            # direction sprocket -> idler 1
     idler2_angle_deg: float = -164.0            # direction idler 1 -> idler 2
     idler3_elbow: int = 1                       # which of the two solutions for idler 3
-    face_width: float = 2.0
-    layer_gap: float = 0.2
-    base_z: float = 36.8                         # underside of idler 1's wheel
-    clearance: float = 0.3                       # minimum gap to non-meshing gears
-    bores: tuple = (4.4, 4.0, 3.0, 3.2)          # idler 1-3, dial
+    # face heights (z, mm): the sprocket pinion, then each idler's wheel with its
+    # pinion running straight on from the wheel's top face, then the dial wheel
+    pinion0_span: tuple = (36.8, 40.8)
+    wheel_spans: tuple = ((36.8, 38.5), (39.0, 40.8), (41.2, 43.0), (43.4, 45.9))
+    pinion_tops: tuple = (40.8, 43.0, 45.4)      # idler 1-3
+    # bores per idler 1-3 and the dial wheel: (lower dia, upper dia, z where it steps)
+    bores: tuple = ((4.4, 3.6, 38.8), (3.61, 3.61, 39.0), (3.6, 3.6, 41.2), (3.2, 3.2, 43.4))
+    pinion_phase_deg: float = 15.0               # tooth angle of every pinion; wheels follow
+    clearance: float = 0.3                       # minimum radial gap to non-meshing gears
+    axial_clearance: float = 0.3                 # minimum gap between gears that pass over each other
     hub_diameter: float = 6.6
     # fixed round parts sharing the bay: (axis index, diameter, z0, z1)
-    obstacles: tuple = ((0, 5.4, 30.0, 41.0),     # sprocket-gear hub
+    obstacles: tuple = ((0, 5.4, 30.0, 40.8),     # sprocket-gear hub
                         (4, 17.0, 44.9, 47.6),    # counter dial, lower step
                         (4, 20.0, 47.6, 49.4))    # counter dial face
 
@@ -101,20 +106,55 @@ def _circle_intersection(c1, r1, c2, r2, elbow):
 
 
 def layers(t: TrainSpec):
-    """(axis index, kind, gear, z0, z1) for every toothed body."""
-    step = t.face_width + t.layer_gap
-    out = [(0, "pinion", t.pinion(), t.base_z, t.base_z + t.face_width)]
+    """(axis index, kind, gear, z0, z1) for every toothed body, as built."""
+    out = [(0, "pinion", t.pinion(), *t.pinion0_span)]
     for s in range(4):
-        z0 = t.base_z + s * step
-        out.append((s + 1, "wheel", t.wheel(s), z0, z0 + t.face_width))
+        w0, w1 = t.wheel_spans[s]
+        out.append((s + 1, "wheel", t.wheel(s), w0, w1))
         if s < 3:
-            out.append((s + 1, "pinion", t.pinion(), z0 + step, z0 + step + t.face_width))
+            out.append((s + 1, "pinion", t.pinion(), w1, t.pinion_tops[s]))
+    return out
+
+
+def gear_span(t: TrainSpec, axis):
+    zs = [z for a, k, g, z0, z1 in layers(t) if a == axis for z in (z0, z1)]
+    return min(zs), max(zs)
+
+
+def bore_segments(t: TrainSpec, axis):
+    """(diameter, z0, z1) pieces of the bore through gear `axis`; none on the sprocket pinion."""
+    if axis == 0:
+        return []
+    lower, upper, step = t.bores[axis - 1]
+    z0, z1 = gear_span(t, axis)
+    step = min(max(step, z0), z1)
+    segs = [(lower, z0, step), (upper, step, z1)]
+    return [(d, a, b) for d, a, b in segs if b - a > 1e-9]
+
+
+def mesh_phase(phase_a, teeth_a, axis_a, axis_b, teeth_b):
+    """Angle for gear b so a tooth space of b faces the tooth of a on the line of centres."""
+    beta = math.degrees(math.atan2(axis_b[1] - axis_a[1], axis_b[0] - axis_a[0]))
+    return beta + 180 + 180 / teeth_b - (phase_a - beta) * teeth_a / teeth_b
+
+
+def phases(t: TrainSpec):
+    """Per axis {'pinion': deg, 'wheel': deg}: pinions at the set phase, each wheel meshed to
+    the pinion that drives it, so the train closes without overlap in the model."""
+    axes = layout(t)
+    out = [{} for _ in axes]
+    for a in range(4):
+        out[a]["pinion"] = t.pinion_phase_deg
+    for s in range(4):
+        out[s + 1]["wheel"] = mesh_phase(t.pinion_phase_deg, t.pinion_teeth, axes[s], axes[s + 1],
+                                         t.wheel_teeth[s])
     return out
 
 
 def collisions(t: TrainSpec):
-    """Pairs of bodies that overlap in z and whose tip circles come closer than
-    `clearance` without being a meshing pair."""
+    """Pairs of bodies that could touch. Bodies that overlap in z must keep `clearance`
+    between their tip circles unless they are a meshing pair; bodies that pass over each
+    other in plan must keep `axial_clearance` between their faces."""
     axes = layout(t)
     bodies = [(a, k, tip_diameter(g), z0, z1) for a, k, g, z0, z1 in layers(t)]
     bodies += [(a, "fixed", d, z0, z1) for a, d, z0, z1 in t.obstacles]
@@ -122,14 +162,19 @@ def collisions(t: TrainSpec):
     problems = []
     for i, (ai, ki, gi, zi0, zi1) in enumerate(bodies):
         for aj, kj, gj, zj0, zj1 in bodies[i + 1:]:
-            if ai == aj or min(zi1, zj1) <= max(zi0, zj0):
+            if ai == aj:
                 continue
             pair = tuple(sorted((ai, aj)))
-            if pair in meshing and {ki, kj} == {"wheel", "pinion"}:
-                continue
-            gap = math.dist(axes[ai], axes[aj]) - gi / 2 - gj / 2
-            if gap < t.clearance:
-                problems.append((ai, ki, aj, kj, round(gap, 3)))
+            radial = math.dist(axes[ai], axes[aj]) - gi / 2 - gj / 2
+            if min(zi1, zj1) > max(zi0, zj0):                     # side by side in z
+                if pair in meshing and {ki, kj} == {"wheel", "pinion"}:
+                    continue
+                if radial < t.clearance:
+                    problems.append((ai, ki, aj, kj, round(radial, 3)))
+            elif radial < 0:                                     # one passes over the other
+                axial = max(zj0 - zi1, zi0 - zj1)
+                if axial < t.axial_clearance - 1e-9:
+                    problems.append((ai, ki, aj, kj, round(axial, 3)))
     return problems
 
 
@@ -209,6 +254,13 @@ def profile(g: GearSpec):
         tooth += [(rf, g0 + (g1 - g0) * j / n_root) for j in range(1, n_root)]
         pts += [(r * math.cos(a), r * math.sin(a)) for r, a in tooth]
     return pts
+
+
+def placed_profile(g: GearSpec, centre, phase_deg=0.0):
+    """profile(g) turned by phase_deg about its own centre, then moved to centre."""
+    c, s = math.cos(math.radians(phase_deg)), math.sin(math.radians(phase_deg))
+    cx, cy = centre
+    return [(cx + x * c - y * s, cy + x * s + y * c) for x, y in profile(g)]
 
 
 def tooth_thickness_at_pitch(g: GearSpec):
