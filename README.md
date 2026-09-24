@@ -208,6 +208,8 @@ Before fitting the counter face, screw the cover down and turn the sprocket by h
 
 The face starts at 25 and counts up: 25 is the loading position, then winding on takes you to 1, 2, 3 and so on. There is no zero. Lay the face on the hub with 25 against the body marker and finger-tighten S13. The face grips on friction, so to reset it for a new roll you loosen the thumbscrew, turn 25 back to the marker, and tighten again. Don't use thread lock. The head sits in a Ø5.8 × 0.5 mm recess, so a head no bigger than Ø5.8 sits down in the face.
 
+Every frame has its own marker on the rim, 0.9 × 1.7 mm and 0.4 mm deep, with a wider one beside each number, so you can see at a glance when a frame lines up with the body marker. Print the face dial-down. In one colour the recesses read on their own, and a little paint or wax crayon wiped across them makes them stand out further. For two colours, open `3mf/parts/counter-face-two-colour.3mf`, load it as one object with two parts, and give `counter-face-inlay` the second filament. Only the first two layers change colour.
+
 ### Take-up spool and collar
 
 C1 is a printed part, not a bought one, named `takeup-washer-stopper` in the files. It is a split ring (Ø9.45 bore × Ø12.95 × 1.7 mm) that stops the take-up spool lifting out of the body, sitting in the groove just below the spool head (Ø9.3 at the root), directly under the body's take-up bore. The collar is wider than the bore, so once it's in, the spool can't pull up through the top.
