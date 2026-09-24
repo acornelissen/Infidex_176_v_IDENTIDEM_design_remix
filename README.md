@@ -200,7 +200,7 @@ On heads: the knob's seat for S12 is a Ø3.7 × 90° countersink 0.75 mm deep, s
 
 ### Counter train
 
-The four counter gears drop onto printed pins in the body, and each pin runs nearly the full height of its gear so a gear cannot tilt out of mesh. The top cover sits on the floor of its recess once it is screwed down, and every gear keeps at least 0.3 mm of end float in that position. The dial wheel is centred on the counter face by its hub, and the face turns in the cover on a close-running step.
+The four counter gears drop onto printed pins in the body. The idler 1 and 2 pins run up to the top of their gears so they cannot tilt out of mesh, and the idler 3 pin stops level with the body's top face, which is the face the two-piece top half prints on. The top cover sits on the floor of its recess once it is screwed down, and every gear keeps at least 0.3 mm of end float in that position. The dial wheel is centred on the counter face by its hub, and the face turns in the cover on a close-running step.
 
 Before fitting the counter face, screw the cover down and turn the sprocket by hand. The train should run freely with no tight spots. If it only binds with the cover on, look for sagged bridging on the cover's pocket ceilings and clean it up rather than backing the screws off.
 
