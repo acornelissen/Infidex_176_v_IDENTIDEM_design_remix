@@ -14,17 +14,22 @@ Releases are tagged `vX.Y.Z`. Changes that only touch the documentation go into 
 
 ## [Unreleased]
 
-Documentation only. **Reprint:** nothing.
+## [2.0.1] - 2026-09-25
+
+Tighter tolerances where printed parts showed gaps. The new parts fit a 2.0.0 build.
+
+**Reprint:** `cover`, `sprocket` and `ratchet-coupling-gear`.
+
+### Fixed
+
+- Tighter tolerances on the `cover`, `sprocket` and `ratchet-coupling-gear`, which printed with gaps. Outer dimensions are unchanged. [`b55eabc`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/b55eabc)
+- I12 sits at Z 48.0, not 47.8, so S13 has 0.9 mm below its tip and 3.1 mm of thread. The thumbscrew recess is Ø6.0, not Ø5.8.
+- S1–S5 figures are given with the cover screwed down: 0.2 mm below the tip and 3.8 mm of thread.
 
 ### Changed
 
 - The hardware guide is rebuilt from a source in `docs/hardware-map/`, and its fitting order and the README's now include the counter gears. Figure 8 is redrawn from the current counter face.
 - The README documents the cover's locating boss, the two-colour counter face and the flocking templates.
-
-### Fixed
-
-- I12 sits at Z 48.0, not 47.8, so S13 has 0.9 mm below its tip and 3.1 mm of thread. The thumbscrew recess is Ø6.0, not Ø5.8.
-- S1–S5 figures are given with the cover screwed down: 0.2 mm below the tip and 3.8 mm of thread.
 
 ## [2.0.0] - 2026-09-24
 
@@ -85,7 +90,8 @@ First release of the remix.
 - README with parts, hardware and the full assembly procedure. [`96984c0`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/96984c0), [`238e9ea`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/238e9ea)
 - Attribution notice for the original project. [`f6cef08`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/f6cef08)
 
-[Unreleased]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v1.0.0...v1.0.1
