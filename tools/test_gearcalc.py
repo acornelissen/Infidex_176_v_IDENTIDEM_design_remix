@@ -9,6 +9,10 @@ def test_train_ratio_is_50_to_1():
     assert gc.ratio(TRAIN) == pytest.approx(50.0)
 
 
+def test_the_50_to_1_train_turns_the_dial_once_per_25_frames():
+    assert gc.frames_per_turn(TRAIN) == pytest.approx(25.0)
+
+
 def test_centre_distances_match_rev5():
     assert [round(d, 2) for d in gc.centre_distances(TRAIN)] == [13.2, 12.6, 12.6, 14.4]
 
@@ -63,7 +67,7 @@ def test_backlash_is_sum_of_thinning():
 
 
 @pytest.mark.parametrize("gear, tip, root", [
-    (lambda t: t.pinion(), 8.68, 6.17),
+    (lambda t: t.pinion(0), 8.68, 6.17),
     (lambda t: t.wheel(0), 19.84, 17.21),
     (lambda t: t.wheel(1), 18.64, 16.01),
     (lambda t: t.wheel(3), 22.25, 19.61),
@@ -88,7 +92,7 @@ def test_train_tip_to_root_clearance_is_positive_on_every_mesh():
 @pytest.mark.parametrize("stage", [None, 0, 1, 2, 3])
 def test_train_outlines_are_simple_closed_polygons(stage):
     from shapely.geometry import Polygon
-    g = TRAIN.pinion() if stage is None else TRAIN.wheel(stage)
+    g = TRAIN.pinion(0) if stage is None else TRAIN.wheel(stage)
     assert Polygon(gc.profile(g)).is_valid
 
 
@@ -96,7 +100,7 @@ def test_train_outlines_are_simple_closed_polygons(stage):
 def test_meshing_outlines_do_not_overlap_at_any_phase(stage):
     from shapely.geometry import Polygon
     from shapely import affinity
-    p, w = TRAIN.pinion(), TRAIN.wheel(stage)
+    p, w = TRAIN.pinion(stage), TRAIN.wheel(stage)
     c = gc.centre_distances(TRAIN)[stage]
     pin = Polygon(gc.profile(p))
     for k in range(12):
@@ -184,7 +188,7 @@ def test_bore_segments_match_the_built_gears(axis, want):
 @pytest.mark.parametrize("axis", [1, 2, 3])
 def test_bores_leave_at_least_0_8_mm_of_wall_under_the_pinion_teeth(axis):
     p0, p1 = _span(axis, "pinion")
-    root_r = gc.root_diameter(TRAIN.pinion()) / 2
+    root_r = gc.root_diameter(TRAIN.pinion(axis)) / 2
     for d, z0, z1 in gc.bore_segments(TRAIN, axis):
         if min(z1, p1) > max(z0, p0):
             assert root_r - d / 2 >= 0.8
@@ -199,16 +203,63 @@ def test_pinions_are_drawn_at_the_built_phase():
 def test_built_phases_mesh_without_overlap_with_the_backlash_centred(stage):
     from shapely.geometry import Polygon
     axes, ph = gc.layout(TRAIN), gc.phases(TRAIN)
-    pin = Polygon(gc.placed_profile(TRAIN.pinion(), axes[stage], ph[stage]["pinion"]))
+    pin = Polygon(gc.placed_profile(TRAIN.pinion(stage), axes[stage], ph[stage]["pinion"]))
     whl = Polygon(gc.placed_profile(TRAIN.wheel(stage), axes[stage + 1], ph[stage + 1]["wheel"]))
     assert pin.intersection(whl).area < 1e-4
     assert pin.distance(whl) > 0.05           # clear of both flanks, not resting on one
 
 
 def test_placed_profile_rotates_about_the_gear_centre_then_moves_it():
-    g = TRAIN.pinion()
+    g = TRAIN.pinion(0)
     pts = gc.placed_profile(g, (10.0, -5.0), 90.0)
     tip = max(pts, key=lambda p: p[1])
     assert tip[0] == pytest.approx(10.0, abs=0.2)          # tooth 0 now points along +Y
     assert tip[1] == pytest.approx(-5.0 + gc.tip_diameter(g) / 2, abs=0.01)
     assert len(pts) == len(gc.profile(g))
+
+
+# ---------- the 20-frame train: 14:28 on mesh 3, everything else shared ----------
+
+TWENTY = gc.TWENTY_FRAME_TRAIN
+
+
+def test_twenty_frame_train_is_40_to_1_and_turns_once_per_20_frames():
+    assert gc.ratio(TWENTY) == pytest.approx(40.0)
+    assert gc.frames_per_turn(TWENTY) == pytest.approx(20.0)
+
+
+def test_twenty_frame_train_changes_only_mesh_3():
+    assert TWENTY.pinion_teeth == (12, 12, 14, 12)
+    assert TWENTY.wheel_teeth == (32, 30, 28, 36)
+
+
+def test_twenty_frame_train_keeps_every_axis_so_the_body_is_unchanged():
+    for got, want in zip(gc.layout(TWENTY), gc.layout(TRAIN)):
+        assert got == pytest.approx(want, abs=1e-9)
+
+
+def test_twenty_frame_train_has_no_collisions():
+    assert gc.collisions(TWENTY) == []
+
+
+@pytest.mark.parametrize("stage", range(4))
+def test_twenty_frame_meshes_keep_their_contact_ratio(stage):
+    assert gc.contact_ratio(TWENTY, stage) >= 1.3
+    assert gc.contact_ratio(TWENTY, stage, spread=0.2) >= 1.0
+    assert gc.tip_root_clearance(TWENTY, stage) > 0.1
+
+
+@pytest.mark.parametrize("stage", range(4))
+def test_twenty_frame_built_phases_mesh_without_overlap(stage):
+    from shapely.geometry import Polygon
+    axes, ph = gc.layout(TWENTY), gc.phases(TWENTY)
+    pin = Polygon(gc.placed_profile(TWENTY.pinion(stage), axes[stage], ph[stage]["pinion"]))
+    whl = Polygon(gc.placed_profile(TWENTY.wheel(stage), axes[stage + 1], ph[stage + 1]["wheel"]))
+    assert pin.intersection(whl).area < 1e-4
+    assert pin.distance(whl) > 0.05
+
+
+def test_twenty_frame_14_tooth_pinion_keeps_its_wall_over_the_bore():
+    root_r = gc.root_diameter(TWENTY.pinion(2)) / 2
+    for d, z0, z1 in gc.bore_segments(TWENTY, 2):
+        assert root_r - d / 2 >= 0.8

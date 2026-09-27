@@ -29,7 +29,7 @@ Nothing needs installing into Fusion's Python. The script uses only the Fusion A
 | Parameter | What it sets |
 |---|---|
 | `ct_module`, `ct_pressure_angle` | Gear module and pressure angle |
-| `ct_pinion_teeth`, `ct_wheel1..4_teeth` | Tooth counts, sprocket end to dial end |
+| `ct_pinion0..3_teeth`, `ct_wheel1..4_teeth` | Tooth counts, sprocket end to dial end. Pinion *n* drives wheel *n + 1* |
 | `ct_thinning` | Tooth thinning per gear, which is the backlash share |
 | `ct_pinion_shift` | Profile shift on the pinions; the wheels take the opposite |
 | `ct_pinion_tip_reduction`, `ct_wheel_tip_reduction` | Tip shaves |
@@ -41,15 +41,20 @@ Nothing needs installing into Fusion's Python. The script uses only the Fusion A
 | `ct_clearance` | Minimum radial gap to non-meshing parts |
 | `ct_axial_clearance` | Minimum gap between gears that pass over each other |
 
+Axis numbers and the part files they print as: idler 1 is `counter-coupling-gear`, idler 2 is `counter-idler-1`, idler 3 is `counter-idler-2` and the dial wheel is `counter-gear`. The built components carry both names.
+
+### 20-frame train
+
+Set `ct_pinion2_teeth` to 14 and `ct_wheel3_teeth` to 28, then rerun. Mesh 3 keeps its 12.6 mm centres, so every axis stays where it is and only idler 2 and idler 3 change. The train drops from 50:1 to 40:1, and the dial turns once per 20 frames instead of 25. The summary shows the frames per dial turn after every build.
+
 The sprocket and dial axes stay put; idler 3 is solved so it meshes with both idler 2 and the dial wheel. If a set of values cannot close, a gear would come within `ct_clearance` of the sprocket hub or the dial disc, or two stacked gears would come within `ct_axial_clearance` of each other, the script stops with a message instead of building. It does not know about the body walls or the cover bosses, so look at the gear bay yourself after a big change.
 
 ## Tests
 
-`gearcalc.py` and `params.py` have no Fusion imports, so they can be tested with any Python:
+`gearcalc.py` and `params.py` have no Fusion imports, so they can be tested outside Fusion. From the repository root, with [mise](https://mise.jdx.dev):
 
 ```sh
-pip install pytest shapely
-pytest
+mise run test
 ```
 
-64 tests cover the ratio, centre distances, the solved axis positions, radial and axial clash detection, the face heights and stepped bores of the built gears, the wall left under the pinion teeth, the tooth phases the model is drawn at, tooth geometry, the contact ratio of every mesh (at least 1.3 as drawn, and still 1.0 with the axes 0.2 mm apart), and that meshing outlines do not overlap through a full pitch.
+The tests cover the ratio and frames per dial turn, centre distances, the solved axis positions, radial and axial clash detection, the face heights and stepped bores of the built gears, the wall left under the pinion teeth, the tooth phases the model is drawn at, tooth geometry, the contact ratio of every mesh (at least 1.3 as drawn, and still 1.0 with the axes 0.2 mm apart), that meshing outlines do not overlap through a full pitch, and the same checks on the 20-frame train.

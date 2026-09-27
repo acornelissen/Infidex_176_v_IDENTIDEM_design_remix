@@ -2,9 +2,16 @@
 
 Train: sprocket pinion -> [wheel+pinion] x 3 idlers -> dial wheel.
 Units are mm and degrees. Angles follow the body's XY axes.
+
+Axis numbers and the part files they print as:
+  0 sprocket pinion (part of the sprocket gear)   2 idler 2 = counter-idler-1
+  1 idler 1 = counter-coupling-gear                3 idler 3 = counter-idler-2
+                                                   4 dial wheel = counter-gear
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import math
+
+SPROCKET_TURNS_PER_FRAME = 2   # one 3:1 frame of film turns the sprocket twice
 
 
 class LayoutError(ValueError):
@@ -30,8 +37,8 @@ class GearSpec:
 class TrainSpec:
     module: float = 0.6
     pressure_angle_deg: float = 20.0
-    pinion_teeth: int = 12
-    wheel_teeth: tuple = (32, 30, 30, 36)       # one per mesh, sprocket -> dial
+    pinion_teeth: tuple = (12, 12, 12, 12)      # driving pinion of each mesh, sprocket -> idler 3
+    wheel_teeth: tuple = (32, 30, 30, 36)       # driven wheel of each mesh, idler 1 -> dial
     thinning: float = 0.10
     pinion_shift: float = 0.4                    # wheels get the opposite shift
     pinion_tip_reduction: float = 0.10
@@ -57,8 +64,9 @@ class TrainSpec:
                         (4, 17.0, 44.9, 47.6),    # counter dial, lower step
                         (4, 20.0, 47.6, 49.4))    # counter dial face
 
-    def pinion(self):
-        return GearSpec(self.pinion_teeth, self.module, self.pressure_angle_deg, self.thinning,
+    def pinion(self, stage):
+        """The pinion driving mesh `stage`, which sits on axis `stage`."""
+        return GearSpec(self.pinion_teeth[stage], self.module, self.pressure_angle_deg, self.thinning,
                         self.pinion_tip_reduction, self.pinion_shift)
 
     def wheel(self, stage):
@@ -70,13 +78,18 @@ class TrainSpec:
 
 def ratio(t: TrainSpec):
     r = 1.0
-    for z in t.wheel_teeth:
-        r *= z / t.pinion_teeth
+    for p, w in zip(t.pinion_teeth, t.wheel_teeth):
+        r *= w / p
     return r
 
 
+def frames_per_turn(t: TrainSpec):
+    """Frames wound on for one turn of the counter face."""
+    return ratio(t) / SPROCKET_TURNS_PER_FRAME
+
+
 def centre_distances(t: TrainSpec):
-    return [t.module * (t.pinion_teeth + z) / 2 for z in t.wheel_teeth]
+    return [t.module * (p + w) / 2 for p, w in zip(t.pinion_teeth, t.wheel_teeth)]
 
 
 def _polar(p, d, deg):
@@ -107,12 +120,12 @@ def _circle_intersection(c1, r1, c2, r2, elbow):
 
 def layers(t: TrainSpec):
     """(axis index, kind, gear, z0, z1) for every toothed body, as built."""
-    out = [(0, "pinion", t.pinion(), *t.pinion0_span)]
+    out = [(0, "pinion", t.pinion(0), *t.pinion0_span)]
     for s in range(4):
         w0, w1 = t.wheel_spans[s]
         out.append((s + 1, "wheel", t.wheel(s), w0, w1))
         if s < 3:
-            out.append((s + 1, "pinion", t.pinion(), w1, t.pinion_tops[s]))
+            out.append((s + 1, "pinion", t.pinion(s + 1), w1, t.pinion_tops[s]))
     return out
 
 
@@ -146,7 +159,7 @@ def phases(t: TrainSpec):
     for a in range(4):
         out[a]["pinion"] = t.pinion_phase_deg
     for s in range(4):
-        out[s + 1]["wheel"] = mesh_phase(t.pinion_phase_deg, t.pinion_teeth, axes[s], axes[s + 1],
+        out[s + 1]["wheel"] = mesh_phase(t.pinion_phase_deg, t.pinion_teeth[s], axes[s], axes[s + 1],
                                          t.wheel_teeth[s])
     return out
 
@@ -181,7 +194,7 @@ def collisions(t: TrainSpec):
 def contact_ratio(t: TrainSpec, stage, spread=0.0):
     """Transverse contact ratio of mesh `stage`, with the axes `spread` mm further
     apart than designed (print and fit tolerance). Below 1.0 the teeth lose contact."""
-    p, w = t.pinion(), t.wheel(stage)
+    p, w = t.pinion(stage), t.wheel(stage)
     alpha = math.radians(t.pressure_angle_deg)
     a0 = centre_distances(t)[stage]
     a = a0 + spread
@@ -191,7 +204,7 @@ def contact_ratio(t: TrainSpec, stage, spread=0.0):
 
 
 def backlash(t: TrainSpec, stage):
-    return t.pinion().thinning + t.wheel(stage).thinning
+    return t.pinion(stage).thinning + t.wheel(stage).thinning
 
 
 # ---------- single gear ----------
@@ -207,7 +220,7 @@ def root_diameter(g: GearSpec):
 def tip_root_clearance(t: TrainSpec, stage):
     """Smallest radial gap between a tip and the mating root at mesh `stage`."""
     c = centre_distances(t)[stage]
-    p, w = t.pinion(), t.wheel(stage)
+    p, w = t.pinion(stage), t.wheel(stage)
     return min(c - tip_diameter(p) / 2 - root_diameter(w) / 2,
                c - tip_diameter(w) / 2 - root_diameter(p) / 2)
 
@@ -276,3 +289,8 @@ def tooth_thickness_at_pitch(g: GearSpec):
             if abs(a) < math.pi / g.teeth:
                 angles.append(a)
     return (max(angles) - min(angles)) * rp
+
+
+# The optional 20-frame counter: 14:28 on mesh 3 keeps its 12.6 mm centres, so every axis,
+# the body and the other gears stay as they are, and the train drops from 50:1 to 40:1.
+TWENTY_FRAME_TRAIN = replace(TrainSpec(), pinion_teeth=(12, 12, 14, 12), wheel_teeth=(32, 30, 28, 36))

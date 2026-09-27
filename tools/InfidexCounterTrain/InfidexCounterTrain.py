@@ -80,7 +80,8 @@ def _build(design, spec, axes):
     root = design.rootComponent
     _remove_previous(design)
     first = design.timeline.count
-    names = ["CT sprocket pinion (tool body)", "CT idler 1", "CT idler 2", "CT idler 3", "CT dial wheel (tool body)"]
+    names = ["CT sprocket pinion (tool body)", "CT idler 1 counter-coupling-gear", "CT idler 2 counter-idler-1",
+             "CT idler 3 counter-idler-2", "CT dial wheel counter-gear (tool body)"]
     phases = gc.phases(spec)
     by_axis = {}
     for axis, kind, gear, z0, z1 in gc.layers(spec):
@@ -170,9 +171,9 @@ def _join(comp, body, tool):
 
 
 def _summary(spec, axes):
-    lines = [f"Counter train rebuilt. Ratio {gc.ratio(spec):.3f}:1"]
+    lines = [f"Counter train rebuilt. Ratio {gc.ratio(spec):.3f}:1, {gc.frames_per_turn(spec):g} frames per dial turn"]
     for s, d in enumerate(gc.centre_distances(spec)):
-        lines.append(f"mesh {s + 1}: {spec.pinion_teeth}:{spec.wheel_teeth[s]}  centres {d:.3f} mm  "
+        lines.append(f"mesh {s + 1}: {spec.pinion_teeth[s]}:{spec.wheel_teeth[s]}  centres {d:.3f} mm  "
                      f"tip/root clearance {gc.tip_root_clearance(spec, s):.3f} mm  backlash {gc.backlash(spec, s):.3f} mm")
     for i, (x, y) in enumerate(axes):
         lines.append(f"axis {i}: X {x:.3f}  Y {y:.3f}")
