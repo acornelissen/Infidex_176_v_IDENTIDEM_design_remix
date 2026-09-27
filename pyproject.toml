@@ -1,0 +1,21 @@
+[project]
+name = "infidex176v-remix-tools"
+version = "0"
+description = "Build and check tools for the Infidex 176 V x IDENTIDEM.design remix"
+requires-python = ">=3.12,<3.13"
+dependencies = []
+
+[dependency-groups]
+# gear maths tests, no CAD kernel needed
+test = ["pytest", "shapely"]
+# reading the STEP and writing 3MFs
+cad = ["cadquery-ocp", "trimesh", "numpy", "scipy"]
+# printing the hardware guide to PDF
+guide = ["playwright"]
+
+[tool.uv]
+package = false
+default-groups = ["test", "cad"]
+
+[tool.pytest.ini_options]
+testpaths = ["tools"]
