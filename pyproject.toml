@@ -9,7 +9,8 @@ dependencies = []
 # gear maths tests, no CAD kernel needed
 test = ["pytest", "shapely"]
 # reading the STEP and writing 3MFs
-cad = ["cadquery-ocp", "trimesh", "numpy", "scipy"]
+# (rtree backs trimesh's closest-point queries used by the fit)
+cad = ["cadquery-ocp", "trimesh", "numpy", "scipy", "rtree"]
 # printing the hardware guide to PDF
 guide = ["playwright"]
 
