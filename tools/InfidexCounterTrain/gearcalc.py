@@ -47,7 +47,7 @@ class TrainSpec:
     wheel_spans: tuple = ((36.8, 38.5), (39.0, 40.8), (41.2, 43.0), (43.4, 45.9))
     pinion_tops: tuple = (40.8, 43.0, 45.4)      # idler 1-3
     # bores per idler 1-3 and the dial wheel: (lower dia, upper dia, z where it steps)
-    bores: tuple = ((4.4, 3.6, 38.8), (3.61, 3.61, 39.0), (3.6, 3.6, 41.2), (3.2, 3.2, 43.4))
+    bores: tuple = ((4.2, 3.4, 38.8), (3.4, 3.4, 39.0), (3.4, 3.4, 41.2), (3.2, 3.2, 43.4))
     pinion_phase_deg: float = 15.0               # tooth angle of every pinion; wheels follow
     clearance: float = 0.3                       # minimum radial gap to non-meshing gears
     axial_clearance: float = 0.3                 # minimum gap between gears that pass over each other

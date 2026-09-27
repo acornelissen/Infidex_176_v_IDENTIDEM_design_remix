@@ -169,9 +169,9 @@ def test_axial_clash_is_reported_when_stacked_gears_come_too_close():
 
 @pytest.mark.parametrize("axis, want", [
     (0, []),
-    (1, [(4.4, 36.8, 38.8), (3.6, 38.8, 40.8)]),
-    (2, [(3.61, 39.0, 43.0)]),
-    (3, [(3.6, 41.2, 45.4)]),
+    (1, [(4.2, 36.8, 38.8), (3.4, 38.8, 40.8)]),
+    (2, [(3.4, 39.0, 43.0)]),
+    (3, [(3.4, 41.2, 45.4)]),
     (4, [(3.2, 43.4, 45.9)]),
 ])
 def test_bore_segments_match_the_built_gears(axis, want):
