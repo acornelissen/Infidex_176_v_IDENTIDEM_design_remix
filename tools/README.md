@@ -58,3 +58,22 @@ mise run test
 ```
 
 The tests cover the ratio and frames per dial turn, centre distances, the solved axis positions, radial and axial clash detection, the face heights and stepped bores of the built gears, the wall left under the pinion teeth, the tooth phases the model is drawn at, tooth geometry, the contact ratio of every mesh (at least 1.3 as drawn, and still 1.0 with the axes 0.2 mm apart), that meshing outlines do not overlap through a full pitch, and the same checks on the 20-frame train.
+
+## CAD export and checks
+
+`cad/` is a small Python package that keeps the 3MFs in step with the STEP (`cad/Infidex176V-IDENTIDEM.design-remix.step` at the repository root). Run it through mise from anywhere in the repository:
+
+| Task | What it does |
+|---|---|
+| `mise run verify` | Checks every file in `3mf/parts/` and every object in the Bambu project. Each mesh must be closed, consistently wound and of positive volume; each part file must match the STEP solid of the same name within 0.02 mm RMS and 0.5 % volume; the inlay in a two-colour file must sit where the STEP puts it; each project object must match its part file. Prints a table and exits non-zero on any failure. Add part names to check only those. Takes about two and a half minutes |
+| `mise run export -- <part names>` | Re-exports parts after a CAD change. For every mesh of the part (its part file, a two-colour file holding it, its project object) it fits the solid from the STEP as committed (`--ref`, default `HEAD`) onto the mesh, then writes the solid from the current STEP through the same transform, so each copy keeps its place on the bed. Everything else in the archives is copied byte for byte. If the old solid does not fit a mesh within 0.02 mm, nothing is written. `--dry-run` reports without writing |
+| `mise run clearance` | Checks the counter gears (`ratchet-coupling-gear`, which carries the sprocket pinion, `counter-coupling-gear`, `counter-idler-1`, `counter-idler-2`, `counter-gear`) against `body-solid`, `body-top`, `simple-cover`, `drag-cover` and each other, as assembled in the STEP. Reports the shared volume and the smallest gap per pair, and fails on an overlap over 0.001 mm³. Meshing pairs, where a pinion drives the next wheel in the train, are reported but not judged; their teeth are the gear maths' job |
+
+Workflow after changing the CAD: export the STEP from Fusion over the one in `cad/`, run `mise run export -- <changed parts>`, then `mise run verify` and, for the counter train, `mise run clearance`. Commit the STEP and the 3MFs together, so the next export fits against the right STEP.
+
+Notes:
+
+- The fit error is measured from the mesh's vertices to the STEP surface, because the vertices of an exported mesh lie on the true surface whatever the facet size. Nearly symmetric parts may come out turned about their own axis by a symmetry step; their footprint on the bed is the same.
+- Part file names map to STEP solid names one to one, except `pressure-plate-1` (`pressure-plate (1)`) and the two-colour files, which hold the face and `counter-face-inlay` (the STEP bodies `Body1`, `Body2`, and so on).
+- `--step FILE` makes `verify`, `export` and `clearance` use another STEP, for example one taken from git.
+- `export` only replaces parts that already have meshes. TODO: an `add` command for a brand-new part (write its part 3MF, place it on a free spot of the right plate in the project, clone an object's settings). Until then, import the new part into Bambu Studio by hand and run `verify`.
