@@ -25,3 +25,9 @@ description = "Re-export parts from the STEP into their 3MFs, keeping placement:
 depends = ["setup"]
 dir = "{{config_root}}/tools"
 run = "uv run python -m cad.export"
+
+[tasks.clearance]
+description = "Check the counter gears against the body, the covers and each other"
+depends = ["setup"]
+dir = "{{config_root}}/tools"
+run = "uv run python -m cad.clearance"
