@@ -24,7 +24,7 @@ A choice of counter dial: the existing free-running one, or a new one held by a 
 
 - `drag-cover` and `drag-counter-face`, a matched pair that replaces the cover and counter face. A tower beside the dial, 0.2 mm clear of the face rim, holds a seventh ball plunger, P7, in the same Ø2.2 hole as the others. Its ball runs in a 0.12 mm groove round the rim. The friction keeps the backlash taken up so the dial stops in the same place and doesn't flutter. The marker for 25 is an arrow on top of the tower. [`13bc08e`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/13bc08e)
 - `drag-counter-face-two-colour.3mf`, with the same marker inlay as the simple face. [`13bc08e`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/13bc08e)
-- In the project file, `drag-cover` is on plate 7 beside the simple cover and `drag-counter-face` is on plate 8 beside the simple face. Both plates say to print one of each. [`13bc08e`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/13bc08e)
+- In the project file, `drag-cover` is on plate 7 beside the simple cover and `drag-counter-face` is on plate 8 beside the simple face. Print one of each pair. [`13bc08e`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/13bc08e)
 - The README and the hardware guide explain how to choose between the two dials, and the guide has a drawing of P7 (Figure 11). [`a93a39c`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/a93a39c)
 
 ### Changed
