@@ -14,6 +14,22 @@ Releases are tagged `vX.Y.Z`. Changes that only touch the documentation go into 
 
 ## [Unreleased]
 
+## [2.0.2] - 2026-09-27
+
+Closer-running counter idlers, and a sprocket that no longer binds in the body. The new parts fit a 2.0.1 build.
+
+**Reprint:** `counter-coupling-gear`, `counter-idler-1` and `counter-idler-2`. Reprint your body (`body-solid`, or `body-top`) only if the sprocket binds in it.
+
+### Fixed
+
+- The idler bores are 0.2 mm over their pins, down from 0.4 mm: `counter-coupling-gear` from Ø4.4/Ø3.6 to Ø4.2/Ø3.4, `counter-idler-1` from Ø3.61 to Ø3.4 and `counter-idler-2` from Ø3.6 to Ø3.4. Face heights and outer dimensions are unchanged. [`3587f2b`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/3587f2b)
+- The body's hole for the sprocket shaft is Ø6.2, up from Ø5.8, which was tighter than the Ø6.0 shaft. [`26c1d61`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/26c1d61)
+
+### Changed
+
+- The counter-train generator defaults match the new bores. [`3587f2b`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/3587f2b)
+- The README gives the idler bore sizes and how to free a tight idler.
+
 ## [2.0.1] - 2026-09-25
 
 Tighter tolerances where printed parts showed gaps. The new parts fit a 2.0.0 build.
@@ -90,7 +106,8 @@ First release of the remix.
 - README with parts, hardware and the full assembly procedure. [`96984c0`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/96984c0), [`238e9ea`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/238e9ea)
 - Attribution notice for the original project. [`f6cef08`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/f6cef08)
 
-[Unreleased]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.0.1...HEAD
+[Unreleased]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.0.2...HEAD
+[2.0.2]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v1.0.1...v1.1.0
