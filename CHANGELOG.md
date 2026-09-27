@@ -14,6 +14,10 @@ Releases are tagged `vX.Y.Z`. Changes that only touch the documentation go into 
 
 ## [Unreleased]
 
+### Changed
+
+- The parametric counter-train model has the 2.0.2 idler bores, so it matches the main model again.
+
 ## [2.0.2] - 2026-09-27
 
 Closer-running counter idlers, and a sprocket that no longer binds in the body. The new parts fit a 2.0.1 build.
