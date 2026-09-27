@@ -87,8 +87,6 @@ Some parts are a choice rather than a set. Print one from each of these:
 - **Counter dial:** `simple-cover` with `simple-counter-face`, or `drag-cover` with `drag-counter-face`. Print them as a matched pair; see [Counter dial: simple or drag](#counter-dial-simple-or-drag) to choose. The project file has all four, the covers on plate 7 and the faces on plate 8, so delete the pair you don't want before slicing
 - **Counter face colours:** either face in one colour, or its `-two-colour` file (`simple-counter-face-two-colour`, `drag-counter-face-two-colour`) for markers in a second filament
 
-One file name differs from the words used in the hardware guide: the split collar is `takeup-washer-stopper`.
-
 ### Lens mount alternatives
 
 The helicoid in this repo is one of four mounts Denis offers, and the others are worth a look before you commit: **[STL/Lens mount](https://github.com/max05210238/Infidex_176_V/tree/Main/STL/Lens%20mount)** has a classic cone, a tube mount, and an older cone for the T-22 lens alongside the focusing helicoid. The cone and tube install the same way as each other, so swapping is not a big job.
@@ -147,7 +145,7 @@ Carried over from Denis's build, not in the printed files, and still needed:
 
 ### Heat-set inserts
 
-Fourteen in all, every one 4 mm long in a hole 4.0 mm deep. Buy M3 × 4, not the common 5.7 mm length.
+Fourteen in all, every one 4 mm long in a hole 4.0 mm deep: ten M2 × 4 and four M3 × 4. Buy the 4 mm length, not the common 5.7 mm.
 
 - **I1–I5**, M2, top face, for the top cover
 - **I6–I7**, M2, top face, for the cold shoe
@@ -164,7 +162,7 @@ I14 goes into the top of the sprocket, and the sprocket gear screws down onto it
 
 ### Ball plungers
 
-All of them are D2×3 flanged plungers (Ø2 body, Ø2.5 nose flange, 3 mm long overall, Ø1.5 ball standing 0.4 mm proud of the flange, about 5 N) in radial holes. Each hole opens into a shaft bore and stops short of the outside wall, so **every plunger goes in from inside the bore**, flange in its seat flush with the bore wall and ball pointing at the shaft.
+All of them are D2×3 flanged plungers (Ø2 body, Ø2.5 nose flange, 3 mm long overall, Ø1.5 ball standing 0.4 mm proud of the flange, about 5 N) in radial holes. Each of P1–P6 opens into a shaft bore and stops short of the outside wall, so **P1–P6 go in from inside the bore**, flange in its seat flush with the bore wall and ball pointing at the shaft.
 
 P1–P3 sit 120° apart around the body's rewind bore and act on the rewind knob. P4–P6 repeat the pattern in the top cover's take-up bore and ride in the inner-ratchet's W and R detent grooves. Both covers have P4–P6. P7 is only on `drag-cover`: it sits in the tower on the lens side of the dial and presses on the counter face rim, see [Counter dial: simple or drag](#counter-dial-simple-or-drag).
 
@@ -201,7 +199,7 @@ Each length is the longest standard screw that stays inside its insert without b
 | S13 | M2×4 thumbscrew, flat underside | 1 | Counter face to counter gear | I12 | 0.9 mm | 3.1 mm |
 | S14 | M2×6 socket cap (ISO 4762) or countersunk | 1 | Sprocket gear to sprocket | I14 | 0.25 mm | 4.0 mm |
 
-The cold shoe (M2×4) and lens standard (M3×4) lengths are proven on the printed camera and leave plenty of clearance. The M2×6 cover and sprocket screws are the longest that fit: the next size up bottoms out. The S1–S5 figures are with the cover screwed down, which seats it 0.1 mm below its drawn height. S14 takes the full depth of its insert either way, so run it down gently and stop when it seats. Don't go longer on S12 either, as an M2×8 would reach 0.35 mm into the M1 magnet pocket.
+The cold shoe (M2×4) and lens standard (M3×4) lengths are proven on the printed camera and leave plenty of clearance. The M2×6 cover and sprocket screws are the longest that fit: the next size up bottoms out. The S1–S5 figures are with the cover screwed down, which seats it 0.1 mm below its drawn height. S14 takes the full depth of its insert whether it is a cap or countersunk screw, so run it down gently and stop when it seats. Don't go longer on S12 either, as an M2×8 would reach 0.35 mm into the M1 magnet pocket.
 
 On heads: the knob's seat for S12 is a Ø3.7 × 90° countersink 0.75 mm deep, so a standard M2 flat head (Ø3.8) finishes level with the knob face. The countersinks in the cover and cold shoe are Ø3.7–3.8 at 90°, so M2 flat heads finish flush or a hair proud. The lens-standard counterbores are Ø7.3 × 3.1 deep, so either an M3 cap head (Ø5.5 × 3) or an M3 countersunk head sits below the surface.
 
@@ -209,7 +207,7 @@ On heads: the knob's seat for S12 is a Ø3.7 × 90° countersink 0.75 mm deep, s
 
 ### Counter train
 
-The four counter gears drop onto printed pins in the body. The idler bores are 0.2 mm over their pins: Ø3.4 on the Ø3.2 pins, and Ø4.2 over the Ø4.0 foot of the stepped pin under the first idler. If an idler won't drop on or turns stiffly, run a 3.4 mm drill through its bore by hand rather than sanding the pin. The idler 1 and 2 pins run up to the top of their gears so they cannot tilt out of mesh, and the idler 3 pin stops level with the body's top face, which is the face the two-piece top half prints on. The top cover sits on the floor of its recess once it is screwed down, and every gear keeps at least 0.3 mm of end float in that position. A 25 mm boss on the body around the dial locates the cover in a 25.2 mm recess, so the cover sits concentric with the dial. The dial wheel is centred on the counter face by its hub, and the face turns in the cover on a close-running step.
+The four counter gears drop onto printed pins in the body. From the sprocket: idler 1 is `counter-coupling-gear`, idler 2 is `counter-idler-1`, idler 3 is `counter-idler-2`, and the dial wheel is `counter-gear`. The idler bores are 0.2 mm over their pins: Ø3.4 on the Ø3.2 pins, and Ø4.2 over the Ø4.0 foot of the stepped pin under idler 1. If an idler won't drop on or turns stiffly, run a drill of the bore size through it by hand rather than sanding the pin: 3.4 mm, or 4.2 mm for the lower part of idler 1's stepped bore. The idler 1 and 2 pins run up to the top of their gears so they cannot tilt out of mesh, and the idler 3 pin stops level with the body's top face, which is the face the two-piece top half prints on. The top cover sits on the floor of its recess once it is screwed down, and every gear keeps at least 0.3 mm of end float in that position. A 25 mm boss on the body around the dial locates the cover in a 25.2 mm recess, so the cover sits concentric with the dial. The dial wheel is centred on the counter face by its hub, and the face turns in the cover on a close-running step.
 
 Before fitting the counter face, screw the cover down and turn the sprocket by hand. The train should run freely with no tight spots. If it only binds with the cover on, look for sagged bridging on the cover's pocket ceilings and clean it up rather than backing the screws off.
 
@@ -219,7 +217,7 @@ The face starts at 25 and counts up: 25 is the loading position, then winding on
 
 ![Counter face on the counter gear, in section](docs/hardware-map/img/counter-face.png)
 
-Every frame has its own marker on the rim, 0.9 × 1.7 mm and 0.4 mm deep, with a wider one beside each number, so you can see at a glance when a frame lines up with the body marker. Print the face dial-down. In one colour the recesses read on their own, and a little paint or wax crayon wiped across them makes them stand out further. For two colours, open `3mf/parts/simple-counter-face-two-colour.3mf` or `3mf/parts/drag-counter-face-two-colour.3mf`, load it as one object with two parts, and give `counter-face-inlay` the second filament. The inlay is the same for both faces. Only the first two layers change colour.
+Every frame has its own marker on the rim, 0.9 × 1.7 mm and 0.4 mm deep, with a wider one beside each number, so you can see at a glance when a frame lines up with the marker. Print the face dial-down. In one colour the recesses read on their own, and a little paint or wax crayon wiped across them makes them stand out further. For two colours, open `3mf/parts/simple-counter-face-two-colour.3mf` or `3mf/parts/drag-counter-face-two-colour.3mf`, load it as one object with two parts, and give `counter-face-inlay` the second filament. The inlay is the same for both faces. Only the first two layers change colour.
 
 ### Take-up spool and collar
 
@@ -229,7 +227,7 @@ C1 is a printed part, not a bought one, named `takeup-washer-stopper` in the fil
 2. Lower the take-up spool into the body from the top. As it comes down, its bottom end passes through the collar, and the split lets the collar open over the Ø10.8 barrel.
 3. Keep lowering the spool until the collar snaps closed in the groove below the head, then spin the spool to check it turns freely without lifting.
 
-The advance knob screws down into the inner-ratchet, which sits over the spool head. The optional magnets hold the two together, and the collar under the body stops the spool lifting.
+The advance knob screws down into the inner-ratchet, which sits over the spool head. The optional magnets hold the two together, and the collar under the take-up bore stops the spool lifting.
 
 ![Section through the take-up axis](docs/fig5_takeup_stack.png)
 
@@ -292,7 +290,7 @@ The counter comes two ways. Pick one pair and print both parts of it; the covers
 | Extra hardware | None | One more D2×3 ball plunger (P7) |
 | How the dial moves | Turns only with the gear train, with nothing else touching it | A ball plunger in a tower beside the dial presses on the face's rim, riding in a shallow groove. The tower itself stays 0.2 mm clear of the rim |
 | Marker for 25 | Triangle recessed into the cover | Arrow on top of the plunger tower, on the lens side of the dial |
-| Height | Face is the highest point, 49.4 mm | Tower stands 1 mm above the face, at 50.4 mm |
+| Height | Face is the highest point (Z 49.4 in the CAD) | Tower stands 1 mm above the face (Z 50.4) |
 
 **Choose simple** if you want the fewest parts and the lightest wind. The dial is driven only by the gears, so it adds nothing to the effort of winding on, and there is one less plunger to fit. The trade-off is that the four meshes each have a little backlash, so the face can rock a fraction of a frame either way and does not always come to rest in exactly the same place.
 
@@ -304,7 +302,7 @@ With the drag option, the thumbscrew has to hold the face against the plunger's 
 
 ## Parametric counter train
 
-`cad/Infidex176V-IDENTIDEM.design-remix-counter-train.f3d` holds the counter gear train as a parametric model, so you can change it without redrawing the gears. The sprocket and dial axes stay fixed where the body needs them; the two idler axes follow from the centre distances. Module, tooth counts, profile shift, backlash, the height of every gear face and the stepped bores are all parameters, and the defaults rebuild the idlers exactly as the main model has them, so a different reduction or a coarser module is a table edit and a rebuild.
+`cad/Infidex176V-IDENTIDEM.design-remix-counter-train.f3d` holds the counter gear train as a parametric model, so you can change it without redrawing the gears. The sprocket and dial axes stay fixed where the body needs them; the three idler axes follow from the centre distances. Module, tooth counts, profile shift, backlash, the height of every gear face and the stepped bores are all parameters, and the defaults rebuild the idlers exactly as the main model has them, so a different reduction or a coarser module is a table edit and a rebuild.
 
 Start from the values in the file if you are only nudging it: the train is 50:1 in four meshes and the gears are already near the limit of what a 0.4 mm nozzle resolves.
 
