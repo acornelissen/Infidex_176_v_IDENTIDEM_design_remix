@@ -16,6 +16,7 @@ The camera is unchanged where it counts: same 3:1 panoramic frame on 35mm film, 
 |---|---|---|
 | Body | One piece | Reworked, and supplied two ways: in one piece, or as two halves glued together with a light-tight lip and alignment pegs |
 | Frame counting | Count as you wind | Sprocket-driven gear train and a numbered counter face, starting at 25 |
+| Counter dial | None | Two versions: a free-running dial, or one held by a ball plunger for a steadier reading |
 | Rewind knob | Spring detent | Three ball plungers |
 | Take-up coupling | Dog coupling | Inner-ratchet with three ball plungers for wind and rewind, magnets optional |
 | Spool retention | Glued washer | Printed split collar (`takeup-washer-stopper`) that clicks into the groove |
@@ -42,6 +43,7 @@ Specific to this remix:
 
 - **Frame counter:** 50:1 spur train, module 0.6, four meshes (12:32, 12:30, 12:30, 12:36), one counter-face turn per 25 frames
 - **Counter face:** starts at 25 as the loading position, then reads 1, 2, 3 and on as you wind; friction-fitted under a thumbscrew, reset by loosening it and turning 25 back to the marker
+- **Counter dial:** simple (free-running) or drag (one extra ball plunger presses on the dial rim), see [Counter dial: simple or drag](#counter-dial-simple-or-drag)
 
 ## Files
 
@@ -52,7 +54,7 @@ Specific to this remix:
 | `cad/Infidex176V-IDENTIDEM.design-remix-counter-train.f3d` | Fusion source for the parametric counter gear train |
 | `3mf/Infidex176V-IDENTIDEM.design-remix.3mf` | Print-ready project, all parts laid out across nine plates |
 | `3mf/parts/` | One 3MF per part, for reprinting a single part |
-| `Infidex-Hardware-Map.pdf` | Hardware placement and assembly guide, 6 pages, built from `docs/hardware-map/` |
+| `Infidex-Hardware-Map.pdf` | Hardware placement and assembly guide, 7 pages, built from `docs/hardware-map/` |
 | `tools/InfidexCounterTrain/` | Fusion script that rebuilds the counter train from parameters, see [`tools/README.md`](tools/README.md) |
 | `flocking/` | Full-size flocking templates, PDF and DXF |
 | `docs/` | Section drawings used in this README, and the source of the hardware guide |
@@ -73,7 +75,7 @@ The counter train gears are the finest parts in the model. Print them with the r
 
 ### Parts
 
-Print the whole camera from the project file in `3mf/`, which has everything arranged across nine plates with the per-part settings already set. `3mf/parts/` holds the same 32 parts one to a file, plus a two-colour version of the counter face, each in the orientation it is meant to print in and sitting on the bed, for when you only need to reprint one. Updating an earlier build? [`CHANGELOG.md`](CHANGELOG.md) lists the parts to reprint for each release.
+Print the whole camera from the project file in `3mf/`, which has everything arranged across nine plates with the per-part settings already set. `3mf/parts/` holds the same 34 parts one to a file, plus a two-colour version of each counter face, each in the orientation it is meant to print in and sitting on the bed, for when you only need to reprint one. Updating an earlier build? [`CHANGELOG.md`](CHANGELOG.md) lists the parts to reprint for each release.
 
 Some parts are a choice rather than a set. Print one from each of these:
 
@@ -82,7 +84,8 @@ Some parts are a choice rather than a set. Print one from each of these:
 - **Viewfinder:** `viewfinder-var-1` or `viewfinder-var-2`
 - **Focus ring:** `helicoid-focus-ring-ribs` or `helicoid-focus-ring-no-ribs`
 - **Helicoid inner ring:** `helicoid-inner-ring-for-80mm-lens` or `helicoid-inner-ring-for-55mm-lens`, to suit your taking lens
-- **Counter face:** `counter-face` in one colour, or `counter-face-two-colour` for markers in a second filament
+- **Counter dial:** `simple-cover` with `simple-counter-face`, or `drag-cover` with `drag-counter-face`. Print them as a matched pair; see [Counter dial: simple or drag](#counter-dial-simple-or-drag) to choose. The project file has all four, the covers on plate 7 and the faces on plate 8, so delete the pair you don't want before slicing
+- **Counter face colours:** either face in one colour, or its `-two-colour` file (`simple-counter-face-two-colour`, `drag-counter-face-two-colour`) for markers in a second filament
 
 One file name differs from the words used in the hardware guide: the split collar is `takeup-washer-stopper`.
 
@@ -112,7 +115,7 @@ Everything below was measured from the CAD. [`Infidex-Hardware-Map.pdf`](Infidex
 | M3 × 4 cap or countersunk screws | 4 | Lens standard |
 | M2 × 6 cap or countersunk screw | 1 | Sprocket gear to sprocket |
 | M2 × 4 thumbscrew | 1 | Counter face |
-| D2×3 flanged ball plungers | 6 | Rewind bore ×3, take-up bore ×3 |
+| D2×3 flanged ball plungers | 6, or 7 with the drag cover | Rewind bore ×3, take-up bore ×3, drag cover ×1 |
 | Ø5 × 2 magnet | 1 | Inner-ratchet (optional, recommended) |
 | Ø4 × 2 magnets | 2 | Take-up spool head (optional, recommended) |
 | 3/8" to 1/4" tripod bushing | 1 | Base, in the printed 3/8"-16 socket |
@@ -133,7 +136,7 @@ Carried over from Denis's build, not in the printed files, and still needed:
 ### Fitting order
 
 1. **All heat-set inserts first** (I1–I11 in the body, I12 in the counter gear, I13 in the inner-ratchet, I14 in the sprocket), before anything else is fitted to those parts. The soldering iron can't then hurt a magnet or loosen a plunger.
-2. **Ball plungers** once the body and cover have cooled: P1–P3 in the body's rewind bore, P4–P6 in the cover's take-up bore.
+2. **Ball plungers** once the body and cover have cooled: P1–P3 in the body's rewind bore, P4–P6 in the cover's take-up bore, and P7 in the tower beside the dial if you printed `drag-cover`.
 3. **Magnets** (optional, highly recommended), checking polarity before gluing. M1 goes into the inner-ratchet from below, after I13 is in.
 4. **Pressure plate into the door.** Let the glue cure before closing the door on it.
 5. **Take-up spool and printed collar:** hold the split collar inside the body under the take-up bore, then lower the spool from the top through it until the collar clicks into the groove.
@@ -161,11 +164,13 @@ I14 goes into the top of the sprocket, and the sprocket gear screws down onto it
 
 ### Ball plungers
 
-All six are D2×3 flanged plungers (Ø2 body, Ø2.5 nose flange, Ø1.5 ball) in radial holes. Each hole opens into a shaft bore and stops short of the outside wall, so **every plunger goes in from inside the bore**, flange in its seat flush with the bore wall and ball pointing at the shaft.
+All of them are D2×3 flanged plungers (Ø2 body, Ø2.5 nose flange, 3 mm long overall, Ø1.5 ball standing 0.4 mm proud of the flange, about 5 N) in radial holes. Each hole opens into a shaft bore and stops short of the outside wall, so **every plunger goes in from inside the bore**, flange in its seat flush with the bore wall and ball pointing at the shaft.
 
-P1–P3 sit 120° apart around the body's rewind bore and act on the rewind knob. P4–P6 repeat the pattern in the top cover's take-up bore and ride in the inner-ratchet's W and R detent grooves.
+P1–P3 sit 120° apart around the body's rewind bore and act on the rewind knob. P4–P6 repeat the pattern in the top cover's take-up bore and ride in the inner-ratchet's W and R detent grooves. Both covers have P4–P6. P7 is only on `drag-cover`: it sits in the tower on the lens side of the dial and presses on the counter face rim, see [Counter dial: simple or drag](#counter-dial-simple-or-drag).
 
 The holes are drawn Ø2.2 × 3.1 mm with a Ø2.7 × 0.57 mm flange seat. With a 0.4 mm nozzle they print close to Ø2.0, which gives a press fit. Push the plunger body-first from inside the bore with a flat-ended rod until the flange sits in its seat and is level with the bore wall. If one is loose, put a small drop of CA on its body before pressing it in. Keep glue away from the flange and the ball, or the ball will stick.
+
+P7's hole is also Ø2.2, 2.8 mm deep behind a Ø2.7 flange seat, but it prints horizontally, so it may come out slightly oval. The seat is set 0.1 mm deeper than the tower's inner face, so a seated flange stands 0.1 mm proud of the face and stays 0.1 mm clear of the dial rim. Fit P7 before the counter face goes on, while you can reach the tower's inner face.
 
 ![Rewind bore in the body, three plunger holes 120 degrees apart](docs/fig3_rewind_plungers.png)
 
@@ -210,11 +215,11 @@ Before fitting the counter face, screw the cover down and turn the sprocket by h
 
 ### Counter face
 
-The face starts at 25 and counts up: 25 is the loading position, then winding on takes you to 1, 2, 3 and so on. There is no zero. Lay the face on the hub with 25 against the body marker and finger-tighten S13. The face grips on friction, so to reset it for a new roll you loosen the thumbscrew, turn 25 back to the marker, and tighten again. Don't use thread lock. The head sits in a Ø6.0 × 0.5 mm recess, so a head up to about Ø5.8 sits down in the face.
+The face starts at 25 and counts up: 25 is the loading position, then winding on takes you to 1, 2, 3 and so on. There is no zero. Lay the face on the hub with 25 against the marker and finger-tighten S13. On `simple-cover` the marker is the triangle recessed into the cover beside the dial; on `drag-cover` it is the arrow on top of the plunger tower. The face grips on friction, so to reset it for a new roll you loosen the thumbscrew, turn 25 back to the marker, and tighten again. Don't use thread lock. The head sits in a Ø6.0 × 0.5 mm recess, so a head up to about Ø5.8 sits down in the face.
 
 ![Counter face on the counter gear, in section](docs/hardware-map/img/counter-face.png)
 
-Every frame has its own marker on the rim, 0.9 × 1.7 mm and 0.4 mm deep, with a wider one beside each number, so you can see at a glance when a frame lines up with the body marker. Print the face dial-down. In one colour the recesses read on their own, and a little paint or wax crayon wiped across them makes them stand out further. For two colours, open `3mf/parts/counter-face-two-colour.3mf`, load it as one object with two parts, and give `counter-face-inlay` the second filament. Only the first two layers change colour.
+Every frame has its own marker on the rim, 0.9 × 1.7 mm and 0.4 mm deep, with a wider one beside each number, so you can see at a glance when a frame lines up with the body marker. Print the face dial-down. In one colour the recesses read on their own, and a little paint or wax crayon wiped across them makes them stand out further. For two colours, open `3mf/parts/simple-counter-face-two-colour.3mf` or `3mf/parts/drag-counter-face-two-colour.3mf`, load it as one object with two parts, and give `counter-face-inlay` the second filament. The inlay is the same for both faces. Only the first two layers change colour.
 
 ### Take-up spool and collar
 
@@ -276,6 +281,26 @@ Flocking and foam go in last, after everything else is fitted and the camera has
 ## Body: one piece or two
 
 Both bodies are remixed parts, not the original. The one-piece body carries all the changes above and needs no gluing. The two-piece body is the same part split horizontally through the middle, which suits a smaller printer and puts both halves flat on the bed, seam face down. See [Two-piece body seam](#two-piece-body-seam) for how the halves go together. The hardware is the same either way.
+
+## Counter dial: simple or drag
+
+The counter comes two ways. Pick one pair and print both parts of it; the covers and faces are otherwise identical, take the same screws, inserts and gears, and fit the same body.
+
+| | Simple | Drag |
+|---|---|---|
+| Parts | `simple-cover`, `simple-counter-face` | `drag-cover`, `drag-counter-face` |
+| Extra hardware | None | One more D2×3 ball plunger (P7) |
+| How the dial moves | Turns only with the gear train, with nothing else touching it | A ball plunger in a tower beside the dial presses on the face's rim, riding in a shallow groove. The tower itself stays 0.2 mm clear of the rim |
+| Marker for 25 | Triangle recessed into the cover | Arrow on top of the plunger tower, on the lens side of the dial |
+| Height | Face is the highest point, 49.4 mm | Tower stands 1 mm above the face, at 50.4 mm |
+
+**Choose simple** if you want the fewest parts and the lightest wind. The dial is driven only by the gears, so it adds nothing to the effort of winding on, and there is one less plunger to fit. The trade-off is that the four meshes each have a little backlash, so the face can rock a fraction of a frame either way and does not always come to rest in exactly the same place.
+
+**Choose drag** if you want the dial to read the same every time. The plunger's light, constant friction keeps the backlash taken up in one direction, so the face stops where the gears leave it and doesn't flutter when the camera is knocked or carried. The costs are one more plunger, a slightly heavier wind, and the tower standing proud of the dial.
+
+With the drag option, the thumbscrew has to hold the face against the plunger's friction as well as the gears. Tighten S13 firmly by hand, then wind through a few frames and check that the face stays with the train rather than slipping on the hub. If it slips, tighten S13 a little more rather than backing off the plunger. Don't mix the pairs: the simple face has no groove for the ball, so on the drag cover the ball would ride on the plain rim, drag harder and mark it.
+
+![Drag option, from above and cut through P7](docs/hardware-map/img/drag-option.png)
 
 ## Parametric counter train
 
