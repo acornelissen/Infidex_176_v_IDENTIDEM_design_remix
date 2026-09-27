@@ -13,3 +13,9 @@ run = "uv sync"
 description = "Run the tool tests"
 depends = ["setup"]
 run = "uv run pytest"
+
+[tasks.verify]
+description = "Check every part 3MF and project object against the STEP"
+depends = ["setup"]
+dir = "{{config_root}}/tools"
+run = "uv run python -m cad.verify"
