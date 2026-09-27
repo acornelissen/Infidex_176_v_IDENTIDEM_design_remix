@@ -19,3 +19,9 @@ description = "Check every part 3MF and project object against the STEP"
 depends = ["setup"]
 dir = "{{config_root}}/tools"
 run = "uv run python -m cad.verify"
+
+[tasks.export]
+description = "Re-export parts from the STEP into their 3MFs, keeping placement: mise run export -- <part names>"
+depends = ["setup"]
+dir = "{{config_root}}/tools"
+run = "uv run python -m cad.export"
