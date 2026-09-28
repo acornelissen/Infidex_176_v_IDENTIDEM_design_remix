@@ -52,3 +52,9 @@ description = "Plates in the Bambu project: mise run plates -- list | add-plate 
 depends = ["setup"]
 dir = "{{config_root}}/tools"
 run = "uv run python -m cad.project"
+
+[tasks.add]
+description = "Add a new STEP solid to the 3MFs, placed like a sibling: mise run add -- <solid> --like <sibling> [--inlay <solid>] [--plate <n or name>]"
+depends = ["setup"]
+dir = "{{config_root}}/tools"
+run = "uv run python -m cad.add"

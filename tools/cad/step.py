@@ -16,7 +16,7 @@ from OCP.TopExp import TopExp_Explorer
 from OCP.TopLoc import TopLoc_Location
 from OCP.TopoDS import TopoDS
 
-from . import INLAY_BODY, REPO, STEP, STEP_PATH
+from . import INLAY, INLAY_BODY, REPO, STEP, STEP_PATH
 
 
 def load_solids(path=STEP, names=None):
@@ -48,9 +48,14 @@ def load_solids_at(ref, names=None):
         return load_solids(f.name, names)
 
 
-def inlay_solids(solids):
-    """The loose bodies that make up the two-colour inlay."""
-    return [s for n, s in solids.items() if INLAY_BODY.fullmatch(n)]
+def inlay_solids(solids, name=INLAY):
+    """The STEP solids of the two-colour inlay called `name` in the 3MFs: the solid of that
+    name, or for counter-face-inlay the loose bodies Body1, Body2, ..."""
+    if name in solids:
+        return [solids[name]]
+    if name == INLAY:
+        return [s for n, s in solids.items() if INLAY_BODY.fullmatch(n)]
+    return []
 
 
 def volume(shape):

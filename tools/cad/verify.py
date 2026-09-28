@@ -3,17 +3,20 @@
 For each mesh: watertight, consistent winding, positive volume. A part file must match
 the STEP solid of the same name (fit RMS and volume); a two-colour file holds the face
 and the inlay, and the inlay must sit where the STEP puts it relative to the face. Every
-project object must match the mesh in its part file.
+project object must match the mesh in its part file. Every project object must sit on its
+plate's bed (inside it, out of the excluded corner, lowest point at z 0) at least
+project.GAP mm from the other objects on the plate.
 
-Usage: python -m cad.verify [--step FILE] [part names...]    (all parts when none are given)
+Usage: python -m cad.verify [--step FILE] [--parts DIR] [--project FILE] [part names...]
+(all parts when none are given)
 Exits 1 if anything fails.
 """
 import argparse
 import sys
 
-from . import (INLAY, INLAY_BODY, PART_ENTRY, PARTS, PROJECT, STEP, TOLERANCE_RMS, TOLERANCE_VOLUME, TWO_COLOUR,
-               file_stem, solid_name, user_path)
-from . import step, threemf
+from . import (INLAY, INLAY_BODY, INLAY_SUFFIX, PART_ENTRY, PARTS, PROJECT, STEP, TOLERANCE_RMS, TOLERANCE_VOLUME,
+               TWO_COLOUR, file_stem, solid_name, user_path)
+from . import project, step, threemf
 from .fit import fit, vertex_rms
 
 
@@ -46,7 +49,9 @@ def check_part_file(path, solids, step_mesh):
     """Rows for one part 3MF against the STEP."""
     meshes = threemf.mesh_objects(threemf.read_entry(path, PART_ENTRY))
     face = solid_name(path.stem)
-    expected = [face, INLAY] if path.stem.endswith(TWO_COLOUR) else [face]
+    expected = [face]
+    if path.stem.endswith(TWO_COLOUR):
+        expected += [n for n in meshes if n != face and n.endswith(INLAY_SUFFIX)] or [INLAY]
     if len(meshes) == 1 and len(expected) == 1:
         meshes = {face: next(iter(meshes.values()))}   # a lone mesh may carry any object name
     rows = []
@@ -59,13 +64,13 @@ def check_part_file(path, solids, step_mesh):
                          "dv": None, "problems": ["object missing from the file"]})
             continue
         mesh = meshes[name]
-        if name == INLAY:
-            bodies = step.inlay_solids(solids)
+        if name != face:
+            bodies = step.inlay_solids(solids, name)
             if not bodies or T is None:
-                rows.append(row(path.name, name, mesh, problems=["no inlay bodies or no face fit to place them"]))
+                rows.append(row(path.name, name, mesh, problems=["no inlay solids in the STEP or no face fit to place them"]))
                 continue
             ref_volume = sum(step.volume(s) for s in bodies)
-            rms = vertex_rms(step_mesh(INLAY), mesh, T)
+            rms = vertex_rms(step_mesh(name, inlay=True), mesh, T)
             rows.append(row(path.name, name, mesh, ref_volume, rms))
         elif name not in solids:
             rows.append(row(path.name, name, mesh, problems=[f"no STEP solid named {name!r}"]))
@@ -75,15 +80,15 @@ def check_part_file(path, solids, step_mesh):
     return rows, meshes
 
 
-def check_project(part_meshes, only):
+def check_project(project_path, part_meshes, only):
     """Rows for every project object against the mesh in its part file."""
     rows = []
-    for o in threemf.project_objects(PROJECT):
+    for o in threemf.project_objects(project_path):
         name = o["name"]
         if only and name not in only and file_stem(name) not in only:
             continue
         label = f"project:{o['mesh_file'].rsplit('/', 1)[-1]}"
-        xml = threemf.read_entry(PROJECT, o["mesh_file"])
+        xml = threemf.read_entry(project_path, o["mesh_file"])
         mesh = next(x["mesh"] for x in threemf.objects(xml) if x["id"] == o["mesh_object_id"])
         ref = part_meshes.get((file_stem(name), name))
         if ref is None:
@@ -91,6 +96,18 @@ def check_project(part_meshes, only):
             continue
         _, rms = fit(ref, mesh)
         rows.append(row(label, name, mesh, ref.volume, rms))
+    return rows
+
+
+def check_plates(project_path):
+    """One row per plate: every object on its bed and clear of the others."""
+    proj = project.Project(project_path)
+    problems = proj.plate_problems()
+    rows = []
+    for p in proj.plates():
+        found = [f"{name}: {problem}" for plate, name, problem in problems if plate == p["id"]]
+        rows.append({"file": f"project:plate {p['id']}", "object": f"{len(p['objects'])} objects on the bed",
+                     "rms": None, "volume": None, "ref_volume": None, "dv": None, "problems": found})
     return rows
 
 
@@ -108,31 +125,34 @@ def main(argv=None):
     ap = argparse.ArgumentParser(prog="verify", description=__doc__.splitlines()[0])
     ap.add_argument("parts", nargs="*", help="part file names or STEP solid names (default: all)")
     ap.add_argument("--step", type=user_path, default=STEP, help="STEP file to check against (default: the one in cad/)")
+    ap.add_argument("--parts", dest="parts_dir", type=user_path, default=PARTS, help="folder of part 3MFs (default: 3mf/parts)")
+    ap.add_argument("--project", type=user_path, default=PROJECT, help="project 3MF (default: the one in 3mf/)")
     args = ap.parse_args(argv)
     only = set(args.parts)
 
     solids = step.load_solids(args.step)
     cache = {}
 
-    def step_mesh(name):
-        if name not in cache:
-            cache[name] = (step.tessellate_all(step.inlay_solids(solids)) if name == INLAY
-                           else step.tessellate(solids[name]))
-        return cache[name]
+    def step_mesh(name, inlay=False):
+        if (name, inlay) not in cache:
+            cache[name, inlay] = (step.tessellate_all(step.inlay_solids(solids, name)) if inlay
+                                  else step.tessellate(solids[name]))
+        return cache[name, inlay]
 
     rows, part_meshes = [], {}
-    paths = sorted(PARTS.glob("*.3mf"))
+    paths = sorted(args.parts_dir.glob("*.3mf"))
     for path in paths:
         if only and path.stem not in only and solid_name(path.stem) not in only:
             continue
         r, meshes = check_part_file(path, solids, step_mesh)
         rows += r
         part_meshes.update({(path.stem, n): m for n, m in meshes.items()})
-    rows += check_project(part_meshes, only)
+    rows += check_project(args.project, part_meshes, only)
+    rows += check_plates(args.project)
     print_table(rows)
 
     if not only:
-        covered = {solid_name(p.stem) for p in paths}
+        covered = {solid_name(p.stem) for p in paths} | {n for _, n in part_meshes}
         loose = sorted(n for n in solids if n not in covered and not INLAY_BODY.fullmatch(n))
         if loose:
             print(f"\nnote: STEP solids with no part file: {', '.join(loose)}")
