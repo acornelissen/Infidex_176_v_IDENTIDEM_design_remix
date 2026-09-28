@@ -14,6 +14,18 @@ Releases are tagged `vX.Y.Z`. Changes that only touch the documentation go into 
 
 ## [Unreleased]
 
+**Reprint:** nothing, unless you want the drag dial to click onto each frame: then reprint `drag-counter-face` (or `drag-counter-face-two-colour`).
+
+### Added
+
+- `drag-counter-face` has a detent flute under every frame marker: 25 vertical V-flutes, 120° included, 0.22 mm below the groove floor. P7's ball drops 0.1 mm into each one, so the face settles with the number centred on the arrow. The flute's shallow flank keeps its pull on the face well under the thumbscrew's grip. The simple dial and every other part are unchanged. [`a72c8d3`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/a72c8d3)
+- `mise run verify`, `mise run export` and `mise run clearance` check the 3MFs and the counter gears against the STEP and re-export parts in place, and CI runs the checks on every push. See [`tools/README.md`](tools/README.md).
+- The counter-train script takes a tooth count for each pinion.
+
+### Fixed
+
+- The README and hardware guide: insert sizes, the part file for each idler, where P7 goes in, and other wording. [`638c877`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/638c877)
+
 ## [2.1.0] - 2026-09-27
 
 A choice of counter dial: the existing free-running one, or a new one held by a ball plunger so it reads the same every time. Existing builds are unaffected.
