@@ -1,7 +1,7 @@
 """Print index.html to Infidex-Hardware-Map.pdf at the repo root.
 
-Needs Python Playwright with Chromium (pip install playwright; playwright install chromium)
-and the Inter font, which the page loads from Google Fonts.
+Run it with `mise run guide`, which installs Playwright and its Chromium first. The page
+loads the Inter font from Google Fonts, so it needs a network connection.
 """
 from pathlib import Path
 
