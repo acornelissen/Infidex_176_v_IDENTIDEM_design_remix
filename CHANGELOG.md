@@ -14,13 +14,18 @@ Releases are tagged `vX.Y.Z`. Changes that only touch the documentation go into 
 
 ## [Unreleased]
 
-**Reprint:** nothing, unless you want the drag dial to click onto each frame: then reprint `drag-counter-face` (or `drag-counter-face-two-colour`).
+**Reprint:** nothing, unless you want the drag dial to click onto each frame: then reprint `drag-counter-face` (or `drag-counter-face-two-colour`). It works with the 2.1.0 `drag-cover`, whose tower arrow sits right over P7. The new marker position and the knob arrows are cosmetic, so reprint the covers or knobs only if you want them.
 
 ### Added
 
-- `drag-counter-face` has a detent flute under every frame marker: 25 vertical V-flutes, 120° included, 0.22 mm below the groove floor. P7's ball drops 0.1 mm into each one, so the face settles with the number centred on the arrow. The flute's shallow flank keeps its pull on the face well under the thumbscrew's grip. The simple dial and every other part are unchanged. [`a72c8d3`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/a72c8d3)
+- `drag-counter-face` has a detent flute under every frame marker: 25 vertical V-flutes, 105° included, 0.30 mm below the groove floor. P7's ball drops 0.1 mm into each one, so the face settles with the number centred on the marker. The flank angle keeps the flute's pull on the face well under the thumbscrew's grip. [`a72c8d3`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/a72c8d3), [`3f40a5f`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/3f40a5f)
+- Engraved arrows on `advance-knob` and `rewind-knob` show which way each one turns. [`3f40a5f`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/3f40a5f)
 - `mise run verify`, `mise run export` and `mise run clearance` check the 3MFs and the counter gears against the STEP and re-export parts in place, and CI runs the checks on every push. See [`tools/README.md`](tools/README.md).
 - The counter-train script takes a tooth count for each pinion.
+
+### Changed
+
+- `drag-cover` uses the same triangle marker as `simple-cover` instead of the arrow on the tower. On both covers the triangle moves 6° round the dial, to exactly five frames from P7, so the detent centres each number on it. `advance-knob`'s bore entry chamfer is 0.5 mm instead of 1 mm. [`3f40a5f`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/3f40a5f)
 
 ### Fixed
 

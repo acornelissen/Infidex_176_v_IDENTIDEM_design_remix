@@ -213,7 +213,7 @@ Before fitting the counter face, screw the cover down and turn the sprocket by h
 
 ### Counter face
 
-The face starts at 25 and counts up: 25 is the loading position, then winding on takes you to 1, 2, 3 and so on. There is no zero. Lay the face on the hub with 25 against the marker and finger-tighten S13. On `simple-cover` the marker is the triangle recessed into the cover beside the dial; on `drag-cover` it is the arrow on top of the plunger tower. The face grips on friction, so to reset it for a new roll you loosen the thumbscrew, turn 25 back to the marker, and tighten again. Don't use thread lock. The head sits in a Ø6.0 × 0.5 mm recess, so a head up to about Ø5.8 sits down in the face.
+The face starts at 25 and counts up: 25 is the loading position, then winding on takes you to 1, 2, 3 and so on. There is no zero. Lay the face on the hub with 25 against the marker and finger-tighten S13. The marker is the triangle recessed into the cover beside the dial, in the same place on both covers. The face grips on friction, so to reset it for a new roll you loosen the thumbscrew, turn 25 back to the marker, and tighten again. Don't use thread lock. The head sits in a Ø6.0 × 0.5 mm recess, so a head up to about Ø5.8 sits down in the face.
 
 ![Counter face on the counter gear, in section](docs/hardware-map/img/counter-face.png)
 
@@ -289,12 +289,12 @@ The counter comes two ways. Pick one pair and print both parts of it; the covers
 | Parts | `simple-cover`, `simple-counter-face` | `drag-cover`, `drag-counter-face` |
 | Extra hardware | None | One more D2×3 ball plunger (P7) |
 | How the dial moves | Turns only with the gear train, with nothing else touching it | A ball plunger in a tower beside the dial presses on the face's rim, riding in a shallow groove with a detent flute under every frame. The tower itself stays 0.2 mm clear of the rim |
-| Marker for 25 | Triangle recessed into the cover | Arrow on top of the plunger tower, on the lens side of the dial |
+| Marker for 25 | Triangle recessed into the cover | The same triangle, exactly five frames round from P7 |
 | Height | Face is the highest point (Z 49.4 in the CAD) | Tower stands 1 mm above the face (Z 50.4) |
 
 **Choose simple** if you want the fewest parts and the lightest wind. The dial is driven only by the gears, so it adds nothing to the effort of winding on, and there is one less plunger to fit. The trade-off is that the four meshes each have a little backlash, so the face can rock a fraction of a frame either way and does not always come to rest in exactly the same place.
 
-**Choose drag** if you want the dial to read the same every time. The plunger's light, constant friction keeps the backlash taken up in one direction, so the face stops where the gears leave it and doesn't flutter when the camera is knocked or carried. A shallow V-flute in the groove under each frame marker gives the ball a seat, so the face settles with the number centred on the arrow. The costs are one more plunger, a slightly heavier wind, and the tower standing proud of the dial.
+**Choose drag** if you want the dial to read the same every time. The plunger's light, constant friction keeps the backlash taken up in one direction, so the face stops where the gears leave it and doesn't flutter when the camera is knocked or carried. A shallow V-flute in the groove under each frame marker gives the ball a seat, so the face settles with the number centred on the triangle. The costs are one more plunger, a slightly heavier wind, and the tower standing proud of the dial.
 
 With the drag option, the thumbscrew has to hold the face against the plunger's friction as well as the gears. Tighten S13 firmly by hand, then wind through a few frames and check that the face stays with the train rather than slipping on the hub. If it slips, tighten S13 a little more rather than backing off the plunger. Set the face for a new roll the same way as before; it will click into the flute nearest 25. Don't mix the pairs: the simple face has no groove for the ball, so on the drag cover the ball would ride on the plain rim, drag harder and mark it.
 
