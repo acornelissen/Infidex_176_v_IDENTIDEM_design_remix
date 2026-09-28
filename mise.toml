@@ -46,3 +46,9 @@ run = [
   "uv sync --group guide",
   "uv run --group guide python docs/hardware-map/figures/drag_option.py",
 ]
+
+[tasks.plates]
+description = "Plates in the Bambu project: mise run plates -- list | add-plate <name> | rename-plate <plate> <name> | move <object> <plate>"
+depends = ["setup"]
+dir = "{{config_root}}/tools"
+run = "uv run python -m cad.project"

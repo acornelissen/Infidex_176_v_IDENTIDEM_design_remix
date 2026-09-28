@@ -72,23 +72,43 @@ def read_entry(path, entry):
         return z.read(entry).decode("utf-8")
 
 
-def rewrite_zip(path, replacements):
+def rewrite_zip(path, replacements, additions=None, before=None, out=None):
     """Replace entries of the zip at `path` ({entry: str or bytes}); every other entry,
-    the entry order and the per-entry compression stay as they were."""
-    tmp = f"{path}.tmp"
+    the entry order and the per-entry compression stay as they were.
+
+    `additions` ({entry: str or bytes}) are new entries, compressed, written just before
+    the entry `before` (or at the end). The result goes to `out` (default: over `path`).
+    """
+    additions = additions or {}
+    tmp = f"{out or path}.tmp"
+
+    def encode(data):
+        return data.encode("utf-8") if isinstance(data, str) else data
+
     with zipfile.ZipFile(path) as zin:
-        missing = set(replacements) - set(zin.namelist())
+        names = set(zin.namelist())
+        missing = set(replacements) - names
         if missing:
             raise KeyError(f"not in {path}: {sorted(missing)}")
+        clash = set(additions) & names
+        if clash:
+            raise KeyError(f"already in {path}: {sorted(clash)}")
+        if before is not None and before not in names:
+            raise KeyError(f"not in {path}: {before}")
         with zipfile.ZipFile(tmp, "w") as zout:
+            def add_new():
+                for name, data in additions.items():
+                    info = zipfile.ZipInfo(name, zin.infolist()[0].date_time)
+                    zout.writestr(info, encode(data), compress_type=zipfile.ZIP_DEFLATED)
             for info in zin.infolist():
+                if info.filename == before:
+                    add_new()
                 data = replacements.get(info.filename)
-                if data is None:
-                    data = zin.read(info.filename)
-                elif isinstance(data, str):
-                    data = data.encode("utf-8")
+                data = zin.read(info.filename) if data is None else encode(data)
                 zout.writestr(info, data, compress_type=info.compress_type)
-    os.replace(tmp, path)
+            if before is None:
+                add_new()
+    os.replace(tmp, out or path)
 
 
 def transform(text):
@@ -112,6 +132,11 @@ def project_objects(path):
     with zipfile.ZipFile(path) as z:
         model = z.read("3D/3dmodel.model").decode("utf-8")
         settings = z.read("Metadata/model_settings.config").decode("utf-8")
+    return parse_project(model, settings)
+
+
+def parse_project(model, settings):
+    """project_objects from the text of 3D/3dmodel.model and Metadata/model_settings.config."""
     names = dict(re.findall(r'<object id="(\d+)">\s*<metadata key="name" value="([^"]*)"', settings))
     plates = {}
     for plate, body in re.findall(r'<plate>\s*<metadata key="plater_id" value="(\d+)"/>(.*?)</plate>', settings, re.S):
