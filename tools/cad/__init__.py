@@ -25,8 +25,8 @@ TOLERANCE_VOLUME = 0.005  # relative volume difference
 # part file names whose STEP solid is named differently
 FILE_TO_SOLID = {"pressure-plate-1": "pressure-plate (1)"}
 TWO_COLOUR = "-two-colour"
-# the two-colour inlay: one object in a two-colour 3MF, named after its STEP solid, e.g.
-# counter-face-20-inlay. The 25-frame inlay is the exception: the unnamed STEP bodies
+# the two-colour inlay: one object in a two-colour 3MF, named after its STEP solid (a name
+# ending in -inlay). The counter-face inlay is the exception: the unnamed STEP bodies
 # Body1, Body2, ... that the 3MFs call counter-face-inlay.
 INLAY = "counter-face-inlay"
 INLAY_BODY = re.compile(r"Body\d+")

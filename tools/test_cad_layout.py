@@ -2,7 +2,7 @@ from cad.layout import apply
 from cad.project import Project
 from test_cad_project import make_project
 
-LAYOUT = [("Cover A", ["cover-a"]), ("Idlers 25", ["idler-1", "idler-2"]), ("Idlers 20", ["idler-1-20", "idler-2-20"])]
+LAYOUT = [("Cover A", ["cover-a"]), ("Idlers 25", ["idler-1", "idler-2"]), ("Idlers B", ["idler-1-b", "idler-2-b"])]
 
 
 def small_parts(tmp_path):
@@ -14,7 +14,7 @@ def small_parts(tmp_path):
 def test_layout_gives_each_option_a_plate_and_leaves_shared_parts(tmp_path):
     proj = Project(small_parts(tmp_path))
     said = apply(proj, LAYOUT)
-    assert "skipped 'Idlers 20': not in the project yet: idler-1-20, idler-2-20" in said
+    assert "skipped 'Idlers B': not in the project yet: idler-1-b, idler-2-b" in said
     names = {p["name"]: p for p in proj.plates()}
     assert set(names) == {f"Plate {n}" for n in range(1, 10)} | {"Cover A", "Idlers 25"}
     assert proj.cols() == 4   # 11 plates
@@ -33,5 +33,5 @@ def test_layout_runs_twice_without_changes(tmp_path):
     proj = Project(path)
     model = proj.read("3D/3dmodel.model")
     said = apply(proj, LAYOUT)
-    assert said == ["skipped 'Idlers 20': not in the project yet: idler-1-20, idler-2-20"]
+    assert said == ["skipped 'Idlers B': not in the project yet: idler-1-b, idler-2-b"]
     assert proj.read("3D/3dmodel.model") == model

@@ -2,27 +2,33 @@ from cad.clearance import BODY, COVERS, FACES, IDLER_SETS, pairs
 
 TODAY = {"ratchet-coupling-gear", "counter-coupling-gear", "counter-gear", "counter-idler-1", "counter-idler-2",
          "body-solid", "body-top", "simple-cover", "drag-cover", "simple-counter-face", "drag-counter-face"}
-WITH_20 = TODAY | set(IDLER_SETS["20 frames"]) | {"simple-counter-face-20", "drag-counter-face-20"}
+# a second idler set and face on the same axes, as a new option would be
+SETS = {**IDLER_SETS, "b": ["idler-1-b", "idler-2-b"]}
+ALL_FACES = FACES + ["face-b"]
+WITH_B = TODAY | {"idler-1-b", "idler-2-b", "face-b"}
 
 
 def as_sets(todo):
     return {frozenset((a, b)): meshing for a, b, meshing in todo}
 
 
+def with_b():
+    return as_sets(pairs(WITH_B, SETS, ALL_FACES)[0])
+
+
 def test_alternatives_are_never_checked_against_each_other():
-    got = as_sets(pairs(WITH_20)[0])
-    groups = [COVERS, FACES, IDLER_SETS["25 frames"] + IDLER_SETS["20 frames"]]
-    for group in groups[:2]:
+    got = with_b()
+    for group in (COVERS, ALL_FACES):
         assert not any(frozenset((a, b)) in got for a in group for b in group if a != b)
     for a in IDLER_SETS["25 frames"]:
-        for b in IDLER_SETS["20 frames"]:
+        for b in SETS["b"]:
             assert frozenset((a, b)) not in got
-    assert len(got) == len(pairs(WITH_20)[0])   # each pair once
+    assert len(got) == len(pairs(WITH_B, SETS, ALL_FACES)[0])   # each pair once
 
 
 def test_each_idler_set_meshes_in_its_own_train():
-    got = as_sets(pairs(WITH_20)[0])
-    for i1, i2 in IDLER_SETS.values():
+    got = with_b()
+    for i1, i2 in SETS.values():
         assert got[frozenset(("counter-coupling-gear", i1))] is True
         assert got[frozenset((i1, i2))] is True
         assert got[frozenset((i2, "counter-gear"))] is True
@@ -34,15 +40,20 @@ def test_each_idler_set_meshes_in_its_own_train():
 
 
 def test_faces_are_checked_against_every_cover_and_the_dial_gear():
-    got = as_sets(pairs(WITH_20)[0])
-    for face in FACES:
+    got = with_b()
+    for face in ALL_FACES:
         for other in COVERS + ["counter-gear"]:
             assert got[frozenset((face, other))] is False
         assert frozenset((face, "body-solid")) not in got
 
 
-def test_parts_not_in_the_step_are_skipped_with_a_note():
+def test_the_default_options_are_todays_parts():
     todo, notes = pairs(TODAY)
-    assert not any("-20" in a or "-20" in b for a, b, _ in todo)
-    assert "idler set 20 frames skipped: not in the STEP: counter-idler-1-20, counter-idler-2-20" in notes
-    assert "face simple-counter-face-20 skipped: not in the STEP" in notes
+    assert notes == []
+    assert {p for pair in as_sets(todo) for p in pair} == TODAY
+
+
+def test_options_not_in_the_step_are_skipped_with_a_note():
+    todo, notes = pairs(TODAY, SETS, ALL_FACES)
+    assert as_sets(todo) == as_sets(pairs(TODAY)[0])
+    assert notes == ["idler set b skipped: not in the STEP: idler-1-b, idler-2-b", "face face-b skipped: not in the STEP"]

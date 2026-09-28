@@ -2,9 +2,10 @@
 and delete nothing.
 
 Safe to run again: a plate that exists (by name) is reused, an object already on its plate
-stays where it is, and a plate whose parts are not in the project yet (the 20-frame parts
-before `add` has made them) is skipped with a note. Parts shared by every option
-(counter-coupling-gear, counter-gear) stay on their small-parts plate.
+stays where it is, and a plate whose parts are not in the project is skipped with a note.
+Parts shared by every option (counter-coupling-gear, counter-gear) stay on their
+small-parts plate. A new option is a new line in LAYOUT, once `add` has put its parts in
+the project.
 
 Usage: python -m cad.layout [--project FILE] [--dry-run]
 """
@@ -21,9 +22,6 @@ LAYOUT = [
     ("Counter idlers - 25 frames (choose ONE set)", ["counter-idler-1", "counter-idler-2"]),
     ("Counter face - simple 25 (0.2 mm nozzle if possible)", ["simple-counter-face"]),
     ("Counter face - drag 25 (0.2 mm nozzle if possible)", ["drag-counter-face"]),
-    ("Counter idlers - 20 frames (choose ONE set)", ["counter-idler-1-20", "counter-idler-2-20"]),
-    ("Counter face - simple 20 (0.2 mm nozzle if possible)", ["simple-counter-face-20"]),
-    ("Counter face - drag 20 (0.2 mm nozzle if possible)", ["drag-counter-face-20"]),
 ]
 
 

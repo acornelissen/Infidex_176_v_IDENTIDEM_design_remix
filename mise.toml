@@ -60,7 +60,7 @@ dir = "{{config_root}}/tools"
 run = "uv run python -m cad.add"
 
 [tasks.layout]
-description = "Give each counter option its own plate in the Bambu project (safe to rerun; run again after adding the 20-frame parts)"
+description = "Give each counter option its own plate in the Bambu project (safe to rerun)"
 depends = ["setup"]
 dir = "{{config_root}}/tools"
 run = "uv run python -m cad.layout"

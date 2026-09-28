@@ -4,12 +4,13 @@ The counter-train Fusion script checks the gears against each other and the roun
 in the bay, but cannot see the body walls or the covers. This reports, for every pair of
 parts that are in the camera together, the volume they share and the smallest gap.
 
-Some parts are alternatives, of which a camera has one: the simple or the drag cover, the
-25-frame or the 20-frame idler set, and one counter face. Alternatives are never checked
-against each other. Each idler set is checked with the shared gears (its train runs
+Some parts are alternatives, of which a camera has one: a cover (COVERS), an idler set
+(IDLER_SETS) and a counter face (FACES). Alternatives are never checked against each
+other. Each idler set is checked with the shared gears (its train runs
 ratchet-coupling-gear, counter-coupling-gear, idler 1 of the set, idler 2 of the set,
 counter-gear) and against the housings; each face against every cover and against
-counter-gear, which holds it. Options missing from the STEP are skipped with a note.
+counter-gear, which holds it. A new option is a new entry in these lists; options missing
+from the STEP are skipped with a note.
 
 Meshing pairs (a pinion driving the next wheel in its train, as in gearcalc) run with
 their teeth interleaved, so they are reported but not judged; their tooth clearance is
@@ -38,9 +39,8 @@ DIAL = "counter-gear"
 BODY = ["body-solid", "body-top"]   # the one-piece body and its top half, each checked on its own
 # alternatives: a camera has one of each
 COVERS = ["simple-cover", "drag-cover"]
-IDLER_SETS = {"25 frames": ["counter-idler-1", "counter-idler-2"],
-              "20 frames": ["counter-idler-1-20", "counter-idler-2-20"]}
-FACES = ["simple-counter-face", "drag-counter-face", "simple-counter-face-20", "drag-counter-face-20"]
+IDLER_SETS = {"25 frames": ["counter-idler-1", "counter-idler-2"]}
+FACES = ["simple-counter-face", "drag-counter-face"]
 FIXED = SPROCKET_END + [DIAL] + BODY
 OVERLAP_LIMIT = 1e-3   # mm3
 REACH = 1.0            # mm; gaps larger than this are only reported as "> REACH"
@@ -73,9 +73,13 @@ def train(idlers):
     return SPROCKET_END + list(idlers) + [DIAL]
 
 
-def pairs(present):
+def pairs(present, idler_sets=None, faces=None, covers=None):
     """[(part, other part, meshing)] for every pair to check, given the set of part names in
-    the STEP, and [notes] on options left out. Each pair appears once."""
+    the STEP, and [notes] on options left out. Each pair appears once. The option sets
+    default to IDLER_SETS, FACES and COVERS."""
+    idler_sets = IDLER_SETS if idler_sets is None else idler_sets
+    faces = FACES if faces is None else faces
+    all_covers = COVERS if covers is None else covers
     notes, out, seen = [], [], set()
 
     def add(a, b, meshing=False):
@@ -83,9 +87,9 @@ def pairs(present):
             seen.add(frozenset((a, b)))
             out.append((a, b, meshing))
 
-    covers = [c for c in COVERS if c in present]
+    covers = [c for c in all_covers if c in present]
     housing = BODY + covers
-    for label, idlers in IDLER_SETS.items():
+    for label, idlers in idler_sets.items():
         missing = [i for i in idlers if i not in present]
         if missing:
             notes.append(f"idler set {label} skipped: not in the STEP: {', '.join(missing)}")
@@ -98,13 +102,13 @@ def pairs(present):
         for g in gears:
             for h in housing:
                 add(g, h)
-    for face in FACES:
+    for face in faces:
         if face not in present:
             notes.append(f"face {face} skipped: not in the STEP")
             continue
         for other in covers + [DIAL]:
             add(face, other)
-    notes += [f"cover {c} skipped: not in the STEP" for c in COVERS if c not in present]
+    notes += [f"cover {c} skipped: not in the STEP" for c in all_covers if c not in present]
     return out, notes
 
 

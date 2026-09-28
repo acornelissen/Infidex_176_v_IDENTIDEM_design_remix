@@ -1,7 +1,7 @@
 """Add a solid that is new in the STEP to the part 3MFs and the Bambu project, placed like a sibling.
 
-The sibling is a part already in the 3MFs that the new one should print like (the
-20-frame face like the 25-frame face). Every mesh is written through the rigid transform
+The sibling is a part already in the 3MFs that the new one should print like (a new
+counter face like simple-counter-face). Every mesh is written through the rigid transform
 that maps the sibling's STEP solid onto the sibling's mesh, so the new part has the same
 orientation and bed contact:
 

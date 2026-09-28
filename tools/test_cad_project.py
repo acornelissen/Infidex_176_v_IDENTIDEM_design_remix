@@ -184,14 +184,14 @@ def test_clone_settings_object_copies_print_settings_under_a_new_name():
     settings = ('<config>\n' + settings_object(34, "simple-counter-face", 12) + settings_object(36, "other", 8)
                 + '  <assemble>\n   <assemble_item object_id="34" instance_id="0" transform="1 0 0 0 1 0 0 0 1 5 6 7" offset="0 0 0" />\n'
                 '  </assemble>\n</config>\n')
-    out = project.clone_settings_object(settings, "34", 70, "simple-counter-face-20", 480, "simple-counter-face-20.3mf", "u-70")
+    out = project.clone_settings_object(settings, "34", 70, "simple-counter-face-b", 480, "simple-counter-face-b.3mf", "u-70")
     block = project.settings_object_block(out, 70)
     assert out.index('<object id="34">') < out.index('<object id="70">') < out.index('<object id="36">')
-    assert block.count('value="simple-counter-face-20"') == 2
+    assert block.count('value="simple-counter-face-b"') == 2
     assert '<part id="69"' in block and 'uuid="u-70"' in block
     assert block.count('face_count="480"') == 2
     assert 'key="wall_loops" value="8"' in block
-    assert 'key="source_file" value="simple-counter-face-20.3mf"' in block
+    assert 'key="source_file" value="simple-counter-face-b.3mf"' in block
     assert 'key="source_object_id" value="0"' in block and 'key="source_offset_x" value="0"' in block
     assert '<assemble_item object_id="70" instance_id="0" transform="1 0 0 0 1 0 0 0 1 5 6 7"' in out
     assert project.settings_object_block(out, 34) == project.settings_object_block(settings, 34)
@@ -202,12 +202,12 @@ def test_clone_object_adds_a_complete_object_that_reads_back(tmp_path):
     proj = Project(path)
     sibling = proj.object_named("face")
     mesh = trimesh.creation.cylinder(radius=10, height=4, sections=48)
-    oid = proj.clone_object(sibling, "face-20", mesh, "face-20.3mf")
+    oid = proj.clone_object(sibling, "face-b", mesh, "face-b.3mf")
     proj.move(oid, 1)
     proj.save()
 
     proj = Project(path)
-    new = proj.object_named("face-20")
+    new = proj.object_named("face-b")
     assert new["object_id"] == oid and new["mesh_file"] == "3D/Objects/object_2.model"
     assert len(proj.local_mesh(new).faces) == len(mesh.faces)
     assert proj.plate_of(oid) == 1 and proj.plate_problems() == []
@@ -217,4 +217,4 @@ def test_clone_object_adds_a_complete_object_that_reads_back(tmp_path):
         names = z.namelist()
     assert names.index("3D/Objects/object_2.model") < names.index("Metadata/model_settings.config")
     with pytest.raises(ValueError):
-        proj.clone_object(new, "face-20", mesh, "face-20.3mf")
+        proj.clone_object(new, "face-b", mesh, "face-b.3mf")
