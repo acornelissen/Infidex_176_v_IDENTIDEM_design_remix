@@ -26,3 +26,4 @@ __pycache__/
 .beads/
 .agents/skills/beads/
 .codex/
+docs/hardware-map/figures/.fonts/

@@ -12,7 +12,11 @@ test = ["pytest", "shapely"]
 # (rtree backs trimesh's closest-point queries used by the fit)
 cad = ["cadquery-ocp", "trimesh", "numpy", "scipy", "rtree"]
 # printing the hardware guide to PDF
-guide = ["playwright"]
+guide = [
+    "matplotlib>=3.11.2",
+    "networkx>=3.7",
+    "playwright",
+]
 
 [tool.uv]
 package = false

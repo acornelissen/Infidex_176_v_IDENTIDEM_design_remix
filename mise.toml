@@ -39,3 +39,10 @@ run = [
   "uv run --group guide playwright install chromium-headless-shell",
   "uv run --group guide python docs/hardware-map/build.py",
 ]
+
+[tasks.figures]
+description = "Redraw the hardware guide figures that are drawn from the STEP"
+run = [
+  "uv sync --group guide",
+  "uv run --group guide python docs/hardware-map/figures/drag_option.py",
+]
