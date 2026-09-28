@@ -25,3 +25,4 @@ __pycache__/
 # Beads (local issue tracking, not shared)
 .beads/
 .agents/skills/beads/
+.codex/
