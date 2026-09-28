@@ -6,6 +6,10 @@ committed at --ref is fitted onto the mesh, and the solid from the current STEP 
 through the same transform. Everything else in each archive is copied byte for byte.
 If any old solid does not fit its mesh, nothing is written.
 
+Export is safe to run twice before committing: a mesh that the current solid already fits
+better than the old one, and within ALREADY_RMS, is reported as already exported and left
+alone, so it is never refitted against the wrong solid.
+
 Usage: python -m cad.export [--ref REF] [--step FILE] [--dry-run] <part names...>
 """
 import argparse
@@ -16,6 +20,18 @@ from . import step, threemf
 from .fit import fit
 
 SETTINGS = "Metadata/model_settings.config"
+ALREADY_RMS = 1e-3   # mm; the new solid fits this closely, so the mesh is already the new part
+
+
+def place(m_old, m_new, target, old_frame=None, new_frame=None):
+    """How to write the new solid onto `target`: (verdict, T, rms) with verdict "already"
+    when the mesh already is the new solid (fits it better than the old one, within
+    ALREADY_RMS), otherwise "export" with the transform and error of the old solid's fit."""
+    T, err = fit(m_old, target, old_frame)
+    T_new, err_new = fit(m_new, target, new_frame)
+    if err_new < err and err_new < ALREADY_RMS:
+        return "already", T_new, err_new
+    return "export", T, err
 
 
 def targets(solid):
@@ -54,10 +70,13 @@ def plan_part(solid, old, new, plan):
           f"{len(m_new.faces)} triangles")
     ok = True
     for path, entry, oid, project_oid in where:
-        files = plan.setdefault(path, {})
+        files = plan.get(path, {})
         xml = files.get(entry) or threemf.read_entry(path, entry)
         target = next(o["mesh"] for o in threemf.objects(xml) if o["id"] == oid)
-        T, err = fit(m_old, target, step.mass_frame(old[solid]))
+        verdict, T, err = place(m_old, m_new, target, step.mass_frame(old[solid]), step.mass_frame(new[solid]))
+        if verdict == "already":
+            print(f"  {path.name}:{entry}  already exported (new fit rms {err:.4f} mm), left as it is")
+            continue
         out = m_new.copy()
         out.apply_transform(T)
         fits = err < TOLERANCE_RMS
@@ -66,6 +85,7 @@ def plan_part(solid, old, new, plan):
         if not fits:
             ok = False
             continue
+        files = plan.setdefault(path, {})
         files[entry] = threemf.replace_mesh(xml, out, oid)
         if project_oid is not None:
             settings = files.get(SETTINGS) or threemf.read_entry(path, SETTINGS)
@@ -89,6 +109,9 @@ def main(argv=None):
     if not ok:
         print(f"\nnothing written: the old STEP must fit every mesh within {TOLERANCE_RMS} mm")
         return 1
+    if not plan:
+        print("\nnothing to write: every mesh is already exported")
+        return 0
     if args.dry_run:
         print("\ndry run: nothing written")
         return 0
