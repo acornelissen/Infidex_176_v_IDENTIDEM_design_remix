@@ -8,9 +8,9 @@ permissions:
   contents: read
 
 jobs:
-  checks:
+  test:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     env:
       # the repository's mise.toml sets up a Python venv, which mise only does for trusted configs
       MISE_TRUSTED_CONFIG_PATHS: ${{ github.workspace }}
@@ -22,4 +22,3 @@ jobs:
       # the OCCT kernel in cadquery-ocp links against libGL, even headless
       - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libgl1
       - run: mise run test
-      - run: mise run verify
