@@ -254,7 +254,8 @@ class Project:
         m = self._item(oid)
         tag = m.group(0)
         values = threemf.attr(tag, "transform").split()
-        values[9:12] = [number(v) for v in xyz]
+        # a coordinate that does not change keeps its text, and so its precision
+        values[9:12] = [old if abs(float(old) - v) < 1e-9 else number(v) for old, v in zip(values[9:12], xyz)]
         new = tag.replace(f'transform="{threemf.attr(tag, "transform")}"', f'transform="{" ".join(values)}"', 1)
         self.text[MODEL] = self.text[MODEL][:m.start()] + new + self.text[MODEL][m.end():]
 
