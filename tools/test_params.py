@@ -25,8 +25,8 @@ def test_changing_a_tooth_count_flows_into_the_spec():
 
 
 def test_teeth_are_rounded_to_whole_numbers():
-    values = pm.default_values() | {"ct_pinion2_teeth": 14.0000001}
-    assert pm.to_spec(values).pinion_teeth == (12, 12, 14, 12)
+    values = pm.default_values() | {"ct_pinion1_teeth": 14.0000001}
+    assert pm.to_spec(values).pinion_teeth == (12, 14, 12, 12)
 
 
 def test_every_pinion_has_its_own_tooth_count():
@@ -36,7 +36,7 @@ def test_every_pinion_has_its_own_tooth_count():
 
 
 def test_the_20_frame_train_is_two_parameter_edits():
-    values = pm.default_values() | {"ct_pinion2_teeth": 14, "ct_wheel3_teeth": 28}
+    values = pm.default_values() | {"ct_pinion1_teeth": 14, "ct_wheel2_teeth": 28}
     assert pm.to_spec(values) == gc.TWENTY_FRAME_TRAIN
 
 

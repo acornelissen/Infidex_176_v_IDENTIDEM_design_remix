@@ -291,6 +291,8 @@ def tooth_thickness_at_pitch(g: GearSpec):
     return (max(angles) - min(angles)) * rp
 
 
-# The optional 20-frame counter: 14:28 on mesh 3 keeps its 12.6 mm centres, so every axis,
-# the body and the other gears stay as they are, and the train drops from 50:1 to 40:1.
-TWENTY_FRAME_TRAIN = replace(TrainSpec(), pinion_teeth=(12, 12, 14, 12), wheel_teeth=(32, 30, 28, 36))
+# The optional 20-frame counter: 14:28 on mesh 2 keeps its 12.6 mm centres, so every axis
+# and the body stay as they are, and the train drops from 50:1 to 40:1. Mesh 2, not mesh 3:
+# a 14-tooth pinion on idler 2 would cut 0.33 mm into both covers, while idler 1's pinion
+# has no cover or body wall near it. Only idler 1 and idler 2 change.
+TWENTY_FRAME_TRAIN = replace(TrainSpec(), pinion_teeth=(12, 14, 12, 12), wheel_teeth=(32, 28, 30, 36))

@@ -45,7 +45,7 @@ Axis numbers and the part files they print as: idler 1 is `counter-coupling-gear
 
 ### 20-frame train
 
-Set `ct_pinion2_teeth` to 14 and `ct_wheel3_teeth` to 28, then rerun. Mesh 3 keeps its 12.6 mm centres, so every axis stays where it is and only idler 2 and idler 3 change. The train drops from 50:1 to 40:1, and the dial turns once per 20 frames instead of 25. The summary shows the frames per dial turn after every build.
+Set `ct_pinion1_teeth` to 14 and `ct_wheel2_teeth` to 28, then rerun. Mesh 2 keeps its 12.6 mm centres, so every axis stays where it is and only idler 1 and idler 2 change. Don't put the 14:28 on mesh 3 instead: the same ratio works there, but a 14-tooth pinion on idler 2 cuts 0.33 mm into both covers. The script can't see the covers, so run `mise run clearance` on any new train. The train drops from 50:1 to 40:1, and the dial turns once per 20 frames instead of 25. The summary shows the frames per dial turn after every build.
 
 The sprocket and dial axes stay put; idler 3 is solved so it meshes with both idler 2 and the dial wheel. If a set of values cannot close, a gear would come within `ct_clearance` of the sprocket hub or the dial disc, or two stacked gears would come within `ct_axial_clearance` of each other, the script stops with a message instead of building. It does not know about the body walls or the cover bosses, so look at the gear bay yourself after a big change.
 

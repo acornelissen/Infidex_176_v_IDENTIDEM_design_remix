@@ -218,7 +218,7 @@ def test_placed_profile_rotates_about_the_gear_centre_then_moves_it():
     assert len(pts) == len(gc.profile(g))
 
 
-# ---------- the 20-frame train: 14:28 on mesh 3, everything else shared ----------
+# ---------- the 20-frame train: 14:28 on mesh 2, everything else shared ----------
 
 TWENTY = gc.TWENTY_FRAME_TRAIN
 
@@ -228,9 +228,9 @@ def test_twenty_frame_train_is_40_to_1_and_turns_once_per_20_frames():
     assert gc.frames_per_turn(TWENTY) == pytest.approx(20.0)
 
 
-def test_twenty_frame_train_changes_only_mesh_3():
-    assert TWENTY.pinion_teeth == (12, 12, 14, 12)
-    assert TWENTY.wheel_teeth == (32, 30, 28, 36)
+def test_twenty_frame_train_changes_only_mesh_2():
+    assert TWENTY.pinion_teeth == (12, 14, 12, 12)
+    assert TWENTY.wheel_teeth == (32, 28, 30, 36)
 
 
 def test_twenty_frame_train_keeps_every_axis_so_the_body_is_unchanged():
@@ -260,6 +260,8 @@ def test_twenty_frame_built_phases_mesh_without_overlap(stage):
 
 
 def test_twenty_frame_14_tooth_pinion_keeps_its_wall_over_the_bore():
-    root_r = gc.root_diameter(TWENTY.pinion(2)) / 2
-    for d, z0, z1 in gc.bore_segments(TWENTY, 2):
-        assert root_r - d / 2 >= 0.8
+    p0, p1 = _span(1, "pinion", TWENTY)
+    root_r = gc.root_diameter(TWENTY.pinion(1)) / 2
+    for d, z0, z1 in gc.bore_segments(TWENTY, 1):
+        if min(z1, p1) > max(z0, p0):
+            assert root_r - d / 2 >= 0.8
