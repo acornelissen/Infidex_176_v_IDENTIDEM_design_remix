@@ -20,11 +20,12 @@ Releases are tagged `vX.Y.Z`. Changes that only touch the documentation go into 
 
 - `drag-counter-face` has a detent flute under every frame marker: 25 vertical V-flutes, 105° included, 0.30 mm below the groove floor. P7's ball drops 0.1 mm into each one, so the face settles with the number centred on the marker. The flank angle keeps the flute's pull on the face well under the thumbscrew's grip. [`a72c8d3`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/a72c8d3), [`3f40a5f`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/3f40a5f)
 - Engraved arrows on `advance-knob` and `rewind-knob` show which way each one turns. [`3f40a5f`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/3f40a5f)
-- `mise run verify`, `mise run export` and `mise run clearance` check the 3MFs and the counter gears against the STEP and re-export parts in place, and CI runs the checks on every push. See [`tools/README.md`](tools/README.md).
+- `mise run verify`, `export`, `add`, `plates` and `clearance` check the 3MFs and the counter parts against the STEP, re-export or add parts in place, and manage the project's plates. `mise run guide` and `mise run figures` rebuild the hardware guide. CI runs the tests on every push and the 3MF checks when the CAD, 3MFs or tools change. See [`tools/README.md`](tools/README.md).
 - The counter-train script takes a tooth count for each pinion.
 
 ### Changed
 
+- The project file gives each counter choice its own plate: plate 10 `simple-cover`, 11 `drag-cover`, 12 the idlers, 13 `simple-counter-face`, 14 `drag-counter-face`. Print the plates for the dial you chose; there is nothing to delete first. The shared counter gears stay on Small parts 2, and with 14 plates Bambu Studio lays them out in four columns. [`71851bb`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/71851bb)
 - `drag-cover` uses the same triangle marker as `simple-cover` instead of the arrow on the tower. On both covers the triangle moves 6° round the dial, to exactly five frames from P7, so the detent centres each number on it. `advance-knob`'s bore entry chamfer is 0.5 mm instead of 1 mm. [`3f40a5f`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/3f40a5f)
 
 ### Fixed
