@@ -288,7 +288,7 @@ The counter comes two ways. Pick one pair and print both parts of it; the covers
 |---|---|---|
 | Parts | `simple-cover`, `simple-counter-face` | `drag-cover`, `drag-counter-face` |
 | Extra hardware | None | One more D2×3 ball plunger (P7) |
-| How the dial moves | Turns only with the gear train, with nothing else touching it | A ball plunger in a tower beside the dial presses on the face's rim, riding in a shallow groove with a detent flute under every frame. The tower itself stays 0.2 mm clear of the rim |
+| How the dial moves | Turns only with the gear train; its rim rests on the cover under its own weight | A ball plunger in a tower beside the dial presses on the face's rim, riding in a shallow groove with a detent flute under every frame. The tower itself stays 0.2 mm clear of the rim |
 | Marker for 25 | Triangle recessed into the cover | The same triangle, exactly five frames round from P7 |
 | Height | Face is the highest point (Z 49.4 in the CAD) | Tower stands 1 mm above the face (Z 50.4) |
 
