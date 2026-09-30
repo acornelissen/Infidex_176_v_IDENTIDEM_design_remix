@@ -32,6 +32,7 @@ Releases are tagged `vX.Y.Z`. Changes that only touch the documentation go into 
 
 ### Fixed
 
+- In the CAD, `viewfinder-var-1` sits on the cold-shoe floor like `viewfinder-var-2` instead of 0.03 mm into it. Its printed shape is unchanged, so there is nothing to reprint. [`3bfa478`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/3bfa478)
 - The README and hardware guide: insert sizes, the part file for each idler, where P7 goes in, and other wording. [`638c877`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/638c877)
 
 ## [2.1.0] - 2026-09-27
