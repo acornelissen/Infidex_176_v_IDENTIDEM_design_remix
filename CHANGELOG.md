@@ -14,12 +14,11 @@ Releases are tagged `vX.Y.Z`. Changes that only touch the documentation go into 
 
 ## [Unreleased]
 
-**Reprint:** nothing, unless you want the new counter parts. For a drag dial that clicks onto each frame, reprint `drag-cover` and `drag-counter-face` (or `drag-counter-face-two-colour`) together. For the dog-tooth drive, reprint `counter-gear` with a new face: a 2.1.0 face won't sit on the new gear, though a new face still works on a 2.1.0 gear. The marker position and the knob arrows are cosmetic, so reprint the covers or knobs only for those if you want them.
+**Reprint:** nothing, unless you want the new counter parts. For a drag dial that clicks onto each frame, reprint `drag-cover` and `drag-counter-face` (or `drag-counter-face-two-colour`) together. Reprint `cold-shoe` only if you want the ISO 518 shoe. The marker position and the knob arrows are cosmetic, so reprint the covers or knobs only for those if you want them.
 
 ### Added
 
 - `drag-counter-face` has a detent flute under every frame marker: 25 vertical V-flutes, 120° included, 0.27 mm deep in a plain rim that replaces the ball groove. P7's ball seats on the flute's flanks and drops 0.15 mm, so the face settles with the number centred on the marker and clicks there firmly. [`a72c8d3`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/a72c8d3), [`3f40a5f`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/3f40a5f), [`0711087`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/0711087)
-- `counter-gear` drives both counter faces through 25 dog teeth on the inside of its rim, which drop into 25 notches in the face's skirt. The thumbscrew still clamps the face, but a slip can no longer cost more than the teeth's ±0.7° of play, and resetting is: back S13 off, lift the face, turn it, drop it back. [`0711087`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/0711087)
 - Engraved arrows on `advance-knob` and `rewind-knob` show which way each one turns. [`3f40a5f`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/3f40a5f)
 - `mise run verify`, `export`, `add`, `plates` and `clearance` check the 3MFs and the counter parts against the STEP, re-export or add parts in place, and manage the project's plates. `mise run guide` and `mise run figures` rebuild the hardware guide. CI runs the tests on every push and the 3MF checks when the CAD, 3MFs or tools change. See [`tools/README.md`](tools/README.md).
 - The counter-train script takes a tooth count for each pinion.
@@ -28,6 +27,7 @@ Releases are tagged `vX.Y.Z`. Changes that only touch the documentation go into 
 
 - The project file gives each counter choice its own plate: plate 10 `simple-cover`, 11 `drag-cover`, 12 the idlers, 13 `simple-counter-face`, 14 `drag-counter-face`. Print the plates for the dial you chose; there is nothing to delete first. The shared counter gears stay on Small parts 2, and with 14 plates Bambu Studio lays them out in four columns. [`71851bb`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/71851bb)
 - `drag-cover`'s tower and P7 sit 0.14 mm nearer the dial. P7 pushes the face across by that much until it meets the cover step, which the first flutes didn't allow for: the ball ran out of travel before it reached a flute, so the face rocked at every frame. [`0711087`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/0711087)
+- `cold-shoe` is drawn to ISO 518. It has the same footprint and the same two countersunk holes for S6–S7, so it fits the body as before. [`f9359b2`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/f9359b2)
 - `drag-cover` uses the same triangle marker as `simple-cover` instead of the arrow on the tower. On both covers the triangle moves 6° round the dial, to exactly five frames from P7, so the detent centres each number on it. `advance-knob`'s bore entry chamfer is 0.5 mm instead of 1 mm. [`3f40a5f`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/3f40a5f)
 
 ### Fixed
