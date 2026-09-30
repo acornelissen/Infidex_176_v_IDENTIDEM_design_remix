@@ -35,3 +35,17 @@ def test_an_unchanged_part_is_still_exported():
     old = lumpy_part()
     verdict, _, _ = place(old, old.copy(), moved(old, known_pose()))
     assert verdict == "export"
+
+
+def test_a_part_only_moved_in_the_assembly_keeps_its_place_on_the_bed():
+    # the solid moved in the STEP but kept its shape (viewfinder-var-1 in 3bfa478):
+    # the written mesh must land where the old one was, not follow the move
+    old = lumpy_part()
+    new = old.copy()
+    new.apply_translation([0.0363, -0.0137, 0.0316])
+    T = known_pose()
+    verdict, found, err = place(old, new, moved(old, T))
+    assert verdict == "export"
+    assert err < 1e-3
+    np.testing.assert_allclose(trimesh.transform_points(new.vertices, found),
+                               trimesh.transform_points(old.vertices, T), atol=1e-3)

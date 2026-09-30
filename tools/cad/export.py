@@ -3,7 +3,9 @@
 Every mesh that holds a part (its part file, a two-colour file with it, its project object)
 is placed on the bed in its own way. For each one, the part's solid from the STEP as
 committed at --ref is fitted onto the mesh, and the solid from the current STEP is written
-through the same transform. Everything else in each archive is copied byte for byte.
+through the same transform. A solid whose shape is unchanged is placed by its own fit
+instead, so moving it in the assembly does not move it on the bed. Everything else in each
+archive is copied byte for byte.
 If any old solid does not fit its mesh, nothing is written.
 
 Export is safe to run twice before committing: a mesh that the current solid already fits
@@ -24,13 +26,19 @@ ALREADY_RMS = 1e-3   # mm; the new solid fits this closely, so the mesh is alrea
 
 
 def place(m_old, m_new, target, old_frame=None, new_frame=None):
-    """How to write the new solid onto `target`: (verdict, T, rms) with verdict "already"
-    when the mesh already is the new solid (fits it better than the old one, within
-    ALREADY_RMS), otherwise "export" with the transform and error of the old solid's fit."""
+    """How to write the new solid onto `target`: (verdict, T, rms).
+
+    - "already": the mesh already is the new solid (the new one fits within ALREADY_RMS and
+      the old one does not), so it is left alone.
+    - "export" through the new solid's own fit: both fit within ALREADY_RMS, so the shape is
+      unchanged. The solid may have moved in the assembly; its own fit keeps it where the
+      mesh is on the bed, where the old fit would carry the move along.
+    - "export" through the old solid's fit otherwise: the shape changed, and the old fit
+      keeps what stayed the same where it was."""
     T, err = fit(m_old, target, old_frame)
     T_new, err_new = fit(m_new, target, new_frame)
-    if err_new < err and err_new < ALREADY_RMS:
-        return "already", T_new, err_new
+    if err_new < ALREADY_RMS:
+        return ("export" if err < ALREADY_RMS else "already"), T_new, err_new
     return "export", T, err
 
 
@@ -80,7 +88,7 @@ def plan_part(solid, old, new, plan):
         out = m_new.copy()
         out.apply_transform(T)
         fits = err < TOLERANCE_RMS
-        print(f"  {path.name}:{entry}  old fit rms {err:.4f} mm  "
+        print(f"  {path.name}:{entry}  fit rms {err:.4f} mm  "
               f"lowest z {target.bounds[0, 2]:.3f} -> {out.bounds[0, 2]:.3f}  {'ok' if fits else 'NO FIT'}")
         if not fits:
             ok = False
