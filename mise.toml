@@ -44,6 +44,7 @@ run = [
 description = "Redraw the hardware guide figures that are drawn from the STEP"
 run = [
   "uv sync --group guide",
+  "uv run --group guide python docs/hardware-map/figures/counter_face.py",
   "uv run --group guide python docs/hardware-map/figures/drag_option.py",
 ]
 
