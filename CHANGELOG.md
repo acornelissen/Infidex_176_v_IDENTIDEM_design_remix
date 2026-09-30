@@ -14,6 +14,10 @@ Releases are tagged `vX.Y.Z`. Changes that only touch the documentation go into 
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-09-30
+
+Two-colour knobs, and every figure in the hardware guide is now drawn from the CAD. Existing builds are unaffected.
+
 **Reprint:** nothing. For the knobs' direction arrows in a second colour, print `advance-knob-two-colour` and `rewind-knob-two-colour` instead of the one-colour knobs.
 
 ### Added
@@ -161,7 +165,8 @@ First release of the remix.
 - README with parts, hardware and the full assembly procedure. [`96984c0`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/96984c0), [`238e9ea`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/238e9ea)
 - Attribution notice for the original project. [`f6cef08`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/f6cef08)
 
-[Unreleased]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.2.0...HEAD
+[Unreleased]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.3.0...HEAD
+[2.3.0]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.0.2...v2.1.0
 [2.0.2]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.0.1...v2.0.2
