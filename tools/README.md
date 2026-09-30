@@ -43,7 +43,7 @@ Nothing needs installing into Fusion's Python. The script uses only the Fusion A
 
 Axis numbers and the part files they print as: idler 1 is `counter-coupling-gear`, idler 2 is `counter-idler-1`, idler 3 is `counter-idler-2` and the dial wheel is `counter-gear`. The built components carry both names.
 
-The three idlers come out whole. The sprocket pinion and the dial wheel come out as tool bodies: only their tooth zones, which you swap into the sprocket and `counter-gear` in the main model. Everything else on `counter-gear` is drawn there and not by this script: the hub, the insert hole, the recess the face sits in and the 25 dog teeth that drive the face. So when you bring in new dial-wheel teeth, replace only the toothed ring and keep those features. `mise run clearance` then shows whether the faces still sit on the gear.
+The three idlers come out whole. The sprocket pinion and the dial wheel come out as tool bodies: only their tooth zones, which you swap into the sprocket and `counter-gear` in the main model. Everything else on `counter-gear` is drawn there and not by this script: the hub, the insert hole and the recess the face sits in. So when you bring in new dial-wheel teeth, replace only the toothed ring and keep those features. `mise run clearance` then shows whether the faces still sit on the gear.
 
 ### 20-frame train
 
