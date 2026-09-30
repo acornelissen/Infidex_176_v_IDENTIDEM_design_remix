@@ -44,7 +44,16 @@ run = [
 description = "Redraw the hardware guide figures that are drawn from the STEP"
 run = [
   "uv sync --group guide",
+  "uv run --group guide python docs/hardware-map/figures/fig1_body_top.py",
+  "uv run --group guide python docs/hardware-map/figures/fig2_cover_plungers.py",
+  "uv run --group guide python docs/hardware-map/figures/fig3_rewind_plungers.py",
+  "uv run --group guide python docs/hardware-map/figures/plunger_section.py",
+  "uv run --group guide python docs/hardware-map/figures/fig5_takeup_stack.py",
   "uv run --group guide python docs/hardware-map/figures/counter_face.py",
+  "uv run --group guide python docs/hardware-map/figures/collar.py",
+  "uv run --group guide python docs/hardware-map/figures/fig9_screws.py",
+  "uv run --group guide python docs/hardware-map/figures/fig10_pressure_plate.py",
+  "uv run --group guide python docs/hardware-map/figures/front_face.py",
   "uv run --group guide python docs/hardware-map/figures/drag_option.py",
 ]
 

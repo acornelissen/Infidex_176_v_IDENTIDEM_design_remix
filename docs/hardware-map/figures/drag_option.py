@@ -10,7 +10,7 @@ from shapely.affinity import translate
 from shapely.geometry import Polygon
 
 import common
-from common import EDGE, IMG, INK, draw, label, save
+from common import EDGE, IMG, INK, badge, draw, label, save
 from cad import step  # noqa: E402
 
 OUT = IMG / 'drag-option.png'
@@ -26,13 +26,6 @@ FLOAT = 0.14
 
 def section(name, origin, normal, axes):
     return common.section(M[name], origin, normal, axes)
-
-
-def badge(ax, x, y, text, tx, ty):
-    ax.annotate('', (x, y), (tx, ty), arrowprops=dict(arrowstyle='-', color=INK, lw=0.9), zorder=8)
-    ax.plot(x, y, 'o', ms=4.5, mfc='#e69f00', mec=INK, mew=0.8, zorder=9)
-    ax.text(tx, ty, text, ha='center', va='center', fontsize=10, fontweight='bold', color=INK, zorder=10,
-            bbox=dict(boxstyle='square,pad=0.35', fc='#e69f00', ec=INK, lw=0.9))
 
 
 fig, (a1, a2) = plt.subplots(1, 2, figsize=(10.5, 4.6), gridspec_kw={'width_ratios': [1, 1.25]})

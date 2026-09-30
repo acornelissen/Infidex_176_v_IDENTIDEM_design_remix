@@ -10,7 +10,13 @@ from pathlib import Path
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib import font_manager as fm
+from OCP.BRepAdaptor import BRepAdaptor_Surface
+from OCP.GeomAbs import GeomAbs_Cylinder
+from OCP.TopAbs import TopAbs_FACE
+from OCP.TopExp import TopExp_Explorer
+from OCP.TopoDS import TopoDS
 from shapely.geometry import Polygon
 
 HERE = Path(__file__).resolve().parent
@@ -22,6 +28,7 @@ sys.path.insert(0, str(REPO / 'tools'))
 FONTS = HERE / '.fonts'   # Inter, fetched once and kept out of git
 FONT_URL = 'https://cdn.jsdelivr.net/fontsource/fonts/inter@5/latin-{w}-normal.ttf'
 INK, EDGE, MUTED = '#121212', '#4a4a4a', '#6b6b6b'
+INSERT, PLUNGER = '#0072b2', '#e69f00'   # badge colours for heat-set inserts and ball plungers
 
 
 def load_fonts():
@@ -67,7 +74,54 @@ def label(ax, x, y, text, tx, ty, ha='left'):
                 arrowprops=dict(arrowstyle='-', color=INK, lw=0.9), zorder=10)
 
 
-def save(fig, out):
-    """Write the PNG the same way every time: 200 dpi, no software stamp."""
-    fig.savefig(out, dpi=200, metadata={'Software': None})
+def cylinders(shape, radius, tol=0.005):
+    """Every cylindrical face of `radius` in a solid, as the two ends of its axis over the face's
+    length (numpy XYZ points). A hole split into half-faces comes back once."""
+    out = {}
+    ex = TopExp_Explorer(shape, TopAbs_FACE)
+    while ex.More():
+        s = BRepAdaptor_Surface(TopoDS.Face(ex.Current()))
+        ex.Next()
+        if s.GetType() != GeomAbs_Cylinder or abs(s.Cylinder().Radius() - radius) > tol:
+            continue
+        axis = s.Cylinder().Axis()
+        p, d = axis.Location(), axis.Direction()
+        p, d = np.array([p.X(), p.Y(), p.Z()]), np.array([d.X(), d.Y(), d.Z()])
+        a, b = p + d * s.FirstVParameter(), p + d * s.LastVParameter()
+        out[tuple(np.round((a + b) / 2, 2))] = (a, b)
+    return list(out.values())
+
+
+def badge(ax, x, y, text, tx, ty, size=10):
+    """A plunger's square orange badge at (tx, ty), with a leader to a dot at (x, y)."""
+    ax.annotate('', (x, y), (tx, ty), arrowprops=dict(arrowstyle='-', color=INK, lw=0.9), zorder=8)
+    ax.plot(x, y, 'o', ms=4.5, mfc=PLUNGER, mec=INK, mew=0.8, zorder=9)
+    ax.text(tx, ty, text, ha='center', va='center', fontsize=size, fontweight='bold', color=INK, zorder=10,
+            bbox=dict(boxstyle='square,pad=0.35', fc=PLUNGER, ec=INK, lw=0.9))
+
+
+def save(fig, out, dpi=200):
+    """Write the PNG the same way every time: 200 dpi unless told otherwise, no software stamp."""
+    fig.savefig(out, dpi=dpi, metadata={'Software': None})
     print(f'wrote {out.relative_to(REPO)}')
+
+
+def on_axis(shape, point, direction, tol=0.02):
+    """The cylindrical faces of a solid whose axis runs through `point` along `direction` (a unit
+    vector), as (diameter, start, end): start < end, measured from `point` along `direction`, in
+    order of start. A hole split into half-faces comes back once."""
+    out = set()
+    ex = TopExp_Explorer(shape, TopAbs_FACE)
+    while ex.More():
+        s = BRepAdaptor_Surface(TopoDS.Face(ex.Current()))
+        ex.Next()
+        if s.GetType() != GeomAbs_Cylinder:
+            continue
+        axis = s.Cylinder().Axis()
+        p, d = axis.Location(), axis.Direction()
+        p, d = np.array([p.X(), p.Y(), p.Z()]) - point, np.array([d.X(), d.Y(), d.Z()])
+        if abs(abs(d @ direction) - 1) > 1e-6 or np.linalg.norm(p - (p @ direction) * direction) > tol:
+            continue
+        a, b = sorted((p + d * v) @ direction for v in (s.FirstVParameter(), s.LastVParameter()))
+        out.add((round(2 * s.Cylinder().Radius(), 4), round(a, 4), round(b, 4)))
+    return sorted(out, key=lambda c: c[1])
