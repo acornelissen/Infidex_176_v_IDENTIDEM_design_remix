@@ -2,7 +2,7 @@ import pytest
 import trimesh
 
 from cad import step, threemf
-from cad.add import Refused, mesh_object, rename
+from cad.add import Refused, mesh_object, rename, two_colour_model
 from test_cad_threemf import model
 
 
@@ -30,3 +30,32 @@ def test_inlay_solids_by_name_or_the_loose_bodies():
     assert step.inlay_solids(solids) == [1, 2]
     assert step.inlay_solids(solids, "counter-face-b-inlay") == [3]
     assert step.inlay_solids(solids, "missing-inlay") == []
+
+
+def two_colour_template():
+    """A two-colour counter-face file as the repo has them: face, inlay and the group."""
+    box = trimesh.creation.box()
+    xml = model((1, "simple-counter-face", box), (2, "counter-face-inlay", box))
+    xml = xml.replace("<resources>", '<metadata name="Title">simple-counter-face-two-colour</metadata>\n <resources>')
+    return xml.replace(" </resources>", '  <object id="3" type="model" name="simple-counter-face-two-colour">\n'
+                                        '   <components>\n    <component objectid="1"/>\n'
+                                        '    <component objectid="2"/>\n   </components>\n  </object>\n </resources>')
+
+
+def test_two_colour_model_puts_a_part_and_its_inlay_in_the_counter_face_layout():
+    knob = trimesh.creation.cylinder(radius=14, height=13.4)
+    arrow = trimesh.creation.box((6, 2, 1))
+    xml = two_colour_model(two_colour_template(), knob, arrow, "advance-knob", "advance-knob-inlay")
+    meshes = {o["name"]: o["mesh"] for o in threemf.objects(xml) if o["mesh"] is not None}
+    assert list(meshes) == ["advance-knob", "advance-knob-inlay"]
+    assert abs(meshes["advance-knob"].volume - knob.volume) < 1e-3
+    assert abs(meshes["advance-knob-inlay"].volume - arrow.volume) < 1e-3
+    assert '<metadata name="Title">advance-knob-two-colour</metadata>' in xml
+    assert 'name="advance-knob-two-colour"' in xml and '<component objectid="2"/>' in xml
+    assert "counter-face" not in xml
+
+
+def test_two_colour_model_refuses_a_template_without_one_inlay():
+    box = trimesh.creation.box()
+    with pytest.raises(Refused):
+        two_colour_model(model((1, "simple-counter-face", box)), box, box, "advance-knob", "advance-knob-inlay")

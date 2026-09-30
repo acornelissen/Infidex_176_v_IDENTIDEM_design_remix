@@ -15,14 +15,20 @@ Nothing is written unless every piece fits: the sibling's solid must fit its mes
 TOLERANCE_RMS, the new solid must mesh closed and sit on the bed like the sibling, and
 the plate must have room.
 
+With --inlay-for <part> instead, the new solid is a second-colour inlay (a name ending in
+-inlay) for a part that is already in the 3MFs: 3mf/parts/<part>-two-colour.3mf is written
+in the same layout as the counter faces' two-colour files, with the part's mesh as it is in
+its part file and the inlay placed where the STEP puts it relative to the part.
+
 Usage: python -m cad.add <solid> --like <sibling> [--inlay SOLID] [--plate N|NAME]
                          [--step FILE] [--parts DIR] [--project FILE] [--dry-run]
+       python -m cad.add <inlay solid> --inlay-for <part> [--step FILE] [--parts DIR] [--dry-run]
 """
 import argparse
 import sys
 
-from . import (PART_ENTRY, PARTS, PROJECT, REPO, STEP, TOLERANCE_RMS, TWO_COLOUR, file_stem, solid_name,
-               user_path)
+from . import (INLAY, INLAY_SUFFIX, PART_ENTRY, PARTS, PROJECT, REPO, STEP, TOLERANCE_RMS, TWO_COLOUR, file_stem,
+               solid_name, user_path)
 from . import step, threemf
 from .fit import fit
 from .project import NoRoom, Project, Z_TOLERANCE
@@ -150,10 +156,58 @@ def plan(solid, sibling, inlay, plate, solids, parts, project):
     return files, project
 
 
+def two_colour_model(template, part_mesh, inlay_mesh, part, inlay):
+    """Model XML for <part>-two-colour.3mf from another two-colour file's model: its face and
+    inlay meshes swapped for these, and its names for the part's and the inlay's."""
+    meshes = [o for o in threemf.objects(template) if o["mesh"] is not None]
+    inlays = [o for o in meshes if o["name"] == INLAY or o["name"].endswith(INLAY_SUFFIX)]
+    faces = [o for o in meshes if o not in inlays]
+    if len(inlays) != 1 or len(faces) != 1:
+        raise Refused("the two-colour template must hold one part and one inlay")
+    face, old_inlay = faces[0], inlays[0]
+    xml = threemf.replace_mesh(threemf.replace_mesh(template, part_mesh, face["id"]), inlay_mesh, old_inlay["id"])
+    stem = file_stem(part)
+    return rename(xml, {face["name"]: part, old_inlay["name"]: inlay,
+                        f"{file_stem(face['name'])}{TWO_COLOUR}": f"{stem}{TWO_COLOUR}"})
+
+
+def plan_inlay(inlay, part, solids, parts):
+    """{(template path, new path): model xml} for the part's new two-colour file, or Refused."""
+    if not inlay.endswith(INLAY_SUFFIX):
+        raise Refused(f"an inlay solid's name must end in {INLAY_SUFFIX}")
+    for name in (inlay, part):
+        if name not in solids:
+            raise Refused(f"no solid named {name!r} in the STEP")
+    stem = file_stem(part)
+    part_file, two = parts / f"{stem}.3mf", parts / f"{stem}{TWO_COLOUR}.3mf"
+    if not part_file.exists():
+        raise Refused(f"{part} has no part file {part_file.name}")
+    if two.exists():
+        raise Refused(f"{two.name} already exists; use export to update it")
+    templates = sorted(parts.glob(f"*{TWO_COLOUR}.3mf"))
+    if not templates:
+        raise Refused(f"no {TWO_COLOUR} file in {parts} to copy the layout from")
+
+    m_inlay = step.tessellate_all([solids[inlay]])
+    if not (m_inlay.is_watertight and m_inlay.is_winding_consistent and m_inlay.volume > 0):
+        raise Refused(f"{inlay}: the solid does not mesh into a closed shape")
+    target = mesh_object(threemf.read_entry(part_file, PART_ENTRY), part)["mesh"]
+    m_part = step.tessellate(solids[part])
+    T, err, _ = placed_like(m_part, step.mass_frame(solids[part]), target, m_part, part_file.name)
+    m_inlay.apply_transform(T)
+    if m_inlay.bounds[0, 2] < target.bounds[0, 2] - Z_TOLERANCE:
+        raise Refused(f"{inlay}: it would sit {target.bounds[0, 2] - m_inlay.bounds[0, 2]:.4f} mm below the bed")
+    print(f"{inlay}: volume {step.volume(solids[inlay]):.3f} mm3, the second colour of {part} "
+          f"(part fit rms {err:.4f} mm, template {templates[0].name})")
+    xml = two_colour_model(threemf.read_entry(templates[0], PART_ENTRY), target, m_inlay, part, inlay)
+    return {(templates[0], two): xml}
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="add", description=__doc__.splitlines()[0])
     ap.add_argument("solid", help="the new STEP solid (or its part file name)")
-    ap.add_argument("--like", required=True, help="the sibling part to copy placement and settings from")
+    ap.add_argument("--like", help="the sibling part to copy placement and settings from")
+    ap.add_argument("--inlay-for", metavar="PART", help="the solid is a new inlay: write PART's two-colour file")
     ap.add_argument("--inlay", help="STEP solid of the two-colour inlay (counter-face-inlay: the Body1.. bodies)")
     ap.add_argument("--plate", help="project plate, by number or name (default: the sibling's)")
     ap.add_argument("--step", type=user_path, default=STEP, help="STEP to read (default: the one in cad/)")
@@ -162,8 +216,12 @@ def main(argv=None):
     ap.add_argument("--dry-run", action="store_true", help="work it all out, write nothing")
     args = ap.parse_args(argv)
 
-    solid, sibling = solid_name(args.solid), solid_name(args.like)
+    if (args.like is None) == (args.inlay_for is None):
+        ap.error("give either --like or --inlay-for")
     solids = step.load_solids(args.step)
+    if args.inlay_for is not None:
+        return add_inlay(args.solid, solid_name(args.inlay_for), solids, args.parts, args.dry_run)
+    solid, sibling = solid_name(args.solid), solid_name(args.like)
     try:
         files, project = plan(solid, sibling, args.inlay, args.plate, solids, args.parts, Project(args.project))
     except Refused as e:
@@ -181,6 +239,22 @@ def main(argv=None):
         print(f"wrote {show(path)}")
     project.save()
     print(f"wrote {show(project.path)}\n\nnow run: mise run verify")
+    return 0
+
+
+def add_inlay(inlay, part, solids, parts, dry_run):
+    try:
+        files = plan_inlay(inlay, part, solids, parts)
+    except Refused as e:
+        print(f"{inlay}: {e}\nnothing written")
+        return 1
+    if dry_run:
+        print("\ndry run: nothing written")
+        return 0
+    for (template, path), xml in files.items():
+        threemf.rewrite_zip(template, {PART_ENTRY: xml}, out=path)
+        print(f"wrote {show(path)}")
+    print("\nnow run: mise run verify")
     return 0
 
 
