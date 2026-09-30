@@ -166,7 +166,7 @@ All of them are D2×3 flanged plungers (Ø2 body, Ø2.5 nose flange, 3 mm long o
 
 P1–P3 sit 120° apart around the body's rewind bore and act on the rewind knob. P4–P6 repeat the pattern in the top cover's take-up bore and ride in the inner-ratchet's W and R detent grooves. Both covers have P4–P6. P7 is only on `drag-cover`: it sits in the tower on the lens side of the dial and presses on the counter face rim, see [Counter dial: simple or drag](#counter-dial-simple-or-drag).
 
-The holes are drawn Ø2.2 × 3.1 mm with a Ø2.7 × 0.57 mm flange seat. With a 0.4 mm nozzle they print close to Ø2.0, which gives a press fit. Push the plunger body-first from inside the bore with a flat-ended rod until the flange sits in its seat and is level with the bore wall. If one is loose, put a small drop of CA on its body before pressing it in. Keep glue away from the flange and the ball, or the ball will stick.
+The holes are drawn Ø2.2, 3.1–3.2 mm deep in the body (P1–P3) and 2.6 mm deep in the cover (P4–P6), each behind a Ø2.7 flange seat about 0.6 mm deep. With a 0.4 mm nozzle they print close to Ø2.0, which gives a press fit. Push the plunger body-first from inside the bore with a flat-ended rod until the flange sits in its seat and is level with the bore wall. If one is loose, put a small drop of CA on its body before pressing it in. Keep glue away from the flange and the ball, or the ball will stick.
 
 P7's hole is also Ø2.2, 2.8 mm deep behind a Ø2.7 flange seat, but it prints horizontally, so it may come out slightly oval. The seat is set 0.1 mm deeper than the tower's inner face, so a seated flange stands 0.1 mm proud of the face. The ball pushes the face 0.14 mm across, until its skirt meets the cover step on the far side, and in that position the flange stays 0.1 mm clear of the dial rim. Fit P7 before the counter face goes on, while you can reach the tower's inner face.
 
@@ -176,13 +176,13 @@ P7's hole is also Ø2.2, 2.8 mm deep behind a Ø2.7 flange seat, but it prints h
 
 ### Magnets
 
-Optional, but highly recommended. The camera works without them; they hold the inner-ratchet firmly down on the spool head. All three sit on the take-up axis, and when the camera is assembled the Ø5×2 faces the Ø4×2 stack across a gap of about 0.2 mm.
+Optional, but highly recommended. The camera works without them; they hold the inner-ratchet firmly down on the spool head. All three sit on the take-up axis, and when the camera is assembled the Ø5×2 faces the Ø4×2 stack across a gap of about 0.3 mm.
 
 | Ref | Magnet | Pocket | Fits from |
 |---|---|---|---|
 | M1 | Ø5 × 2 | Ø5.1 × 2.1 | Underside of the inner-ratchet, pressed to the pocket floor |
 | M2 | Ø4 × 2 | Ø4.1 × 4.2 | Top of the spool head, at the bottom of the pocket |
-| M3 | Ø4 × 2 | same pocket | On top of M2, level with the head |
+| M3 | Ø4 × 2 | same pocket | On top of M2, 0.2 mm below the top of the head |
 
 **Polarity.** The top face of the M2/M3 stack has to *attract* the exposed face of M1. Let M2 and M3 snap together into a stack first. Then touch M1 to the top of the stack and mark M1's exposed face with a pen dot before separating them. Glue M1 with the dot facing out of its pocket and the stack with its free face up, then check the attraction with the parts dry-fitted before the glue cures.
 
@@ -221,7 +221,7 @@ Every frame has its own marker on the rim, 0.9 × 1.7 mm and 0.4 mm deep, with a
 
 ### Take-up spool and collar
 
-C1 is a printed part, not a bought one, named `takeup-washer-stopper` in the files. It is a split ring (Ø9.45 bore × Ø12.95 × 1.7 mm) that stops the take-up spool lifting out of the body, sitting in the groove just below the spool head (Ø9.3 at the root), directly under the body's take-up bore. The collar is wider than the bore, so once it's in, the spool can't pull up through the top.
+C1 is a printed part, not a bought one, named `takeup-washer-stopper` in the files. It is a split ring (Ø9.5 bore × Ø13.0 × 1.7 mm) that stops the take-up spool lifting out of the body, sitting in the groove just below the spool head (Ø9.3 at the root), directly under the body's take-up bore. The collar is wider than the bore, so once it's in, the spool can't pull up through the top.
 
 1. Open the body and hold the collar inside it, directly under the take-up bore, with the split facing the lens side.
 2. Lower the take-up spool into the body from the top. As it comes down, its bottom end passes through the collar, and the split lets the collar open over the Ø10.8 barrel.
@@ -237,7 +237,7 @@ G1 is one printed part: a rigid platen on a single thin leaf. The leaf joins the
 
 Clean both surfaces with IPA. Put a thin line of CA or a strip of thin double-sided tape on each end pad only. Seat the plate square in the recess with the platen facing the film, and press on the pads alone for 30 seconds. Keep glue out of the gap under the leaf, or the plate stops flexing.
 
-With the door open, the leaf holds the platen 1.65 mm proud of its working position. Closing the door on loaded film pushes the platen back onto the film rails and flexes the leaf by about 0.8 mm, which gives the pressure on the film. Don't shim or glue anything under the leaf to take up that gap.
+With the door open, the leaf holds the platen 1.6 mm proud of its working position. Closing the door on loaded film pushes the platen back onto the film rails and flexes the leaf by about 0.8 mm, which gives the pressure on the film. Don't shim or glue anything under the leaf to take up that gap.
 
 ![Pressure plate in the door](docs/fig10_pressure_plate.png)
 
