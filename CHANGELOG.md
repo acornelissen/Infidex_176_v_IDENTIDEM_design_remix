@@ -14,6 +14,18 @@ Releases are tagged `vX.Y.Z`. Changes that only touch the documentation go into 
 
 ## [Unreleased]
 
+**Reprint:** nothing. For the knobs' direction arrows in a second colour, print `advance-knob-two-colour` and `rewind-knob-two-colour` instead of the one-colour knobs.
+
+### Added
+
+- `advance-knob-two-colour.3mf` and `rewind-knob-two-colour.3mf`: each knob with an inlay that fills its 1.0 mm arrow recess, for the arrows in a second filament. The one-colour knobs are unchanged. [`90f7198`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/90f7198)
+- `mise run figures` draws all eleven guide figures from the STEP, and `mise run add -- <part>-inlay --inlay-for <part>` gives an existing part a two-colour file. [`a85f57f`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/a85f57f), [`416b7d0`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/416b7d0)
+
+### Fixed
+
+- `mise run export` keeps a part that only moved in the assembly where it is on the bed. [`117b8d4`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/117b8d4)
+- The README and the guide: plunger hole depths, the magnet gap, the collar's size and the platen's lift, measured from the STEP. [`10055dd`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/10055dd)
+
 ## [2.2.0] - 2026-09-30
 
 The drag dial now clicks onto each frame, and the repository gains tools that check the 3MFs against the STEP. Existing builds are unaffected.

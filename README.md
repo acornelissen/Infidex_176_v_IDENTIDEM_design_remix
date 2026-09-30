@@ -75,7 +75,7 @@ The counter train gears are the finest parts in the model. Print them with the r
 
 ### Parts
 
-Print the whole camera from the project file in `3mf/`, which has everything arranged across nine plates with the per-part settings already set. `3mf/parts/` holds the same 34 parts one to a file, plus a two-colour version of each counter face, each in the orientation it is meant to print in and sitting on the bed, for when you only need to reprint one. Updating an earlier build? [`CHANGELOG.md`](CHANGELOG.md) lists the parts to reprint for each release.
+Print the whole camera from the project file in `3mf/`, which has everything arranged across 14 plates with the per-part settings already set. `3mf/parts/` holds the same 34 parts one to a file, plus a two-colour version of each counter face and each knob, each in the orientation it is meant to print in and sitting on the bed, for when you only need to reprint one. Updating an earlier build? [`CHANGELOG.md`](CHANGELOG.md) lists the parts to reprint for each release.
 
 Some parts are a choice rather than a set. Print one from each of these:
 
@@ -86,6 +86,7 @@ Some parts are a choice rather than a set. Print one from each of these:
 - **Helicoid inner ring:** `helicoid-inner-ring-for-80mm-lens` or `helicoid-inner-ring-for-55mm-lens`, to suit your taking lens
 - **Counter dial:** `simple-cover` with `simple-counter-face`, or `drag-cover` with `drag-counter-face`. Print them as a matched pair; see [Counter dial: simple or drag](#counter-dial-simple-or-drag) to choose. The project file has all four, the covers on plate 7 and the faces on plate 8, so delete the pair you don't want before slicing
 - **Counter face colours:** either face in one colour, or its `-two-colour` file (`simple-counter-face-two-colour`, `drag-counter-face-two-colour`) for markers in a second filament
+- **Knob colours:** `advance-knob` and `rewind-knob` in one colour, or their `-two-colour` files for the direction arrows in a second filament. Load each as one object with two parts and give the `-inlay` part the second filament. The arrows are 1.0 mm deep, so the first five layers change colour at 0.2 mm layer height
 
 ### Lens mount alternatives
 
