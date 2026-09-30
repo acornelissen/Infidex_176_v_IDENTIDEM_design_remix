@@ -302,7 +302,7 @@ With the drag option, the dog teeth carry the plunger's drag and the pull of eac
 
 ## Parametric counter train
 
-`cad/Infidex176V-IDENTIDEM.design-remix-counter-train.f3d` holds the counter gear train as a parametric model, so you can change it without redrawing the gears. The sprocket and dial axes stay fixed where the body needs them; the three idler axes follow from the centre distances. Module, tooth counts, profile shift, backlash, the height of every gear face and the stepped bores are all parameters, and the defaults rebuild the idlers exactly as the main model has them, so a different reduction or a coarser module is a table edit and a rebuild.
+`cad/Infidex176V-IDENTIDEM.design-remix-counter-train.f3d` holds the counter gear train as a parametric model, so you can change it without redrawing the gears. The sprocket and dial axes stay fixed where the body needs them; the three idler axes follow from the centre distances. Module, tooth counts, profile shift, backlash, the height of every gear face and the stepped bores are all parameters, and the defaults rebuild the idlers exactly as the main model has them, so a different reduction or a coarser module is a table edit and a rebuild. The sprocket pinion and the dial wheel come out as tooth zones only: `counter-gear`'s hub, face recess and dog teeth belong to the main model, so keep them when you swap in new teeth.
 
 Start from the values in the file if you are only nudging it: the train is 50:1 in four meshes and the gears are already near the limit of what a 0.4 mm nozzle resolves.
 

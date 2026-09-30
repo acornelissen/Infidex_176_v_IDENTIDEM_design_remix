@@ -43,6 +43,8 @@ Nothing needs installing into Fusion's Python. The script uses only the Fusion A
 
 Axis numbers and the part files they print as: idler 1 is `counter-coupling-gear`, idler 2 is `counter-idler-1`, idler 3 is `counter-idler-2` and the dial wheel is `counter-gear`. The built components carry both names.
 
+The three idlers come out whole. The sprocket pinion and the dial wheel come out as tool bodies: only their tooth zones, which you swap into the sprocket and `counter-gear` in the main model. Everything else on `counter-gear` is drawn there and not by this script: the hub, the insert hole, the recess the face sits in and the 25 dog teeth that drive the face. So when you bring in new dial-wheel teeth, replace only the toothed ring and keep those features. `mise run clearance` then shows whether the faces still sit on the gear.
+
 ### 20-frame train
 
 Set `ct_pinion1_teeth` to 14 and `ct_wheel2_teeth` to 28, then rerun. Mesh 2 keeps its 12.6 mm centres, so every axis stays where it is and only idler 1 and idler 2 change. Don't put the 14:28 on mesh 3 instead: the same ratio works there, but a 14-tooth pinion on idler 2 cuts 0.33 mm into both covers. The script can't see the covers, so run `mise run clearance` on any new train. The train drops from 50:1 to 40:1, and the dial turns once per 20 frames instead of 25. The summary shows the frames per dial turn after every build.
