@@ -42,7 +42,7 @@ Carried over from the original design:
 Specific to this remix:
 
 - **Frame counter:** 50:1 spur train, module 0.6, four meshes (12:32, 12:30, 12:30, 12:36), one counter-face turn per 25 frames
-- **Counter face:** starts at 25 as the loading position, then reads 1, 2, 3 and on as you wind; friction-fitted under a thumbscrew, reset by loosening it and turning 25 back to the marker
+- **Counter face:** starts at 25 as the loading position, then reads 1, 2, 3 and on as you wind; driven by 25 dog teeth on the counter gear and held down by a thumbscrew, reset by backing the thumbscrew off, lifting the face and turning 25 back to the marker
 - **Counter dial:** simple (free-running) or drag (one extra ball plunger presses on the dial rim), see [Counter dial: simple or drag](#counter-dial-simple-or-drag)
 
 ## Files
@@ -168,7 +168,7 @@ P1–P3 sit 120° apart around the body's rewind bore and act on the rewind knob
 
 The holes are drawn Ø2.2 × 3.1 mm with a Ø2.7 × 0.57 mm flange seat. With a 0.4 mm nozzle they print close to Ø2.0, which gives a press fit. Push the plunger body-first from inside the bore with a flat-ended rod until the flange sits in its seat and is level with the bore wall. If one is loose, put a small drop of CA on its body before pressing it in. Keep glue away from the flange and the ball, or the ball will stick.
 
-P7's hole is also Ø2.2, 2.8 mm deep behind a Ø2.7 flange seat, but it prints horizontally, so it may come out slightly oval. The seat is set 0.1 mm deeper than the tower's inner face, so a seated flange stands 0.1 mm proud of the face and stays 0.1 mm clear of the dial rim. Fit P7 before the counter face goes on, while you can reach the tower's inner face.
+P7's hole is also Ø2.2, 2.8 mm deep behind a Ø2.7 flange seat, but it prints horizontally, so it may come out slightly oval. The seat is set 0.1 mm deeper than the tower's inner face, so a seated flange stands 0.1 mm proud of the face. The ball pushes the face 0.14 mm across, until its skirt meets the cover step on the far side, and in that position the flange stays 0.1 mm clear of the dial rim. Fit P7 before the counter face goes on, while you can reach the tower's inner face.
 
 ![Rewind bore in the body, three plunger holes 120 degrees apart](docs/fig3_rewind_plungers.png)
 
@@ -207,13 +207,13 @@ On heads: the knob's seat for S12 is a Ø3.7 × 90° countersink 0.75 mm deep, s
 
 ### Counter train
 
-The four counter gears drop onto printed pins in the body. From the sprocket: idler 1 is `counter-coupling-gear`, idler 2 is `counter-idler-1`, idler 3 is `counter-idler-2`, and the dial wheel is `counter-gear`. The idler bores are 0.2 mm over their pins: Ø3.4 on the Ø3.2 pins, and Ø4.2 over the Ø4.0 foot of the stepped pin under idler 1. If an idler won't drop on or turns stiffly, run a drill of the bore size through it by hand rather than sanding the pin: 3.4 mm, or 4.2 mm for the lower part of idler 1's stepped bore. The idler 1 and 2 pins run up to the top of their gears so they cannot tilt out of mesh, and the idler 3 pin stops level with the body's top face, which is the face the two-piece top half prints on. The top cover sits on the floor of its recess once it is screwed down, and every gear keeps at least 0.3 mm of end float in that position. A 25 mm boss on the body around the dial locates the cover in a 25.2 mm recess, so the cover sits concentric with the dial. The dial wheel is centred on the counter face by its hub, and the face turns in the cover on a close-running step.
+The four counter gears drop onto printed pins in the body. From the sprocket: idler 1 is `counter-coupling-gear`, idler 2 is `counter-idler-1`, idler 3 is `counter-idler-2`, and the dial wheel is `counter-gear`. The idler bores are 0.2 mm over their pins: Ø3.4 on the Ø3.2 pins, and Ø4.2 over the Ø4.0 foot of the stepped pin under idler 1. If an idler won't drop on or turns stiffly, run a drill of the bore size through it by hand rather than sanding the pin: 3.4 mm, or 4.2 mm for the lower part of idler 1's stepped bore. The idler 1 and 2 pins run up to the top of their gears so they cannot tilt out of mesh, and the idler 3 pin stops level with the body's top face, which is the face the two-piece top half prints on. The top cover sits on the floor of its recess once it is screwed down, and every gear keeps at least 0.3 mm of end float in that position. A 25 mm boss on the body around the dial locates the cover in a 25.2 mm recess, so the cover sits concentric with the dial. The dial wheel is centred on the counter face by its hub and drives it through 25 dog teeth on the inside of its rim, and the face turns in the cover on a close-running step.
 
 Before fitting the counter face, screw the cover down and turn the sprocket by hand. The train should run freely with no tight spots. If it only binds with the cover on, look for sagged bridging on the cover's pocket ceilings and clean it up rather than backing the screws off.
 
 ### Counter face
 
-The face starts at 25 and counts up: 25 is the loading position, then winding on takes you to 1, 2, 3 and so on. There is no zero. Lay the face on the hub with 25 against the marker and finger-tighten S13. The marker is the triangle recessed into the cover beside the dial, in the same place on both covers. The face grips on friction, so to reset it for a new roll you loosen the thumbscrew, turn 25 back to the marker, and tighten again. Don't use thread lock. The head sits in a Ø6.0 × 0.5 mm recess, so a head up to about Ø5.8 sits down in the face.
+The face starts at 25 and counts up: 25 is the loading position, then winding on takes you to 1, 2, 3 and so on. There is no zero. Lay the face on the hub with 25 against the marker and finger-tighten S13. The marker is the triangle recessed into the cover beside the dial, in the same place on both covers. The face drops onto the counter gear over 25 dog teeth, one every 14.4°, so it goes on in 25 positions and can't slip round the gear. S13 clamps it down, and that takes up the teeth's small play (about ±0.7°). If 25 doesn't land exactly on the marker, put it on the tooth just short of it and wind on until 25 reaches the marker; you are still winding leader at that point. To reset for a new roll, back S13 off about three turns, lift the face 1.1 mm clear of the teeth, turn 25 back to the marker and tighten again. Don't use thread lock. The head sits in a Ø6.0 × 0.5 mm recess, so a head up to about Ø5.8 sits down in the face.
 
 ![Counter face on the counter gear, in section](docs/hardware-map/img/counter-face.png)
 
@@ -288,15 +288,15 @@ The counter comes two ways. Pick one pair and print both parts of it; the covers
 |---|---|---|
 | Parts | `simple-cover`, `simple-counter-face` | `drag-cover`, `drag-counter-face` |
 | Extra hardware | None | One more D2×3 ball plunger (P7) |
-| How the dial moves | Turns only with the gear train; its rim rests on the cover under its own weight | A ball plunger in a tower beside the dial presses on the face's rim, riding in a shallow groove with a detent flute under every frame. The tower itself stays 0.2 mm clear of the rim |
+| How the dial moves | Turns only with the gear train; its rim rests on the cover under its own weight | A ball plunger in a tower beside the dial presses on the face's plain rim, with a detent flute under every frame. The tower itself stays 0.2 mm clear of the rim |
 | Marker for 25 | Triangle recessed into the cover | The same triangle, exactly five frames round from P7 |
 | Height | Face is the highest point (Z 49.4 in the CAD) | Tower stands 1 mm above the face (Z 50.4) |
 
 **Choose simple** if you want the fewest parts and the lightest wind. The dial is driven only by the gears, so it adds nothing to the effort of winding on, and there is one less plunger to fit. The trade-off is that the four meshes each have a little backlash, so the face can rock a fraction of a frame either way and does not always come to rest in exactly the same place.
 
-**Choose drag** if you want the dial to read the same every time. The plunger's light, constant friction keeps the backlash taken up in one direction, so the face stops where the gears leave it and doesn't flutter when the camera is knocked or carried. A shallow V-flute in the groove under each frame marker gives the ball a seat, so the face settles with the number centred on the triangle. The costs are one more plunger, a slightly heavier wind, and the tower standing proud of the dial.
+**Choose drag** if you want the dial to read the same every time. The plunger's light, constant friction keeps the backlash taken up in one direction, so the face stops where the gears leave it and doesn't flutter when the camera is knocked or carried. A V-flute across the rim under each frame marker gives the ball a seat and a firm click, so the face settles with the number centred on the triangle. The costs are one more plunger, a slightly heavier wind, and the tower standing proud of the dial.
 
-With the drag option, the thumbscrew has to hold the face against the plunger's friction as well as the gears. Tighten S13 firmly by hand, then wind through a few frames and check that the face stays with the train rather than slipping on the hub. If it slips, tighten S13 a little more rather than backing off the plunger. Set the face for a new roll the same way as before; it will click into the flute nearest 25. Don't mix the pairs: the simple face has no groove for the ball, so on the drag cover the ball would ride on the plain rim, drag harder and mark it.
+With the drag option, the dog teeth carry the plunger's drag and the pull of each flute, so S13 needs no more than finger-tight. Set the face for a new roll as in [Counter face](#counter-face); with 25 on the marker, a flute sits under the ball and the face clicks into it. Print the pair together: the simple face has no flutes, so on the drag cover it drags without clicking, and the drag face needs the drag cover's tower, which sits 0.14 mm nearer the dial than the 2.1.0 one.
 
 ![Drag option, from above and cut through P7](docs/hardware-map/img/drag-option.png)
 
