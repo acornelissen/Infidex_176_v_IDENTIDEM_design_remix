@@ -14,6 +14,25 @@ Releases are tagged `vX.Y.Z`. Changes that only touch the documentation go into 
 
 ## [Unreleased]
 
+## [2.4.0] - 2026-10-25
+
+A 20-frame counter: the dial turns once per 20 frames instead of 25, with the numbers 18° apart instead of 14.4°. A roll gives 18 or 19 frames, so it never runs past the loading number. Existing builds are unaffected.
+
+**Reprint:** nothing. To switch to 20 frames, print `counter-coupling-gear-20`, `counter-idler-1-20` and a 20-frame face (`simple-counter-face-20` or `drag-counter-face-20`, or its `-two-colour` file) to match your cover. The rest of the counter, the body and both covers stay as they are. If you want the cold shoe's full-length rails, reprint `cold-shoe`.
+
+### Added
+
+- `counter-coupling-gear-20` and `counter-idler-1-20`: idlers 1 and 2 with mesh 2 at 14:28 instead of 12:30, on the same centres, pins and bores. The train drops from 50:1 to 40:1. [`94e1d66`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/94e1d66)
+- `simple-counter-face-20` and `drag-counter-face-20`: 20 at the loading position, then 1 to 19, with markers every 18° and numbers at 5, 10, 15 and 20. The drag face has 20 detent flutes. Outline, hub and rim are the same as the 25-frame faces. Both have a `-two-colour` file with `counter-face-20-inlay`. [`94e1d66`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/94e1d66)
+- The project file has a plate for the 20-frame idlers (15) and one for each 20-frame face (16, 17). [`94e1d66`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/94e1d66)
+- `mise run clearance` checks the 20-frame idler set and faces, and `add` and `verify` read an inlay made of numbered pieces. [`ccfb883`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/ccfb883), [`649d485`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/649d485)
+- The README's Frame count section and the hardware guide describe the choice. [`005cbd3`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/005cbd3)
+
+### Changed
+
+- `cold-shoe`: the rails and slot run the full length of the shoe, where they used to stop about 5 mm short of one end above a low step. [`94e1d66`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/94e1d66)
+- In the project file, `counter-coupling-gear` moves to the 25-frame idler plate (12), as it is no longer shared, and `counter-idler-2` moves to Small parts 2 (8), as it now is. [`94e1d66`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/94e1d66)
+
 ## [2.3.0] - 2026-09-30
 
 Two-colour knobs, and every figure in the hardware guide is now drawn from the CAD. Existing builds are unaffected.
@@ -165,7 +184,8 @@ First release of the remix.
 - README with parts, hardware and the full assembly procedure. [`96984c0`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/96984c0), [`238e9ea`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/238e9ea)
 - Attribution notice for the original project. [`f6cef08`](https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/commit/f6cef08)
 
-[Unreleased]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.3.0...HEAD
+[Unreleased]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.4.0...HEAD
+[2.4.0]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/acornelissen/Infidex_176_v_IDENTIDEM_design_remix/compare/v2.0.2...v2.1.0
