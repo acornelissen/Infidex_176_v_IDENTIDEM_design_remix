@@ -42,7 +42,7 @@ BODY = ["body-solid", "body-top"]   # the one-piece body and its top half, each 
 COVERS = ["simple-cover", "drag-cover"]
 IDLER_SETS = {"25 frames": ["counter-coupling-gear", "counter-idler-1", "counter-idler-2"],
               "20 frames": ["counter-coupling-gear-20", "counter-idler-1-20", "counter-idler-2"]}
-FACES = ["simple-counter-face", "drag-counter-face"]
+FACES = ["simple-counter-face", "drag-counter-face", "simple-counter-face-20", "drag-counter-face-20"]
 FIXED = SPROCKET_END + [DIAL] + BODY
 OVERLAP_LIMIT = 1e-3   # mm3
 REACH = 1.0            # mm; gaps larger than this are only reported as "> REACH"

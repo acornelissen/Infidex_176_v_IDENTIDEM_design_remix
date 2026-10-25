@@ -2,7 +2,8 @@ from cad.clearance import BODY, COVERS, FACES, IDLER_SETS, pairs
 
 TODAY = {"ratchet-coupling-gear", "counter-coupling-gear", "counter-gear", "counter-idler-1", "counter-idler-2",
          "counter-coupling-gear-20", "counter-idler-1-20",
-         "body-solid", "body-top", "simple-cover", "drag-cover", "simple-counter-face", "drag-counter-face"}
+         "body-solid", "body-top", "simple-cover", "drag-cover", "simple-counter-face", "drag-counter-face",
+         "simple-counter-face-20", "drag-counter-face-20"}
 # a third idler set and a face on the same axes, as a new option would be; like the 20-frame
 # set, it shares its last idler with the 25-frame set
 SETS = {**IDLER_SETS, "b": ["coupling-b", "idler-1-b", "counter-idler-2"]}

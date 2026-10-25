@@ -3,7 +3,7 @@ and delete nothing.
 
 Safe to run again: a plate that exists (by name) is reused, an object already on its plate
 stays where it is, and a plate whose parts are not in the project is skipped with a note.
-Parts shared by every option (counter-coupling-gear, counter-gear) stay on their
+Parts shared by every option (counter-idler-2, counter-gear) stay on their
 small-parts plate. A new option is a new line in LAYOUT, once `add` has put its parts in
 the project.
 
@@ -19,9 +19,12 @@ from .project import NoRoom, Project, print_plates
 LAYOUT = [
     ("Counter cover - simple (choose ONE cover)", ["simple-cover"]),
     ("Counter cover - drag (choose ONE cover)", ["drag-cover"]),
-    ("Counter idlers - 25 frames (choose ONE set)", ["counter-idler-1", "counter-idler-2"]),
+    ("Counter idlers - 25 frames (choose ONE set)", ["counter-coupling-gear", "counter-idler-1"]),
     ("Counter face - simple 25 (0.2 mm nozzle if possible)", ["simple-counter-face"]),
     ("Counter face - drag 25 (0.2 mm nozzle if possible)", ["drag-counter-face"]),
+    ("Counter idlers - 20 frames (choose ONE set)", ["counter-coupling-gear-20", "counter-idler-1-20"]),
+    ("Counter face - simple 20 (0.2 mm nozzle if possible)", ["simple-counter-face-20"]),
+    ("Counter face - drag 20 (0.2 mm nozzle if possible)", ["drag-counter-face-20"]),
 ]
 
 
