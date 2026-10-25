@@ -26,11 +26,13 @@ TOLERANCE_VOLUME = 0.005  # relative volume difference
 FILE_TO_SOLID = {"pressure-plate-1": "pressure-plate (1)"}
 TWO_COLOUR = "-two-colour"
 # the two-colour inlay: one object in a two-colour 3MF, named after its STEP solid (a name
-# ending in -inlay). The counter-face inlay is the exception: the unnamed STEP bodies
-# Body1, Body2, ... that the 3MFs call counter-face-inlay.
+# ending in -inlay), or after its pieces <name>-1, <name>-2, ... when it is several glyphs.
+# The counter-face inlay is the exception: the unnamed STEP bodies Body1, Body2, ... that the
+# 3MFs call counter-face-inlay.
 INLAY = "counter-face-inlay"
 INLAY_BODY = re.compile(r"Body\d+")
 INLAY_SUFFIX = "-inlay"
+INLAY_PIECE = re.compile(r"(.+-inlay)-(\d+)")
 
 
 def solid_name(file_stem):

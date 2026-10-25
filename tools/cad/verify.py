@@ -14,7 +14,7 @@ Exits 1 if anything fails.
 import argparse
 import sys
 
-from . import (INLAY, INLAY_BODY, INLAY_SUFFIX, PART_ENTRY, PARTS, PROJECT, STEP, TOLERANCE_RMS, TOLERANCE_VOLUME,
+from . import (INLAY, INLAY_BODY, INLAY_PIECE, INLAY_SUFFIX, PART_ENTRY, PARTS, PROJECT, STEP, TOLERANCE_RMS, TOLERANCE_VOLUME,
                TWO_COLOUR, file_stem, solid_name, user_path)
 from . import project, step, threemf
 from .fit import fit, vertex_rms
@@ -121,6 +121,15 @@ def print_table(rows):
               f"{num(r['ref_volume'], '.2f'):>10s} {dv:>7s}  {verdict}")
 
 
+def loose_solids(solids, covered):
+    """STEP solids that no 3MF holds, given the names the 3MFs cover; leaves out the counter-face
+    inlay bodies and the pieces of an inlay a 3MF holds."""
+    def held(n):
+        m = INLAY_PIECE.fullmatch(n)
+        return n in covered or INLAY_BODY.fullmatch(n) or (m is not None and m[1] in covered)
+    return sorted(n for n in solids if not held(n))
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="verify", description=__doc__.splitlines()[0])
     ap.add_argument("parts", nargs="*", help="part file names or STEP solid names (default: all)")
@@ -153,7 +162,7 @@ def main(argv=None):
 
     if not only:
         covered = {solid_name(p.stem) for p in paths} | {n for _, n in part_meshes}
-        loose = sorted(n for n in solids if n not in covered and not INLAY_BODY.fullmatch(n))
+        loose = loose_solids(solids, covered)
         if loose:
             print(f"\nnote: STEP solids with no part file: {', '.join(loose)}")
     failed = [r for r in rows if r["problems"]]

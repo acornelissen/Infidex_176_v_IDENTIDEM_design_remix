@@ -32,6 +32,16 @@ def test_inlay_solids_by_name_or_the_loose_bodies():
     assert step.inlay_solids(solids, "missing-inlay") == []
 
 
+def test_inlay_solids_in_numbered_pieces():
+    # an inlay of separate glyphs comes out of Fusion as one body per glyph: <inlay>-1, -2, ...
+    solids = {"counter-face-20-inlay-2": 2, "counter-face-20-inlay-10": 10, "counter-face-20-inlay-1": 1,
+              "counter-face-20-inlay-x": 0, "counter-face-20-inlay": None, "Body1": 7}
+    pieces = {k: v for k, v in solids.items() if v is not None}
+    assert step.inlay_solids(pieces, "counter-face-20-inlay") == [1, 2, 10]
+    assert step.inlay_solids(solids, "counter-face-20-inlay") == [None]   # a whole solid wins
+    assert step.inlay_solids(pieces, "counter-face-2-inlay") == []
+
+
 def two_colour_template():
     """A two-colour counter-face file as the repo has them: face, inlay and the group."""
     box = trimesh.creation.box()
