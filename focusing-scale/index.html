@@ -1,0 +1,1301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Infidex 176 V — Focusing Scale</title>
+<meta name="description" content="Focusing scale generator for the Infidex 176 V helicoid. Shown at actual size." />
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png" />
+<link rel="icon" href="assets/favicon-64.png" sizes="64x64" type="image/png" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+<style>
+/* ---------------------------------------------------------------
+   Self-hosted faces, latin subset. Condensed structure and a blocky
+   mono for the figures — drafting lettering is condensed because it
+   had to fit tight spaces, and lens barrels engrave the same way.
+   Azeret ships as a variable font, so one file covers every weight.
+   Both are SIL OFL 1.1 — see assets/fonts/.
+   --------------------------------------------------------------- */
+@font-face { font-family:"Azeret Mono"; src:url("assets/fonts/azeret-mono-latin-var.woff2") format("woff2");
+             font-weight:100 900; font-style:normal; font-display:swap; }
+@font-face { font-family:"Saira SemiCondensed"; src:url("assets/fonts/saira-semicondensed-400-latin.woff2") format("woff2");
+             font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:"Saira SemiCondensed"; src:url("assets/fonts/saira-semicondensed-500-latin.woff2") format("woff2");
+             font-weight:500; font-style:normal; font-display:swap; }
+@font-face { font-family:"Saira SemiCondensed"; src:url("assets/fonts/saira-semicondensed-600-latin.woff2") format("woff2");
+             font-weight:600; font-style:normal; font-display:swap; }
+
+:root {
+  --paper:   #FFFFFF;
+  --desk:    #F3F3F3;
+  --ink:     #121212;
+  --ink-mid: #5A5A5A;
+  --slate:   #242833;
+  --slate-2: #2E3342;
+  --barrel:  #E4E4E4;
+  --red:     #B90000;
+  --cta:     #FCE477;
+
+  --mono: "Azeret Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --sans: "Saira SemiCondensed", "Avenir Next Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  --page: 1240px;
+  --rule:      rgba(18,18,18,.13);   /* structure */
+  --rule-soft: rgba(18,18,18,.07);   /* rows */
+  --rule-firm: rgba(18,18,18,.22);   /* controls, where an edge must be grabbable */
+  --w-rule: 1px;
+  --pad: 24px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; background: var(--slate); }
+body {
+  margin: 0; background: var(--desk); color: var(--ink);
+  font-family: var(--sans); font-size: 15px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+:where(a, button, input, [tabindex]):focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.wrap { max-width: var(--page); margin: 0 auto; padding: 0 24px; }
+
+/* ===============================================================
+   THE RIG — the scale at actual size, which is the whole point
+   =============================================================== */
+.rig { background: var(--slate); color: #fff; padding: 22px 0 0; overflow: hidden; }
+.rig-top { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.rig-top a { display: block; line-height: 0; }
+/* the mark is black artwork on transparency, so reverse it out */
+.rig-top img { width: 120px; height: 120px; display: block; filter: invert(1); }
+.rig-title {
+  font-size: 56px; font-weight: 600; letter-spacing: -.012em; line-height: 1.03;
+  margin: 0; color: #fff;
+}
+@media (max-width: 900px) {
+  .rig-top { gap: 16px; }
+  .rig-top img { width: 92px; height: 92px; }
+  .rig-title { font-size: 42px; }
+}
+@media (max-width: 560px) {
+  .rig-top img { width: 68px; height: 68px; }
+  .rig-title { font-size: 30px; }
+}
+.rig-title .thin { font-weight: 400; color: rgba(255,255,255,.5); }
+
+/* the tape: mm ruler plus the strip, both at true size, scrolled if long */
+.tape-scroll { margin-top: 26px; overflow-x: auto; overflow-y: hidden; padding-bottom: 4px; }
+.tape-scroll::-webkit-scrollbar { height: 8px; }
+.tape-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,.06); }
+.tape-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,.28); }
+.tape { display: inline-block; min-width: 100%; }
+#ruler { display: block; }
+#tapeStrip { display: block; outline: 1px solid rgba(255,255,255,.35); }
+
+.rig-foot {
+  display: flex; align-items: center; justify-content: space-between; gap: 18px 26px;
+  flex-wrap: wrap; padding: 16px 0 24px;
+  font-family: var(--mono); font-size: 12px; letter-spacing: .04em; color: rgba(255,255,255,.62);
+}
+.rig-foot strong { color: #fff; font-weight: 600; }
+/* ===============================================================
+   THE SHEET — the working below
+   =============================================================== */
+.sheet { max-width: var(--page); margin: 30px auto 0; background: var(--paper); border: 1px solid var(--rule); }
+@media (max-width: 820px) { .sheet { margin: 0; border-width: 0 0 1px; } }
+
+.cells { display: grid; gap: var(--w-rule); background: var(--rule); }
+.cell  { background: var(--paper); padding: 12px var(--pad); min-width: 0; }
+
+.k { font-size: 11px; font-weight: 600; letter-spacing: .19em; text-transform: uppercase;
+     color: var(--ink-mid); display: block; margin-bottom: 3px; }
+.v { font-family: var(--mono); font-size: 14px; font-weight: 500; letter-spacing: -.01em; }
+
+.upper { grid-template-columns: minmax(0, 380px) minmax(0, 1fr); }
+.lower { grid-template-columns: 1fr; border-top: 1px solid var(--rule); }
+@media (max-width: 900px) { .upper { grid-template-columns: 1fr; } }
+
+.block { padding: 0; display: flex; flex-direction: column; }
+.block-label {
+  border-bottom: 1px solid var(--rule); padding: 11px var(--pad);
+  font-size: 11px; font-weight: 600; letter-spacing: .19em; text-transform: uppercase;
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+}
+.block-label .dash { color: var(--ink-mid); }
+.view-body { padding: 16px var(--pad) 6px; flex: 1; display: flex; align-items: center; justify-content: center; }
+.view-body svg { display: block; width: 100%; height: auto; }
+#dial { touch-action: none; cursor: grab; max-width: 330px; }
+#dial:active { cursor: grabbing; }
+#dial:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+@media (max-width: 900px) { #dial { max-width: 280px; } }
+
+table.schedule { width: 100%; border-collapse: collapse; }
+.schedule th, .schedule td { text-align: left; padding: 0; }
+.schedule thead th {
+  font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--ink-mid); padding: 9px var(--pad); border-bottom: 1px solid var(--rule);
+}
+.schedule thead th.num, .schedule td.num { text-align: right; }
+.schedule tbody td { border-bottom: 1px solid var(--rule-soft); padding: 8px var(--pad); vertical-align: middle; }
+.schedule tbody tr:last-child td { border-bottom: 0; }
+.schedule td.par { font-size: 15px; }
+.schedule td.par .note-txt { display: block; font-size: 12px; color: var(--ink-mid); }
+.schedule td.unit { font-family: var(--mono); font-size: 12px; color: var(--ink-mid); width: 1%; white-space: nowrap; padding-left: 8px; }
+.schedule td.num { width: 136px; white-space: nowrap; font-family: var(--mono); letter-spacing: -.02em; }
+.schedule input[type="number"] {
+  font-family: var(--mono); font-size: 15px; font-weight: 500; color: var(--ink);
+  background: var(--paper); border: 1px solid var(--rule-firm);
+  padding: 6px 9px; width: 100%; text-align: right; border-radius: 0;
+}
+.schedule input[type="number"]:hover { border-color: var(--ink-mid); }
+.schedule tr.derived td { color: var(--ink-mid); }
+.schedule tr.derived td.num { font-size: 15px; font-weight: 500; color: var(--ink); }
+
+.seg { display: flex; border: 1px solid var(--rule-firm); width: fit-content; margin-top: 3px; }
+.schedule td .dirsel, .schedule td .tickssel, .schedule td .bandsel { margin: 0 0 0 auto; }
+.seg button {
+  font-family: var(--mono); font-size: 12px; letter-spacing: .04em;
+  padding: 5px 11px; border: 0; background: var(--paper); color: var(--ink-mid); cursor: pointer;
+}
+.seg button + button { border-left: 1px solid var(--rule-firm); }
+.seg button:hover { color: var(--ink); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+
+ol.notes { margin: 0; padding: 18px var(--pad) 22px 0; list-style: none; counter-reset: n;
+           columns: 2; column-gap: 46px; }
+@media (max-width: 900px) { ol.notes { columns: 1; } }
+ol.notes li { counter-increment: n; padding-left: calc(var(--pad) + 30px); position: relative;
+              margin-bottom: 13px; font-size: 15px; line-height: 1.6;
+              break-inside: avoid; -webkit-column-break-inside: avoid; }
+ol.notes li::before {
+  content: counter(n, decimal-leading-zero); position: absolute; left: var(--pad); top: 0;
+  font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--ink-mid);
+  letter-spacing: -.02em; line-height: 2;
+}
+ol.notes li.warn, ol.notes li.warn::before { color: var(--red); }
+ol.notes li:last-child { margin-bottom: 0; }
+ol.notes li::marker { content: none; }
+
+.sheetdata { border-top: 1px solid var(--rule); grid-template-columns: repeat(3, minmax(0,1fr)); }
+@media (max-width: 900px) {
+  /* the hairlines are the grid gap showing through, so an empty grid area
+     would read as a grey block; place every cell explicitly */
+  .sheetdata { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .sheetdata .cell:nth-child(3) { grid-column: 1 / -1; }
+}
+.actions { display: flex; align-items: center; gap: 8px; position: relative; }
+.pair { display: flex; align-items: center; gap: 4px; }
+.help {
+  font-family: var(--mono); font-size: 12px; font-weight: 500; line-height: 1;
+  width: 22px; height: 22px; padding: 0; cursor: pointer; color: var(--ink-mid);
+  background: var(--paper); border: 1px solid var(--rule-firm); border-radius: 50%;
+}
+.help:hover { color: var(--ink); border-color: var(--ink-mid); }
+.help[aria-expanded="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+.pop {
+  position: absolute; top: calc(100% + 10px); right: 0; z-index: 40;
+  width: min(430px, calc(100vw - 32px));
+  background: var(--paper); border: 1px solid var(--ink);
+  padding: 18px 20px 20px; text-align: left; text-transform: none; letter-spacing: normal;
+  font-weight: 400; font-size: 14px; line-height: 1.55; color: var(--ink);
+  max-height: min(70vh, 560px); overflow-y: auto;
+}
+.pop[hidden] { display: none; }
+.pop h3 {
+  margin: 0 0 12px; font-size: 11px; font-weight: 600; letter-spacing: .19em;
+  text-transform: uppercase; color: var(--ink-mid);
+}
+.pop dl { margin: 0 0 14px; display: grid; grid-template-columns: auto 1fr; gap: 5px 14px; }
+.pop dt { color: var(--ink-mid); font-size: 13px; white-space: nowrap; }
+.pop dd { margin: 0; font-family: var(--mono); font-size: 13px; letter-spacing: -.01em; }
+.pop ol { margin: 0 0 14px; padding-left: 18px; }
+.pop li { margin-bottom: 7px; }
+.pop p { margin: 0 0 11px; }
+.pop p:last-child, .pop ol:last-child, .pop dl:last-child { margin-bottom: 0; }
+.pop .flag { color: var(--red); }
+.pop code { font-family: var(--mono); font-size: 12px; background: var(--desk); padding: 1px 4px; }
+.pop em { font-style: normal; text-decoration: underline; text-underline-offset: 2px; }
+.pop .close {
+  position: absolute; top: 10px; right: 10px; width: 24px; height: 24px; padding: 0;
+  border: 0; background: none; color: var(--ink-mid); cursor: pointer;
+  font-family: var(--mono); font-size: 15px; line-height: 1;
+}
+.pop .close:hover { color: var(--ink); }
+/* Anchoring to the right-aligned button group leaves no room on a narrow
+   screen, so drop the panel to a fixed sheet instead. */
+@media (max-width: 720px) {
+  .pop {
+    position: fixed; inset: auto 12px 12px 12px; width: auto;
+    max-height: 68vh; box-shadow: 0 0 0 100vmax rgba(18,18,18,.28);
+  }
+}
+.btn {
+  font-family: var(--sans); font-size: 14px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink); background: var(--cta); border: 1px solid var(--rule-firm);
+  padding: 11px 22px; cursor: pointer; border-radius: 0; white-space: nowrap;
+}
+.btn:hover { background: #FBDC53; }
+.btn-inline { font-size: 11px; letter-spacing: .12em; padding: 6px 13px; }
+.btn-quiet { background: var(--paper); color: var(--ink-mid); letter-spacing: .08em; }
+.btn-quiet:hover { background: var(--desk); color: var(--ink); }
+
+.colophon {
+  max-width: var(--page); margin: 26px auto 64px; padding: 26px 28px 28px;
+  background: var(--paper); border: 1px solid var(--rule);
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 20px 52px; flex-wrap: wrap;
+  font-size: 15px; line-height: 1.65; color: var(--ink);
+}
+.colophon p { margin: 0; }
+.colophon .credits { display: flex; flex-direction: column; gap: 9px; max-width: 64ch; }
+.colophon .sign { color: var(--ink-mid); font-size: 14px; }
+.colophon a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule-firm); }
+.colophon a:hover { border-bottom-color: var(--ink); }
+@media (max-width: 820px) {
+  .colophon { margin: 0 0 48px; border-width: 0 0 1px; }
+}
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="rig">
+  <div class="wrap">
+    <div class="rig-top">
+      <a href="https://identidem.design"><img src="assets/logotext.png" width="800" height="800" alt="IDENTIDEM.design" /></a>
+      <h1 class="rig-title">Infidex 176&nbsp;V <span class="thin">focusing scale</span></h1>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="tape-scroll" id="tapeScroll">
+      <div class="tape">
+        <svg id="ruler" role="presentation" aria-hidden="true"></svg>
+        <svg id="tapeStrip" role="img" aria-label="Focusing scale strip at actual size"></svg>
+      </div>
+    </div>
+
+    <div class="rig-foot">
+      <span><strong id="footSize">189.0 × 13.0 mm</strong> &middot; <span id="footRange">∞ – 1.44 m</span> &middot; <span id="footGap">2.6 mm spare on the barrel</span></span>
+    </div>
+  </div>
+</header>
+
+<main class="sheet">
+  <div class="cells upper">
+    <section class="cell block">
+      <h2 class="block-label">View A <span class="dash">—</span> focus ring, from the front</h2>
+      <div class="view-body">
+        <svg id="dial" viewBox="0 0 400 404" tabindex="0" role="slider"
+             aria-label="Focus ring. Drag or use the arrow keys to turn it."
+             aria-valuemin="0" aria-valuenow="0" aria-valuemax="340"></svg>
+      </div>
+    </section>
+
+    <section class="cell block">
+      <h2 class="block-label">Schedule
+        <span class="actions">
+          <button class="btn btn-inline btn-quiet" id="resetBtn" type="button">Reset</button>
+          <span class="pair">
+            <button class="btn btn-inline btn-quiet" id="gerberBtn" type="button">Gerber</button>
+            <button class="help" type="button" aria-expanded="false" aria-controls="gerberHelp"
+                    aria-label="How to order the Gerber files as a PCB">?</button>
+          </span>
+          <span class="pair">
+            <button class="btn btn-inline" id="exportBtn" type="button">Export SVG</button>
+            <button class="help" type="button" aria-expanded="false" aria-controls="svgHelp"
+                    aria-label="How to print the SVG">?</button>
+          </span>
+
+          <div class="pop" id="gerberHelp" hidden="hidden">
+            <button class="close" type="button" aria-label="Close">×</button>
+            <h3>Ordering at JLCPCB</h3>
+            <dl>
+              <dt>Base material</dt><dd>Flex</dd>
+              <dt>Layers</dt><dd>1</dd>
+              <dt>Dimensions</dt><dd><span class="hDims">189.0 × 13.0</span> mm</dd>
+              <dt>Quantity</dt><dd>5 (their minimum)</dd>
+              <dt>Coverlay</dt><dd>Black</dd>
+              <dt>Silkscreen</dt><dd>White</dd>
+              <dt>Copper weight</dt><dd>18 µm (0.5 oz)</dd>
+              <dt>Thickness</dt><dd>0.11 mm</dd>
+              <dt>Surface finish</dt><dd>ENIG 1 u"</dd>
+              <dt>Stiffener</dt><dd>3M468 tape</dd>
+              <dt>EMI shielding</dt><dd>No</dd>
+            </dl>
+            <p>The lighter copper and thinnest dielectric both help it wrap a 61 mm barrel. The
+               surface finish is a required field but does nothing here, as no copper is exposed.</p>
+            <p><strong>3M468 under Stiffener is worth taking.</strong> It is factory-applied
+               double-sided adhesive, so the strips arrive ready to peel and wrap rather than
+               leaving you to align a long strip of wet glue. The zip carries a
+               <code>Bottom Stiffener.GBR</code> layer marking where it goes — selecting the
+               option alone isn't enough, JLC need the area too.</p>
+            <p class="flag">If you order <em>without</em> the tape, delete that file first, or
+               the layer and the order won't match and they will query it the other way.</p>
+            <p class="flag">Expect a DFM query. No exposed copper and an empty soldermask layer is
+               unusual enough that their engineers may email first. It is a legend-only decorative
+               flex with no electrical function: the copper pour is deliberate, and the empty mask
+               layer is what leaves the coverlay covering the whole strip.</p>
+            <p>Check their Gerber preview before paying — the silkscreen layer should show the
+               scale, and the outline should read <span class="hDims">189.0 × 13.0</span> mm.</p>
+          </div>
+
+          <div class="pop" id="svgHelp" hidden="hidden">
+            <button class="close" type="button" aria-label="Close">×</button>
+            <h3>Printing the strip</h3>
+            <ol>
+              <li>Print at <strong>100%</strong>. Turn off “fit to page” and “scale to fit” — the
+                  file carries real millimetre dimensions and any scaling ruins the scale.</li>
+              <li><strong>Measure before you cut.</strong> The strip should be exactly
+                  <span class="hDims">189.0 × 13.0</span> mm. If it isn't, something rescaled it.</li>
+              <li>Laser on matte white adhesive label stock gives the crispest result. Inkjet will
+                  bleed on this much solid black and the tick edges go soft.</li>
+              <li>Cut on the outline.</li>
+              <li>Wrap it with the ∞ mark at your infinity index and work round from there.</li>
+            </ol>
+            <p>It is a lot of solid black for a desktop printer. If yours struggles to lay it down
+               evenly, the Gerber route gives a far better strip — and a more durable one.</p>
+          </div>
+        </span>
+      </h2>
+      <table class="schedule">
+        <thead><tr><th scope="col">Parameter</th><th scope="col" class="num">Value</th><th scope="col"></th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="par">Band
+              <span class="note-txt">turn shown on the tape and exported</span></td>
+            <td class="num" colspan="2">
+              <span class="seg bandsel" role="group" aria-label="Which turn of the helicoid to show and export"><button type="button" data-band="1" aria-pressed="true">1ST TURN</button><button type="button" data-band="2" aria-pressed="false">2ND TURN</button></span>
+            </td>
+          </tr>
+          <tr>
+            <td class="par"><label for="focal">Focal length</label>
+              <span class="note-txt"><span class="seg lens" role="group" aria-label="Taking lens"><button type="button" data-focal="80" aria-pressed="true">80</button><button type="button" data-focal="55" aria-pressed="false">55</button></span></span></td>
+            <td class="num"><input type="number" id="focal" value="80" step="0.1" min="10" /></td>
+            <td class="unit">mm</td>
+          </tr>
+          <tr>
+            <td class="par"><label for="spacer">Extension at infinity</label>
+              <span class="note-txt">0 if the ring bottoms out at ∞</span></td>
+            <td class="num"><input type="number" id="spacer" value="0" step="0.1" min="0" /></td>
+            <td class="unit">mm</td>
+          </tr>
+          <tr>
+            <td class="par"><label for="lead">Thread lead</label>
+              <span class="note-txt">measured on the Infidex focus ring</span></td>
+            <td class="num"><input type="number" id="lead" value="5" step="0.1" min="0.01" /></td>
+            <td class="unit">mm/turn</td>
+          </tr>
+          <tr>
+            <td class="par">Ticks on
+              <span class="note-txt">the edge nearest your index mark</span></td>
+            <td class="num" colspan="2">
+              <span class="seg tickssel" role="group" aria-label="Which edge the tick marks run from"><button type="button" data-ticks="top" aria-pressed="false">TOP</button><button type="button" data-ticks="bottom" aria-pressed="true">BOTTOM</button></span>
+            </td>
+          </tr>
+          <tr>
+            <td class="par">Close focus turns
+              <span class="note-txt">seen from the front of the lens</span></td>
+            <td class="num" colspan="2">
+              <span class="seg dirsel" role="group" aria-label="Direction the ring turns for closer focus"><button type="button" data-dir="acw" aria-pressed="false">ACW</button><button type="button" data-dir="cw" aria-pressed="true">CW</button></span>
+            </td>
+          </tr>
+          <tr><td class="par"><label for="rotation">Rotation covered</label></td>
+              <td class="num"><input type="number" id="rotation" value="340" step="1" min="1" max="1440" /></td>
+              <td class="unit">deg</td></tr>
+          <tr><td class="par"><label for="barrel">Focus ring diameter</label></td>
+              <td class="num"><input type="number" id="barrel" value="61" step="0.1" min="10" /></td>
+              <td class="unit">mm</td></tr>
+          <tr><td class="par"><label for="height">1st turn strip height</label>
+              <span class="note-txt">smooth band is 13.5 tall</span></td>
+              <td class="num"><input type="number" id="height" value="13" step="0.5" min="3" /></td>
+              <td class="unit">mm</td></tr>
+          <tr><td class="par"><label for="height2">2nd turn strip height</label>
+              <span class="note-txt">halve both to stack them on one band</span></td>
+              <td class="num"><input type="number" id="height2" value="13" step="0.5" min="3" /></td>
+              <td class="unit">mm</td></tr>
+          <tr><td class="par"><label for="margin">End margin</label></td>
+              <td class="num"><input type="number" id="margin" value="4" step="0.5" min="0" /></td>
+              <td class="unit">mm</td></tr>
+          <tr class="derived"><td class="par">Strip length <span class="note-txt">derived</span></td>
+              <td class="num" id="dLength">(189.0)</td><td class="unit">mm</td></tr>
+          <tr class="derived"><td class="par">Travel <span class="note-txt">derived</span></td>
+              <td class="num" id="dTravel">(4.72)</td><td class="unit">mm</td></tr>
+          <tr class="derived"><td class="par">Gap left on barrel <span class="note-txt">derived</span></td>
+              <td class="num" id="dGap">(2.6)</td><td class="unit">mm</td></tr>
+          <tr class="derived"><td class="par">Focus range <span class="note-txt">derived</span></td>
+              <td class="num" id="dRange">(∞ – 1.44)</td><td class="unit">m</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <div class="cells lower">
+    <section class="cell block">
+      <h2 class="block-label">Notes</h2>
+      <ol class="notes" id="notes" aria-live="polite"></ol>
+    </section>
+  </div>
+
+  <div class="cells sheetdata">
+    <div class="cell"><span class="k">Drawn</span><span class="v" id="sdLens">Mamiya 80</span></div>
+    <div class="cell"><span class="k">Overall</span><span class="v" id="sdOverall">189.0 × 13.0</span></div>
+    <div class="cell"><span class="k">Range</span><span class="v" id="sdRange">∞ – 1.44 m</span></div>
+  </div>
+</main>
+
+<div class="colophon">
+  <div class="credits">
+    <span class="k">Credits</span>
+    <p>Camera: <a href="https://github.com/max05210238/Infidex_176_V">Infidex 176 V</a>, an open source project by <a href="https://www.youtube.com/@time_to_waste">Denis Aminev (Time to Waste)</a>.</p>
+    <p>Scale generator after <a href="https://www.printables.com/model/1610905-parametric-focusing-scale-for-17-31-mm-m65-and-m77">Parametric Focusing Scale for 17–31 mm, M65 and M77</a> on Printables.</p>
+    <p>The idea for using a Flex PCB for decals comes from <a href="https://panomicron.com">Oscar Oweson</a>.</p>
+    <p>Scale numerals set in <a href="https://dotcolon.net/fonts/f5_6/">F5.6</a> by Sora Sagano, after Leica's engraving face.</p>
+  </div>
+  <p class="sign">IDENTIDEM.design &middot; verify ∞ on ground glass before cutting</p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var MM = 5;                            // drawing units per millimetre
+  var TICK_MAJOR = 0.40, LABEL_GAP = 0.08;
+  var LABEL_CAP = 0.22;                  // numeral cap height, as a fraction of strip height
+
+  // The rule and the strip are drawn in CSS millimetres. A browser assumes
+  // 96dpi, so this is close to life size rather than exactly it.
+  var pxPerMm = 96 / 25.4;
+
+  var DEFAULTS = {
+    focal: 80, spacer: 0, lead: 5, rotation: 340, barrel: 61, height: 13, height2: 13, margin: 4, dir: "cw", ticks: "bottom", band: 1,
+    angles: [20, 40, 60, 85, 115, 150, 190, 235, 280, 320]
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var el = function (name, attrs, parent) {
+    var n = document.createElementNS(SVGNS, name);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  };
+  var txt = function (s, attrs, parent) { var t = el("text", attrs, parent); t.textContent = s; return t; };
+  function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); }
+
+  function readNumber(id, fallback, min, max) {
+    var v = parseFloat($(id).value);
+    if (isNaN(v)) return fallback;
+    if (v < min) return fallback;
+    if (max !== undefined && v > max) return fallback;
+    return v;
+  }
+
+  // ---------------------------------------------------------------
+  // The scale. Checked against e = f^2 / (u - f); leave it alone.
+  // ---------------------------------------------------------------
+  function selectedBand() {
+    return +document.querySelector('.bandsel button[aria-pressed="true"]').dataset.band;
+  }
+
+  // band 1 is the first turn of the helicoid; band 2 is the second, drawn at the
+  // same barrel positions one full revolution later, so the two strips line up
+  function buildScale(bandArg) {
+    var band = bandArg || selectedBand();
+    var offset = band === 2 ? 360 : 0;
+    var f = readNumber("focal", DEFAULTS.focal, 10);
+    var spacer = readNumber("spacer", DEFAULTS.spacer, 0);
+    var lead = readNumber("lead", DEFAULTS.lead, 0.01);
+    var maxAngle = readNumber("rotation", DEFAULTS.rotation, 1, 1440);
+    var barrelDia = readNumber("barrel", DEFAULTS.barrel, 10);
+    var stripHeightMm = band === 2 ? readNumber("height2", DEFAULTS.height2, 3)
+                                   : readNumber("height", DEFAULTS.height, 3);
+    var endMarginMm = readNumber("margin", DEFAULTS.margin, 0);
+
+    // A screw helicoid moves a fixed distance per turn, so travel across
+    // the scale follows from the rotation instead of being set separately.
+    var fullExtension = lead * maxAngle / 360;
+    var circumference = Math.PI * barrelDia;
+    var stripLenMm = circumference * (maxAngle / 360) + 2 * endMarginMm;
+
+    // Which way the ring turns for closer focus, seen from the front. It sets
+    // the handedness of the whole scale: mirrored, the strip is unusable, and
+    // no amount of rotating it on the barrel will fix that.
+    var cw = document.querySelector('.dirsel button[aria-pressed="true"]').dataset.dir === "cw";
+    // Which long edge the ticks run from, i.e. which side your index sits on.
+    // Independent of direction: rotating a strip 180 degrees does both at once,
+    // which is what turns the numerals upside down.
+    var flip = document.querySelector('.tickssel button[aria-pressed="true"]').dataset.ticks === "bottom";
+    function xOf(a) {
+      var x = endMarginMm + circumference * (a / 360);
+      return cw ? stripLenMm - x : x;
+    }
+
+    function distanceFromAngle(a) {
+      var v = f + (fullExtension * (a / maxAngle) + spacer);
+      return (f * v) / (v - f);
+    }
+    function angleFromDistance(u) {
+      var v = (u * f) / (u - f);
+      return maxAngle * (v - f - spacer) / fullExtension;
+    }
+    function generateRoundedCandidates(d) {
+      var c = [], exp = Math.floor(Math.log10(d));
+      [Math.pow(10, exp), Math.pow(10, exp - 1), Math.pow(10, exp - 2)].forEach(function (s) {
+        c.push(Math.round(d / s) * s, Math.floor(d / s) * s, Math.ceil(d / s) * s);
+      });
+      var seen = {}, out = [];
+      c.forEach(function (v) { if (v > 0 && !seen[v]) { seen[v] = 1; out.push(v); } });
+      return out;
+    }
+    function angleTolerance(a) { return 3 + (20 - 3) * a / maxAngle; }
+
+    // Mark angles are stored local to the band (0 to maxAngle), so every
+    // renderer can place them without knowing which turn it is drawing.
+    var major = [];
+    if (band === 1) {
+      DEFAULTS.angles.forEach(function (a) {
+        if (a < 4 || a > maxAngle - 4) return;
+        var tol = angleTolerance(a);
+        var lo = distanceFromAngle(a + tol), hi = distanceFromAngle(a - tol);
+        var cands = generateRoundedCandidates(distanceFromAngle(a)), chosen = null;
+        for (var i = 0; i < cands.length; i++) {
+          if (cands[i] >= lo && cands[i] <= hi) { chosen = cands[i]; break; }
+        }
+        if (chosen !== null) major.push({ distance: chosen, angle: angleFromDistance(chosen) });
+      });
+    } else {
+      // The second turn is close to linear in distance, so rounding fixed
+      // angles gives ugly values like 1.23. Pick round distances instead,
+      // roundest first, and keep only those with room for their label.
+      var mmPerDeg = circumference / 360;
+      var labelMm = labelWidthMm("0.00", LABEL_CAP * stripHeightMm) + 2;
+      var minGap = labelMm / mmPerDeg;
+      var nice = [];
+      for (var u = 100; u < 1000; u += 50) nice.push(u);
+      for (u = 1000; u <= 2000; u += 100) nice.push(u);
+      nice.push(2500, 3000, 4000, 5000, 7000, 10000, 20000);
+      var rank = function (v) { return v % 500 === 0 ? 0 : v % 100 === 0 ? 1 : 2; };
+      nice.map(function (v) { return { distance: v, angle: angleFromDistance(v) - offset }; })
+        .filter(function (c) { return c.angle >= 4 && c.angle <= maxAngle - minGap; })
+        .sort(function (a, b) { return rank(a.distance) - rank(b.distance) || b.distance - a.distance; })
+        .forEach(function (c) {
+          var roomy = major.every(function (m) { return Math.abs(m.angle - c.angle) >= minGap; });
+          if (roomy) major.push(c);
+        });
+      major.sort(function (a, b) { return a.angle - b.angle; });
+    }
+
+    return {
+      f: f, spacer: spacer, lead: lead, maxAngle: maxAngle, barrelDia: barrelDia,
+      stripHeightMm: stripHeightMm, endMarginMm: endMarginMm,
+      fullExtension: fullExtension, circumference: circumference,
+      stripLenMm: stripLenMm, gap: circumference - stripLenMm, major: major,
+      band: band, offset: offset,
+      cw: cw, sgn: cw ? -1 : 1, xOf: xOf, flip: flip,
+      distanceFromAngle: distanceFromAngle, angleFromDistance: angleFromDistance,
+      farthest: distanceFromAngle(offset), nearest: distanceFromAngle(offset + maxAngle)
+    };
+  }
+
+  function formatMeters(mm) {
+    var m = mm / 1000;
+    if (Math.abs(m - Math.round(m)) < 0.01) return String(Math.round(m));
+    return String(parseFloat(m.toFixed(2)));
+  }
+  function formatDistance(mm) {
+    if (!isFinite(mm)) return "∞";
+    return mm >= 1000 ? (mm / 1000).toFixed(2) + " m" : Math.round(mm) + " mm";
+  }
+  function shortDistance(mm) { return isFinite(mm) ? (mm / 1000).toFixed(2) : "∞"; }
+
+  // ---------------------------------------------------------------
+  // The strip. This group is what gets exported, unchanged.
+  // ---------------------------------------------------------------
+  function drawStripGroup(s, parent) {
+    var g = scalePrimitives(s), H = g.H;
+    function X(x) { return (x * MM).toFixed(3); }
+    function Y(y) { return ((H - y) * MM).toFixed(3); }
+    function trace(pts) {
+      return "M" + pts.map(function (p) { return X(p[0]) + " " + Y(p[1]); }).join("L");
+    }
+
+    el("rect", { x: 0, y: 0, width: g.L * MM, height: H * MM, fill: "#000000", "stroke-width": 0 }, parent);
+    g.regions.forEach(function (r) { el("path", { d: trace(r) + "Z", fill: "#ffffff" }, parent); });
+    if (g.glyphs.length) {
+      // even-odd, so each counter cuts out of its own numeral
+      el("path", { d: g.glyphs.map(function (c) { return trace(c.pts) + "Z"; }).join(""),
+                   fill: "#ffffff", "fill-rule": "evenodd" }, parent);
+    }
+    g.strokes.forEach(function (st) {
+      el("path", { d: trace(st.pts), fill: "none", stroke: "#ffffff", "stroke-width": st.w * MM,
+                   "stroke-linecap": "round", "stroke-linejoin": "round" }, parent);
+    });
+    return g;
+  }
+
+  // ---------------------------------------------------------------
+  // The tape: a millimetre rule and the strip, both at true size
+  // ---------------------------------------------------------------
+  function drawTape(s) {
+    var wPx = s.stripLenMm * pxPerMm;
+    var hPx = s.stripHeightMm * pxPerMm;
+
+    var ruler = $("ruler");
+    clear(ruler);
+    var rh = 26;
+    var avail = $("tapeScroll").clientWidth || wPx;
+    var rulerW = Math.max(wPx, avail);
+    ruler.setAttribute("width", rulerW);
+    ruler.setAttribute("height", rh);
+    ruler.setAttribute("viewBox", "0 0 " + rulerW + " " + rh);
+    el("line", { x1: 0, y1: rh - 0.5, x2: rulerW, y2: rh - 0.5, stroke: "rgba(255,255,255,.45)", "stroke-width": 1 }, ruler);
+    for (var mm = 0; mm <= Math.floor(rulerW / pxPerMm); mm++) {
+      var x = mm * pxPerMm;
+      var big = mm % 10 === 0, mid = mm % 5 === 0;
+      var len = big ? 13 : (mid ? 8 : 4);
+      var past = x > wPx;
+      el("line", { x1: x, y1: rh - len, x2: x, y2: rh,
+                   stroke: big ? (past ? "rgba(255,255,255,.3)" : "rgba(255,255,255,.75)")
+                               : (past ? "rgba(255,255,255,.16)" : "rgba(255,255,255,.4)"),
+                   "stroke-width": 1 }, ruler);
+      if (big && mm > 0 && pxPerMm * 10 > 26) {
+        txt(String(mm), { x: x + 3, y: 10, fill: past ? "rgba(255,255,255,.22)" : "rgba(255,255,255,.55)",
+                          "font-family": "Azeret Mono, monospace", "font-size": 9,
+                          "letter-spacing": "-.02em" }, ruler);
+      }
+    }
+
+    var tape = $("tapeStrip");
+    clear(tape);
+    tape.setAttribute("width", wPx);
+    tape.setAttribute("height", hPx);
+    tape.setAttribute("viewBox", "0 0 " + (s.stripLenMm * MM) + " " + (s.stripHeightMm * MM));
+    tape.setAttribute("preserveAspectRatio", "none");
+    var g = el("g", { id: "stripGroup" }, tape);
+    drawStripGroup(s, g);
+    tape.setAttribute("aria-label",
+      "Focusing scale strip at actual size, " + s.stripLenMm.toFixed(1) + " by " +
+      s.stripHeightMm.toFixed(1) + " millimetres, marked from " +
+      formatDistance(s.farthest) + " to " + formatDistance(s.nearest));
+  }
+
+  // ---------------------------------------------------------------
+  // View A: the ring, turned
+  // ---------------------------------------------------------------
+  var DIAL_H = 404, DIAL_CY = 196;
+  var ringAngle = 0;
+  var DIM = { stroke: "#5A5A5A", w: 1, font: 11, arrow: 5 };
+
+  function polar(cx, cy, r, deg) {
+    var a = (deg - 90) * Math.PI / 180;
+    return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+  }
+  function annulusSector(cx, cy, rO, rI, from, to) {
+    var span = Math.min(to - from, 359.999), large = span > 180 ? 1 : 0;
+    var a1 = polar(cx, cy, rO, from), a2 = polar(cx, cy, rO, from + span);
+    var b2 = polar(cx, cy, rI, from + span), b1 = polar(cx, cy, rI, from);
+    return "M" + a1[0] + " " + a1[1] + "A" + rO + " " + rO + " 0 " + large + " 1 " + a2[0] + " " + a2[1] +
+           "L" + b2[0] + " " + b2[1] + "A" + rI + " " + rI + " 0 " + large + " 0 " + b1[0] + " " + b1[1] + "Z";
+  }
+  function arrow(g, x, y, dir) {
+    el("path", { d: "M" + x + " " + y + "l" + (dir * DIM.arrow * 2.2) + " " + (-DIM.arrow * .62) +
+                    "v" + (DIM.arrow * 1.24) + "z", fill: DIM.stroke }, g);
+  }
+  function dimH(g, x1, x2, y, label, extendFrom) {
+    if (extendFrom !== undefined) {
+      el("line", { x1: x1, y1: extendFrom, x2: x1, y2: y + 5, stroke: DIM.stroke, "stroke-width": DIM.w }, g);
+      el("line", { x1: x2, y1: extendFrom, x2: x2, y2: y + 5, stroke: DIM.stroke, "stroke-width": DIM.w }, g);
+    }
+    el("line", { x1: x1, y1: y, x2: x2, y2: y, stroke: DIM.stroke, "stroke-width": DIM.w }, g);
+    arrow(g, x1, y, 1); arrow(g, x2, y, -1);
+    var pad = label.length * DIM.font * .62 / 2 + 5;
+    el("rect", { x: (x1 + x2) / 2 - pad, y: y - DIM.font - 2, width: pad * 2, height: DIM.font + 6, fill: "#FFFFFF" }, g);
+    txt(label, { x: (x1 + x2) / 2, y: y - 6, "text-anchor": "middle",
+                 "font-family": "Azeret Mono, monospace", "font-size": DIM.font, fill: DIM.stroke }, g);
+  }
+
+  var dialScales = null;   // both turns, so the ring can be turned through them
+
+  function drawDial() {
+    var svg = $("dial");
+    clear(svg);
+    var s = ringAngle >= 360 ? dialScales[2] : dialScales[1];
+    var local = ringAngle - s.offset;
+    var CX = 200, CY = DIAL_CY, R = 150;
+    var pxMm = R / (s.barrelDia / 2);
+    var band = Math.min(R - 46, s.stripHeightMm * pxMm);
+    var rIn = R - band;
+
+    var cl = el("g", { stroke: DIM.stroke, "stroke-width": 1, "stroke-dasharray": "14 4 3 4" }, svg);
+    el("line", { x1: CX - R - 16, y1: CY, x2: CX + R + 16, y2: CY }, cl);
+    el("line", { x1: CX, y1: CY - R - 30, x2: CX, y2: CY + R + 16 }, cl);
+
+    el("circle", { cx: CX, cy: CY, r: R, fill: "#E4E4E4" }, svg);
+    el("circle", { cx: CX, cy: CY, r: rIn, fill: "#FFFFFF" }, svg);
+
+    var sgn = s.sgn;
+    var g = el("g", { transform: "rotate(" + (-sgn * local) + " " + CX + " " + CY + ")" }, svg);
+    var marg = (s.endMarginMm / s.circumference) * 360;
+    var a0 = sgn > 0 ? -marg : -(s.maxAngle + marg);
+    var a1 = sgn > 0 ? s.maxAngle + marg : marg;
+    el("path", { d: annulusSector(CX, CY, R, rIn, a0, a1), fill: "#121212" }, g);
+
+    function mark(deg, frac, w) {
+      var a = sgn * deg;
+      var p1 = polar(CX, CY, R, a), p2 = polar(CX, CY, R - band * frac, a);
+      el("line", { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1], stroke: "#FFFFFF", "stroke-width": w }, g);
+    }
+    var cap = LABEL_CAP * band;
+    if (s.band === 1) mark(0, 1, pxMm);
+    mark(s.maxAngle, 1, pxMm);
+    s.major.forEach(function (m) {
+      mark(m.angle, TICK_MAJOR, pxMm);
+      var la = sgn * m.angle;
+      var p = polar(CX, CY, R - band * (TICK_MAJOR + LABEL_GAP) - cap / 2, la);
+      el("path", { d: centredLabelPath(formatMeters(m.distance), cap), fill: "#FFFFFF", "fill-rule": "evenodd",
+                   transform: "translate(" + p[0] + " " + p[1] + ") rotate(" + la + ")" }, g);
+    });
+
+    el("path", { d: "M" + CX + " " + (CY - R + 2) + "l-7 -14h14z", fill: "#B90000" }, svg);
+    txt("INDEX", { x: CX + 12, y: CY - R - 18, "font-family": "Azeret Mono, monospace",
+                   "font-size": 10, fill: "#B90000", "letter-spacing": "1.6" }, svg);
+
+    var d = s.distanceFromAngle(ringAngle);
+    txt(formatDistance(d), { x: CX, y: CY - 2, "text-anchor": "middle", "dominant-baseline": "middle",
+        "font-family": "Azeret Mono, monospace", "font-weight": "600",
+        "font-size": isFinite(d) ? 32 : 44, fill: "#121212" }, svg);
+    txt(Math.round(ringAngle) + "°", { x: CX, y: CY + 26, "text-anchor": "middle", "dominant-baseline": "middle",
+        "font-family": "Azeret Mono, monospace", "font-size": 12, fill: DIM.stroke, "letter-spacing": "1.4" }, svg);
+
+    dimH(el("g", {}, svg), CX - R, CX + R, CY + R + 42, "Ø" + s.barrelDia.toFixed(2), CY + R + 4);
+
+    svg.setAttribute("aria-valuemax", String(Math.round(360 + s.maxAngle)));
+    svg.setAttribute("aria-valuenow", String(Math.round(ringAngle)));
+    svg.setAttribute("aria-valuetext", formatDistance(d) + " at " + Math.round(ringAngle) + " degrees");
+  }
+
+  // ---------------------------------------------------------------
+  // Readouts
+  // ---------------------------------------------------------------
+  function drawReadouts(s, chk) {
+    var size = (s.band === 2 ? "2nd turn · " : "1st turn · ") +
+               s.stripLenMm.toFixed(1) + " × " + s.stripHeightMm.toFixed(1) + " mm";
+    var range = formatDistance(s.farthest) + " – " + formatDistance(s.nearest);
+    $("footSize").textContent = size;
+    $("footRange").textContent = range;
+    $("footGap").textContent = s.gap >= 0
+      ? s.gap.toFixed(1) + " mm spare on the barrel"
+      : Math.abs(s.gap).toFixed(1) + " mm too long for the barrel";
+
+    $("dLength").textContent = "(" + s.stripLenMm.toFixed(1) + ")";
+    $("dTravel").textContent = "(" + s.fullExtension.toFixed(2) + ")";
+    $("dGap").textContent = "(" + (s.gap >= 0 ? "" : "−") + Math.abs(s.gap).toFixed(1) + ")";
+    $("dRange").textContent = "(" + shortDistance(s.farthest) + " – " + shortDistance(s.nearest) + ")";
+    $("sdOverall").textContent = s.stripLenMm.toFixed(1) + " × " + s.stripHeightMm.toFixed(1);
+    var dims = s.stripLenMm.toFixed(1) + " × " + s.stripHeightMm.toFixed(1);
+    Array.prototype.forEach.call(document.querySelectorAll(".hDims"), function (n) {
+      n.textContent = dims;
+    });
+    $("sdRange").textContent = range;
+    $("sdLens").textContent = ({ 80: "Mamiya 80", 55: "Mamiya 55" })[s.f] || (s.f + " mm lens");
+
+    var notes = [
+      { t: "Print at 100%. The exported SVG carries real millimetre dimensions, so do not let the print dialog scale it to fit." },
+      { t: "Infinity is taken to sit at the zero-rotation stop. Check it on ground glass; if the ring racks in past infinity, enter the leftover extension against “Extension at infinity” and the whole scale shifts to match." },
+      { t: "Wrap the strip on the smooth band of the focus ring, between the flutes. That band is 13.5 mm tall." },
+      { t: "The 55 mm and 80 mm builds share this focus ring and thread, so focal length is the only value that changes between them. The inner ring sets the flange distance: 41.70 mm for the 55, 36.10 mm for the 80." },
+      { t: "Gerber gives you the same scale as a flexible PCB. Order it 1 layer, black coverlay, white silkscreen. The soldermask layer is empty on purpose — that is what leaves the strip black end to end." },
+      { t: "The defaults are what the built camera actually needed: ticks on the bottom edge, close focus turning clockwise from the front. Check yours before committing to anything. Set the helicoid to infinity, turn toward close focus, and watch which way the ring travels past the index." },
+      { t: "The helicoid focuses a full turn past the first strip. The 2nd turn strip covers that range at the same barrel positions, one revolution later, so read it against the same index. Export and order each turn separately. The 20° gap at the end of each turn stays unlabelled." },
+      { t: "The two settings are independent, and that is the trap. Rotating a strip 180° to fix the direction also moves the ticks to the other edge, and takes the numerals round with it so they end up upside down. Set each one separately instead and the numbers stay upright either way." }
+    ];
+    if (s.maxAngle > 360) {
+      notes.push({ warn: true, t: "Rotation covers " + (s.maxAngle / 360).toFixed(2) +
+        " turns. The strip cannot wrap the barrel without overlapping itself." });
+    } else if (s.gap < 0) {
+      notes.push({ warn: true, t: "The strip is " + Math.abs(s.gap).toFixed(1) +
+        " mm longer than the barrel. Reduce the end margin or the rotation." });
+    }
+    if (chk.clipped) notes.push({ warn: true, t: "The end symbols run off the strip. Increase the end margin." });
+    if (chk.crowded) notes.push({ warn: true, t: "Some numerals are closer than 0.3 mm or touching. Increase the strip height or the barrel diameter, or cover less rotation." });
+    if (chk.stemMm < 0.15) notes.push({ warn: true, t: "At this strip height the numeral strokes are " + chk.stemMm.toFixed(2) + " mm, under JLCPCB's 0.15 mm silkscreen minimum. Increase the strip height before ordering a PCB." });
+
+    var ol = $("notes");
+    ol.innerHTML = "";
+    notes.forEach(function (n) {
+      var li = document.createElement("li");
+      if (n.warn) li.className = "warn";
+      li.textContent = n.t;
+      ol.appendChild(li);
+    });
+  }
+
+  // ---------------------------------------------------------------
+  var current = null;
+
+  function generate() {
+    var s = buildScale();
+    current = s;
+    dialScales = { 1: s.band === 1 ? s : buildScale(1), 2: s.band === 2 ? s : buildScale(2) };
+    if (ringAngle > 360 + s.maxAngle) ringAngle = 360 + s.maxAngle;
+    drawTape(s);
+    drawDial();
+
+    var prim = scalePrimitives(s);
+    var spans = prim.labels.slice().sort(function (a, b) { return a.lo - b.lo; });
+    var chk = { clipped: false, crowded: false, stemMm: prim.stemMm };
+    spans.forEach(function (sp, i) {
+      if (sp.lo < 0 || sp.hi > prim.L) chk.clipped = true;
+      if (i && sp.lo < spans[i - 1].hi + 0.3) chk.crowded = true;
+    });
+    drawReadouts(s, chk);
+  }
+
+  // ---------------------------------------------------------------
+  // Turning the ring
+  // ---------------------------------------------------------------
+  (function wireDial() {
+    var svg = $("dial"), dragging = false, last = 0;
+    function pointerAngle(ev) {
+      var r = svg.getBoundingClientRect();
+      var cx = r.left + r.width / 2, cy = r.top + r.height * (DIAL_CY / DIAL_H);
+      return Math.atan2(ev.clientY - cy, ev.clientX - cx) * 180 / Math.PI;
+    }
+    function setAngle(v) {
+      ringAngle = Math.max(0, Math.min(current ? 360 + current.maxAngle : 360, v));
+      if (current) drawDial();
+    }
+    svg.addEventListener("pointerdown", function (ev) {
+      dragging = true; last = pointerAngle(ev); svg.setPointerCapture(ev.pointerId); ev.preventDefault();
+    });
+    svg.addEventListener("pointermove", function (ev) {
+      if (!dragging) return;
+      var a = pointerAngle(ev), d = a - last;
+      while (d > 180) d -= 360;
+      while (d < -180) d += 360;
+      last = a; setAngle(ringAngle - d);
+    });
+    ["pointerup", "pointercancel"].forEach(function (t) {
+      svg.addEventListener(t, function () { dragging = false; });
+    });
+    svg.addEventListener("keydown", function (ev) {
+      var step = ev.shiftKey ? 10 : 1, max = current ? 360 + current.maxAngle : 360, handled = true;
+      switch (ev.key) {
+        case "ArrowRight": case "ArrowUp": setAngle(ringAngle + step); break;
+        case "ArrowLeft":  case "ArrowDown": setAngle(ringAngle - step); break;
+        case "Home": setAngle(0); break;
+        case "End": setAngle(max); break;
+        case "PageUp": setAngle(ringAngle + 25); break;
+        case "PageDown": setAngle(ringAngle - 25); break;
+        default: handled = false;
+      }
+      if (handled) ev.preventDefault();
+    });
+  })();
+
+  // ---------------------------------------------------------------
+  // Scale numerals: F5.6 by Sora Sagano (SIL OFL 1.1), a face built from the
+  // same engraving constraints as Leica's lens lettering. Outlines are
+  // embedded, in font units (cap height 870, baseline 0), so the tape, the
+  // SVG, the Gerber and the dial all draw identical numerals and nothing
+  // depends on which fonts are installed where the file is opened.
+  // Each contour is [hole, x, y, x, y, ...]. The zero's slash is removed:
+  // Leica doesn't slash its zeros, and on a lens a slashed 0 reads as Ø.
+  // ---------------------------------------------------------------
+  var F56 = {
+    "0": { a: 840, l: 150, r: 690, c: [[0,663,843,657,849,650,853,642,858,634,861,626,864,617,866,607,868,597,869,586,870,575,870,265,870,254,870,243,869,233,868,223,866,214,864,206,861,198,858,190,853,183,849,177,843,171,837,167,830,162,822,159,814,156,806,154,797,152,787,151,777,150,766,150,755,150,115,150,104,151,93,152,83,154,73,156,64,159,56,162,48,167,40,171,33,177,27,183,21,190,17,198,12,206,9,214,6,223,4,233,2,243,1,254,0,265,0,575,0,586,0,597,1,607,2,617,4,626,6,634,9,642,12,650,17,657,21,663,27,669,33,673,40,678,48,681,56,684,64,686,73,688,83,689,93,690,104,690,115,690,755,690,766,689,777,688,787,686,797,684,806,681,814,678,822,673,830,669,837],[1,270,116,570,116,570,754,270,754]] },
+    "1": { a: 578, l: 108, r: 408, c: [[0,401,863,399,865,397,866,395,867,393,868,391,869,389,869,387,870,385,870,382,870,380,870,316,870,314,870,311,870,309,870,307,869,305,869,303,868,301,867,299,866,297,865,295,863,293,861,292,859,291,857,290,855,289,853,289,851,288,849,288,847,288,844,288,842,288,750,136,750,134,750,131,750,129,750,127,749,125,749,123,748,121,747,119,746,117,745,115,743,113,741,112,739,111,737,110,735,109,733,109,731,108,729,108,727,108,724,108,722,108,658,108,656,108,653,108,651,109,649,109,647,110,645,111,643,112,641,113,639,115,637,117,635,119,634,121,633,123,632,125,631,127,631,129,630,131,630,134,630,136,630,288,630,288,28,288,26,288,23,288,21,289,19,289,17,290,15,291,13,292,11,293,9,295,7,297,5,299,4,301,3,303,2,305,1,307,1,309,0,311,0,314,0,316,0,380,0,382,0,385,0,387,0,389,1,391,1,393,2,395,3,397,4,399,5,401,7,403,9,404,11,405,13,406,15,407,17,407,19,408,21,408,23,408,26,408,28,408,842,408,844,408,847,408,849,407,851,407,853,406,855,405,857,404,859,403,861]] },
+    "2": { a: 768, l: 138, r: 646, c: [[0,138,192,138,28,138,26,138,23,138,21,139,19,139,17,140,15,141,13,142,11,143,9,145,7,147,5,149,4,151,3,153,2,155,1,157,1,159,0,161,0,164,0,166,0,618,0,620,0,623,0,625,0,627,1,629,1,631,2,633,3,635,4,637,5,639,7,641,9,642,11,643,13,644,15,645,17,645,19,646,21,646,23,646,26,646,28,646,88,646,90,646,93,646,95,645,97,645,99,644,101,643,103,642,105,641,107,639,109,637,111,635,112,633,113,631,114,629,115,627,115,625,116,623,116,620,116,618,116,258,116,258,180,258,193,259,205,260,215,262,224,265,233,269,241,274,249,281,256,289,263,298,271,554,464,571,478,586,491,597,504,607,518,614,532,620,547,624,564,626,581,628,600,628,621,628,755,628,766,627,777,626,787,624,797,622,806,619,814,616,822,611,830,607,837,601,843,595,849,588,853,580,858,572,861,564,864,555,866,545,868,535,869,524,870,513,870,261,870,250,870,239,869,229,868,219,866,210,864,202,861,194,858,186,853,179,849,173,843,167,837,163,830,158,822,155,814,152,806,150,797,148,787,147,777,146,766,146,755,146,658,146,656,146,653,146,651,147,649,147,647,148,645,149,643,150,641,151,639,153,637,155,635,157,634,159,633,161,632,163,631,165,631,167,630,169,630,172,630,174,630,238,630,240,630,243,630,245,630,247,631,249,631,251,632,253,633,255,634,257,635,259,637,261,639,262,641,263,643,264,645,265,647,265,649,266,651,266,653,266,656,266,658,266,754,508,754,508,636,508,622,507,610,506,599,504,590,501,582,497,575,492,567,485,561,477,553,468,546,211,350,194,336,180,322,168,308,159,294,151,280,146,265,142,249,140,231,138,213]] },
+    "3": { a: 740, l: 90, r: 610, c: [[0,583,476,577,482,570,486,562,491,554,494,546,497,537,499,527,501,517,502,506,503,495,503,359,503,560,723,567,731,573,739,579,747,583,755,587,762,590,770,592,778,594,785,595,793,595,801,594,813,592,824,588,834,583,843,576,851,567,858,556,863,544,867,530,869,514,870,150,870,148,870,145,870,143,870,141,869,139,869,137,868,135,867,133,866,131,865,129,863,127,861,126,859,125,857,124,855,123,853,123,851,122,849,122,847,122,844,122,842,122,782,122,780,122,777,122,775,123,773,123,771,124,769,125,767,126,765,127,763,129,761,131,759,133,758,135,757,137,756,139,755,141,755,143,754,145,754,148,754,150,754,437,754,231,524,227,519,224,515,221,511,219,506,217,502,215,497,214,493,214,488,213,482,213,476,213,415,213,413,213,410,213,408,214,406,214,404,215,402,216,400,217,398,218,396,220,394,222,392,224,391,226,390,228,389,230,388,232,388,234,387,236,387,239,387,241,387,490,387,490,116,210,116,210,208,210,210,210,213,210,215,209,217,209,219,208,221,207,223,206,225,205,227,203,229,201,231,199,232,197,233,195,234,193,235,191,235,189,236,187,236,184,236,182,236,118,236,116,236,113,236,111,236,109,235,107,235,105,234,103,233,101,232,99,231,97,229,95,227,94,225,93,223,92,221,91,219,91,217,90,215,90,213,90,210,90,208,90,115,90,104,91,93,92,83,94,73,96,64,99,56,102,48,107,40,111,33,117,27,123,21,130,17,138,12,146,9,154,6,163,4,173,2,183,1,194,0,205,0,495,0,506,0,517,1,527,2,537,4,546,6,554,9,562,12,570,17,577,21,583,27,589,33,593,40,598,48,601,56,604,64,606,73,608,83,609,93,610,104,610,115,610,388,610,399,609,410,608,420,606,430,604,439,601,447,598,455,593,463,589,470]] },
+    "4": { a: 763, l: 77, r: 688, c: [[0,681,329,679,331,677,332,675,333,673,334,671,335,669,335,667,336,665,336,662,336,660,336,568,336,568,622,568,624,568,627,568,629,567,631,567,633,566,635,565,637,564,639,563,641,561,643,559,645,557,646,555,647,553,648,551,649,549,649,547,650,545,650,542,650,540,650,476,650,474,650,471,650,469,650,467,649,465,649,463,648,461,647,459,646,457,645,455,643,453,641,452,639,451,637,450,635,449,633,449,631,448,629,448,627,448,624,448,622,448,336,214,336,421,837,423,843,424,848,424,853,423,857,421,861,418,864,415,866,410,868,405,870,399,870,326,870,321,870,317,869,313,868,310,866,306,864,303,862,301,859,298,856,296,852,294,848,90,360,87,354,85,348,83,342,82,336,80,331,79,326,78,320,77,315,77,310,77,305,78,290,81,276,85,263,92,252,100,243,110,235,122,228,135,224,150,221,167,220,448,220,448,28,448,26,448,23,448,21,449,19,449,17,450,15,451,13,452,11,453,9,455,7,457,5,459,4,461,3,463,2,465,1,467,1,469,0,471,0,474,0,476,0,540,0,542,0,545,0,547,0,549,1,551,1,553,2,555,3,557,4,559,5,561,7,563,9,564,11,565,13,566,15,567,17,567,19,568,21,568,23,568,26,568,28,568,220,660,220,662,220,665,220,667,220,669,221,671,221,673,222,675,223,677,224,679,225,681,227,683,229,684,231,685,233,686,235,687,237,687,239,688,241,688,243,688,246,688,248,688,308,688,310,688,313,688,315,687,317,687,319,686,321,685,323,684,325,683,327]] },
+    "5": { a: 778, l: 110, r: 640, c: [[0,525,503,264,503,264,754,572,754,574,754,577,754,579,754,581,755,583,755,585,756,587,757,589,758,591,759,593,761,595,763,596,765,597,767,598,769,599,771,599,773,600,775,600,777,600,780,600,782,600,842,600,844,600,847,600,849,599,851,599,853,598,855,597,857,596,859,595,861,593,863,591,865,589,866,587,867,585,868,583,869,581,869,579,870,577,870,574,870,572,870,259,870,248,870,237,869,227,868,217,866,208,864,200,861,192,858,184,853,177,849,171,843,165,837,161,830,156,822,153,814,150,806,148,797,146,787,145,777,144,766,144,755,144,502,144,491,145,480,146,470,148,460,150,451,153,443,156,435,161,427,165,420,171,414,177,408,184,404,192,399,200,396,208,393,217,391,227,389,237,388,248,387,259,387,520,387,520,116,230,116,230,212,230,214,230,217,230,219,229,221,229,223,228,225,227,227,226,229,225,231,223,233,221,235,219,236,217,237,215,238,213,239,211,239,209,240,207,240,204,240,202,240,138,240,136,240,133,240,131,240,129,239,127,239,125,238,123,237,121,236,119,235,117,233,115,231,114,229,113,227,112,225,111,223,111,221,110,219,110,217,110,214,110,212,110,115,110,104,111,93,112,83,114,73,116,64,119,56,122,48,127,40,131,33,137,27,143,21,150,17,158,12,166,9,174,6,183,4,193,2,203,1,214,0,225,0,525,0,536,0,547,1,557,2,567,4,576,6,584,9,592,12,600,17,607,21,613,27,619,33,623,40,628,48,631,56,634,64,636,73,638,83,639,93,640,104,640,115,640,388,640,399,639,410,638,420,636,430,634,439,631,447,628,455,623,463,619,470,613,476,607,482,600,486,592,491,584,494,576,497,567,499,557,501,547,502,536,503]] },
+    "6": { a: 810, l: 150, r: 670, c: [[0,643,476,637,482,630,486,622,491,614,494,606,497,597,499,587,501,577,502,566,503,555,503,270,503,270,754,530,754,530,658,530,656,530,653,530,651,531,649,531,647,532,645,533,643,534,641,535,639,537,637,539,635,541,634,543,633,545,632,547,631,549,631,551,630,553,630,556,630,558,630,622,630,624,630,627,630,629,630,631,631,633,631,635,632,637,633,639,634,641,635,643,637,645,639,646,641,647,643,648,645,649,647,649,649,650,651,650,653,650,656,650,658,650,755,650,766,649,777,648,787,646,797,644,806,641,814,638,822,633,830,629,837,623,843,617,849,610,853,602,858,594,861,586,864,577,866,567,868,557,869,546,870,535,870,265,870,254,870,243,869,233,868,223,866,214,864,206,861,198,858,190,853,183,849,177,843,171,837,167,830,162,822,159,814,156,806,154,797,152,787,151,777,150,766,150,755,150,115,150,104,151,93,152,83,154,73,156,64,159,56,162,48,167,40,171,33,177,27,183,21,190,17,198,12,206,9,214,6,223,4,233,2,243,1,254,0,265,0,555,0,566,0,577,1,587,2,597,4,606,6,614,9,622,12,630,17,637,21,643,27,649,33,653,40,658,48,661,56,664,64,666,73,668,83,669,93,670,104,670,115,670,388,670,399,669,410,668,420,666,430,664,439,661,447,658,455,653,463,649,470],[1,550,116,270,116,270,387,550,387]] },
+    "7": { a: 716, l: 83, r: 632, c: [[0,83,842,83,658,83,656,83,653,83,651,84,649,84,647,85,645,86,643,87,641,88,639,90,637,92,635,94,634,96,633,98,632,100,631,102,631,104,630,106,630,109,630,111,630,175,630,177,630,180,630,182,630,184,631,186,631,188,632,190,633,192,634,194,635,196,637,198,639,199,641,200,643,201,645,202,647,202,649,203,651,203,653,203,656,203,658,203,754,500,754,214,32,212,26,211,21,212,16,213,12,215,8,218,6,222,3,226,1,231,0,237,0,308,0,313,0,317,1,321,2,324,3,328,5,331,7,333,10,336,14,338,17,340,22,621,732,623,738,625,744,627,749,628,754,630,760,630,765,631,769,632,774,632,779,632,784,631,800,628,814,623,826,617,838,608,847,597,855,585,862,571,866,554,869,536,870,111,870,109,870,106,870,104,870,102,869,100,869,98,868,96,867,94,866,92,865,90,863,88,861,87,859,86,857,85,855,84,853,84,851,83,849,83,847,83,844]] },
+    "8": { a: 823, l: 140, r: 683, c: [[0,610,415,544,448,588,467,605,476,620,485,633,496,644,509,653,522,660,536,665,552,668,569,670,587,671,606,671,755,671,766,670,777,669,787,667,797,665,806,662,814,659,822,654,830,650,837,644,843,638,849,631,853,623,858,615,861,607,864,598,866,588,868,578,869,567,870,556,870,270,870,259,870,248,869,238,868,228,866,219,864,211,861,203,858,195,853,188,849,182,843,176,837,172,830,167,822,164,814,161,806,159,797,157,787,156,777,155,766,155,755,155,611,156,592,157,573,161,556,166,540,172,526,180,512,190,499,203,488,217,478,234,470,278,451,213,417,197,407,184,397,173,385,163,371,156,357,150,342,145,326,142,309,141,291,140,272,140,115,140,104,141,93,142,83,144,73,146,64,149,56,152,48,157,40,161,33,167,27,173,21,180,17,188,12,196,9,204,6,213,4,223,2,233,1,244,0,255,0,568,0,579,0,590,1,600,2,610,4,619,6,627,9,635,12,643,17,650,21,656,27,662,33,666,40,671,48,674,56,677,64,679,73,681,83,682,93,683,104,683,115,683,270,682,289,681,307,678,324,673,341,668,356,660,370,650,383,639,395,626,406],[1,275,754,551,754,551,616,551,606,550,597,548,589,546,581,542,573,538,566,532,559,525,553,517,547,507,542,416,497,328,537,316,543,306,549,297,555,290,562,285,569,281,577,278,585,276,594,275,605,275,616],[1,563,116,260,116,260,272,260,281,261,290,263,298,265,306,268,314,273,321,277,327,283,333,290,339,298,344,402,408,525,344,533,339,540,334,546,328,550,321,554,314,558,307,560,299,562,290,563,281,563,272]] },
+    "9": { a: 810, l: 140, r: 660, c: [[0,633,843,627,849,620,853,612,858,604,861,596,864,587,866,577,868,567,869,556,870,545,870,255,870,244,870,233,869,223,868,213,866,204,864,196,861,188,858,180,853,173,849,167,843,161,837,157,830,152,822,149,814,146,806,144,797,142,787,141,777,140,766,140,755,140,482,140,471,141,460,142,450,144,440,146,431,149,423,152,415,157,407,161,400,167,394,173,388,180,384,188,379,196,376,204,373,213,371,223,369,233,368,244,367,255,367,540,367,540,116,280,116,280,212,280,214,280,217,280,219,279,221,279,223,278,225,277,227,276,229,275,231,273,233,271,235,269,236,267,237,265,238,263,239,261,239,259,240,257,240,254,240,252,240,188,240,186,240,183,240,181,240,179,239,177,239,175,238,173,237,171,236,169,235,167,233,165,231,164,229,163,227,162,225,161,223,161,221,160,219,160,217,160,214,160,212,160,115,160,104,161,93,162,83,164,73,166,64,169,56,172,48,177,40,181,33,187,27,193,21,200,17,208,12,216,9,224,6,233,4,243,2,253,1,264,0,275,0,545,0,556,0,567,1,577,2,587,4,596,6,604,9,612,12,620,17,627,21,633,27,639,33,643,40,648,48,651,56,654,64,656,73,658,83,659,93,660,104,660,115,660,755,660,766,659,777,658,787,656,797,654,806,651,814,648,822,643,830,639,837],[1,260,483,260,754,540,754,540,483]] },
+    ".": { a: 200, l: 40, r: 160, c: [[0,40,92,40,28,40,26,40,23,40,21,41,19,41,17,42,15,43,13,44,11,45,9,47,7,49,5,51,4,53,3,55,2,57,1,59,1,61,0,63,0,66,0,68,0,132,0,134,0,137,0,139,0,141,1,143,1,145,2,147,3,149,4,151,5,153,7,155,9,156,11,157,13,158,15,159,17,159,19,160,21,160,23,160,26,160,28,160,92,160,94,160,97,160,99,159,101,159,103,158,105,157,107,156,109,155,111,153,113,151,115,149,116,147,117,145,118,143,119,141,119,139,120,137,120,134,120,132,120,68,120,66,120,63,120,61,120,59,119,57,119,55,118,53,117,51,116,49,115,47,113,45,111,44,109,43,107,42,105,41,103,41,101,40,99,40,97,40,94]] },
+    "m": { a: 990, l: 140, r: 856, c: [[0,829,653,823,659,816,663,808,668,800,671,792,674,783,676,773,678,763,679,752,680,741,680,168,680,166,680,163,680,161,680,159,679,157,679,155,678,153,677,151,676,149,675,147,673,145,671,144,669,143,667,142,665,141,663,141,661,140,659,140,657,140,654,140,652,140,28,140,26,140,23,140,21,141,19,141,17,142,15,143,13,144,11,145,9,147,7,149,5,151,4,153,3,155,2,157,1,159,1,161,0,163,0,166,0,168,0,228,0,230,0,233,0,235,0,237,1,239,1,241,2,243,3,245,4,247,5,249,7,251,9,252,11,253,13,254,15,255,17,255,19,256,21,256,23,256,26,256,28,256,566,440,566,440,28,440,26,440,23,440,21,441,19,441,17,442,15,443,13,444,11,445,9,447,7,449,5,451,4,453,3,455,2,457,1,459,1,461,0,463,0,466,0,468,0,528,0,530,0,533,0,535,0,537,1,539,1,541,2,543,3,545,4,547,5,549,7,551,9,552,11,553,13,554,15,555,17,555,19,556,21,556,23,556,26,556,28,556,566,740,566,740,28,740,26,740,23,740,21,741,19,741,17,742,15,743,13,744,11,745,9,747,7,749,5,751,4,753,3,755,2,757,1,759,1,761,0,763,0,766,0,768,0,828,0,830,0,833,0,835,0,837,1,839,1,841,2,843,3,845,4,847,5,849,7,851,9,852,11,853,13,854,15,855,17,855,19,856,21,856,23,856,26,856,28,856,565,856,576,855,587,854,597,852,607,850,616,847,624,844,632,839,640,835,647]] }
+  };
+  var F56_CAP = 870, F56_STEM = 120, F56_TRACK = -40;
+
+  // Digits close up slightly; the decimal point keeps its full spacing, or it
+  // crowds the digit after it.
+  function advance(str, i) {
+    var byPoint = str[i] === "." || str[i + 1] === ".";
+    return F56[str[i]].a + (byPoint ? 0 : F56_TRACK);
+  }
+
+  function inkOf(str) {
+    var pen = 0, lo = Infinity, hi = -Infinity;
+    for (var i = 0; i < str.length; i++) {
+      var g = F56[str[i]];
+      lo = Math.min(lo, pen + g.l);
+      hi = Math.max(hi, pen + g.r);
+      pen += advance(str, i);
+    }
+    return { lo: lo, hi: hi };
+  }
+  function labelWidthMm(str, cap) {
+    var ink = inkOf(str);
+    return (ink.hi - ink.lo) * cap / F56_CAP;
+  }
+
+  // Calls fn(hole, pts) for each contour of a string, centred on its ink.
+  // pts are in font units relative to that centre and the baseline.
+  function eachContour(str, fn) {
+    var ink = inkOf(str), mid = (ink.lo + ink.hi) / 2, pen = 0;
+    for (var i = 0; i < str.length; i++) {
+      var g = F56[str[i]];
+      g.c.forEach(function (c) {
+        var pts = [];
+        for (var j = 1; j < c.length; j += 2) pts.push([pen + c[j] - mid, c[j + 1]]);
+        fn(!!c[0], pts);
+      });
+      pen += advance(str, i);
+    }
+  }
+
+  // Strip coordinates: millimetres, Y up, centred on cx with the baseline at y.
+  function textOutlines(str, cx, y, cap, out) {
+    var k = cap / F56_CAP;
+    eachContour(str, function (hole, pts) {
+      out.glyphs.push({ hole: hole, pts: pts.map(function (p) { return [cx + p[0] * k, y + p[1] * k]; }) });
+    });
+  }
+
+  // Dial coordinates: an SVG path centred on 0,0, Y down, for rotating into place.
+  function centredLabelPath(str, cap) {
+    var k = cap / F56_CAP, d = "";
+    eachContour(str, function (hole, pts) {
+      d += "M" + pts.map(function (p) {
+        return (p[0] * k).toFixed(2) + " " + (-(p[1] - F56_CAP / 2) * k).toFixed(2);
+      }).join("L") + "Z";
+    });
+    return d;
+  }
+
+  // Everything in millimetres, Y up, origin at the strip's bottom-left.
+  // The SVG strip and the Gerber are both drawn from this, so they match.
+  function scalePrimitives(s) {
+    var L = s.stripLenMm, H = s.stripHeightMm;
+    var tickMajor = TICK_MAJOR * H, cap = LABEL_CAP * H;
+    var baseline = s.flip ? (tickMajor + LABEL_GAP * H)
+                          : (H - tickMajor - LABEL_GAP * H - cap);
+    var xOf = s.xOf;
+    var out = { regions: [], glyphs: [], strokes: [], labels: [], L: L, H: H,
+                stemMm: F56_STEM / F56_CAP * cap };
+
+    function bar(x, w, off, len) {           // off measured from whichever edge the ticks run from
+      var y0 = s.flip ? off : H - off - len;
+      var y1 = s.flip ? off + len : H - off;
+      out.regions.push([[x - w / 2, y0], [x + w / 2, y0], [x + w / 2, y1], [x - w / 2, y1]]);
+    }
+    function label(str, cx) {
+      var w = labelWidthMm(str, cap);
+      out.labels.push({ lo: cx - w / 2, hi: cx + w / 2 });
+      textOutlines(str, cx, baseline, cap, out);
+    }
+
+    if (s.band === 1) bar(xOf(0), 1, 0, H);
+    bar(xOf(s.maxAngle), 1, 0, H);
+    s.major.forEach(function (m) {
+      bar(xOf(m.angle), 1, 0, tickMajor);
+      label(formatMeters(m.distance), xOf(m.angle));
+    });
+
+    // The infinity and metre marks sit beside their index bars, the way a lens
+    // barrel is engraved, so on silkscreen white never runs into white.
+    var clear = 0.5 + 0.6;
+    if (s.band === 1 && !s.spacer) {
+      // F5.6 has no infinity sign, so draw a Gerono lemniscate at its stem weight
+      var A = 0.52 * cap, B = 0.30 * cap, st = out.stemMm;
+      var cx = xOf(0) + s.sgn * (clear + A + st / 2), cy = baseline + cap / 2, pts = [];
+      for (var i = 0; i <= 120; i++) {
+        var t = i / 120 * 2 * Math.PI;
+        pts.push([cx + A * Math.cos(t), cy + 2 * B * Math.sin(t) * Math.cos(t)]);
+      }
+      out.strokes.push({ w: st, pts: pts });
+      out.labels.push({ lo: cx - A - st / 2, hi: cx + A + st / 2 });
+    }
+    label("m", xOf(s.maxAngle) - s.sgn * (clear + labelWidthMm("m", cap) / 2));
+    return out;
+  }
+
+  // --- Gerber writing -------------------------------------------------
+  function gCoord(v) { return Math.round(v * 1e6); }
+  function gHead(fn) {
+    return ["%FSLAX46Y46*%", "%MOMM*%", "%TF.FileFunction," + fn + "*%",
+            "%TF.Part,Single*%", "%TF.SameCoordinates*%", "%LPD*%", "G01*"];
+  }
+  function gRegion(pts, o) {
+    o.push("G36*");
+    o.push("X" + gCoord(pts[0][0]) + "Y" + gCoord(pts[0][1]) + "D02*");
+    for (var i = 1; i < pts.length; i++) o.push("X" + gCoord(pts[i][0]) + "Y" + gCoord(pts[i][1]) + "D01*");
+    o.push("X" + gCoord(pts[0][0]) + "Y" + gCoord(pts[0][1]) + "D01*");
+    o.push("G37*");
+  }
+  function gPoly(pts, o) {
+    o.push("X" + gCoord(pts[0][0]) + "Y" + gCoord(pts[0][1]) + "D02*");
+    for (var i = 1; i < pts.length; i++) o.push("X" + gCoord(pts[i][0]) + "Y" + gCoord(pts[i][1]) + "D01*");
+  }
+
+  function buildGerber(s) {
+    var g = scalePrimitives(s), L = g.L, H = g.H, f = {};
+
+    // Silkscreen: ticks and numerals as filled regions, so widths stay exact.
+    // Counters are cleared afterwards with clear polarity; each one lies inside
+    // its own numeral, so nothing else is touched.
+    var o = gHead("Legend,Top");
+    o.push("%ADD10C,0.100000*%");
+    var widths = [];
+    g.strokes.forEach(function (st) { if (widths.indexOf(st.w) < 0) widths.push(st.w); });
+    widths.forEach(function (w, i) { o.push("%ADD" + (11 + i) + "C," + w.toFixed(6) + "*%"); });
+    o.push("D10*");
+    g.regions.forEach(function (r) { gRegion(r, o); });
+    g.glyphs.forEach(function (c) { if (!c.hole) gRegion(c.pts, o); });
+    var holes = g.glyphs.filter(function (c) { return c.hole; });
+    if (holes.length) {
+      o.push("%LPC*%");
+      holes.forEach(function (c) { gRegion(c.pts, o); });
+      o.push("%LPD*%");
+    }
+    widths.forEach(function (w, i) {
+      o.push("D" + (11 + i) + "*");
+      g.strokes.forEach(function (st) { if (st.w === w) gPoly(st.pts, o); });
+    });
+    o.push("M02*");
+    f["GTO"] = o.join("\n") + "\n";
+
+    // Soldermask defines openings, so an empty layer means full coverage,
+    // which is what makes the finished strip black end to end.
+    f["GTS"] = gHead("Soldermask,Top").concat(["M02*"]).join("\n") + "\n";
+
+    // Copper: a plain pour, inset from the edge. Never seen; it just gives
+    // the fab a normal flex stack rather than coverlay on bare polyimide.
+    var c = gHead("Copper,L1,Top"), i = 0.5;
+    c.push("%ADD10C,0.100000*%", "D10*");
+    gRegion([[i, i], [L - i, i], [L - i, H - i], [i, H - i]], c);
+    c.push("M02*");
+    f["GTL"] = c.join("\n") + "\n";
+
+    // The 3M tape goes on the back, against the barrel, so this is a bottom
+    // stiffener: a filled area inset far enough not to overhang after routing.
+    var st = gHead("Other,Stiffener"), si = 0.3;
+    st.splice(1, 0, "G04 Bottom stiffener - area for 3M468 adhesive backing*");
+    st.push("%ADD10C,0.100000*%", "D10*");
+    gRegion([[si, si], [L - si, si], [L - si, H - si], [si, H - si]], st);
+    st.push("M02*");
+    f["STIFF"] = st.join("\n") + "\n";
+
+    var p = gHead("Profile,NP");
+    p.push("%ADD10C,0.050000*%", "D10*");
+    gPoly([[0, 0], [L, 0], [L, H], [0, H], [0, 0]], p);
+    p.push("M02*");
+    f["GKO"] = p.join("\n") + "\n";
+
+    f["DRL"] = ["M48", "FMAT,2", "METRIC,TZ", "%", "M30", ""].join("\n");
+    return f;
+  }
+
+  // --- minimal store-only ZIP ----------------------------------------
+  var CRC_TABLE = (function () {
+    var t = new Uint32Array(256);
+    for (var n = 0; n < 256; n++) {
+      var c = n;
+      for (var k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      t[n] = c >>> 0;
+    }
+    return t;
+  })();
+  function crc32(bytes) {
+    var c = 0xFFFFFFFF;
+    for (var i = 0; i < bytes.length; i++) c = CRC_TABLE[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+  function zip(entries) {
+    var enc = new TextEncoder(), parts = [], central = [], offset = 0;
+    function u16(v) { return [v & 255, (v >>> 8) & 255]; }
+    function u32(v) { return [v & 255, (v >>> 8) & 255, (v >>> 16) & 255, (v >>> 24) & 255]; }
+    entries.forEach(function (e) {
+      var name = enc.encode(e.name), data = enc.encode(e.data), crc = crc32(data);
+      var local = [].concat(u32(0x04034b50), u16(20), u16(0), u16(0), u16(0), u16(0),
+                            u32(crc), u32(data.length), u32(data.length),
+                            u16(name.length), u16(0));
+      parts.push(new Uint8Array(local), name, data);
+      central.push([].concat(u32(0x02014b50), u16(20), u16(20), u16(0), u16(0), u16(0), u16(0),
+                             u32(crc), u32(data.length), u32(data.length),
+                             u16(name.length), u16(0), u16(0), u16(0), u16(0), u32(0), u32(offset)));
+      central[central.length - 1].name = name;
+      offset += local.length + name.length + data.length;
+    });
+    var cenParts = [], cenLen = 0;
+    central.forEach(function (c) {
+      cenParts.push(new Uint8Array(c), c.name);
+      cenLen += c.length + c.name.length;
+    });
+    var end = new Uint8Array([].concat(u32(0x06054b50), u16(0), u16(0),
+      u16(entries.length), u16(entries.length), u32(cenLen), u32(offset), u16(0)));
+    return new Blob(parts.concat(cenParts, [end]), { type: "application/zip" });
+  }
+
+  function download(blob, name) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  $("gerberBtn").addEventListener("click", function () {
+    var f = buildGerber(current), base = "infidex-176v-focusing-scale-band" + current.band;
+    var readme =
+      "Infidex 176 V focusing scale, " + (current.band === 2 ? "2nd" : "1st") + " turn, " +
+      formatDistance(current.farthest) + " to " + formatDistance(current.nearest) + ", " +
+      current.stripLenMm.toFixed(1) + " x " +
+      current.stripHeightMm.toFixed(1) + " mm.\r\n\r\n" +
+      "Order as: flexible PCB, 1 layer, black coverlay, white silkscreen.\r\n" +
+      "Units are millimetres; do not let anything rescale the files.\r\n\r\n" +
+      "GTL  copper, a plain pour inset 0.5 mm from the edge\r\n" +
+      "GTS  soldermask, intentionally empty so the coverlay covers everything\r\n" +
+      "GTO  silkscreen, the scale itself\r\n" +
+      "GKO  board outline\r\n" +
+      "DRL  drill, no holes in this board\r\n\r\n" +
+      "Bottom Stiffener.GBR marks where the 3M468 adhesive goes: the whole\r\n" +
+      "back face, inset 0.3 mm so it cannot overhang after routing.\r\n" +
+      "If you order WITHOUT the 3M tape option, delete that file, or the\r\n" +
+      "stiffener layer and the order will not match.\r\n";
+    download(zip([
+      { name: base + ".GTL", data: f.GTL },
+      { name: base + ".GTS", data: f.GTS },
+      { name: base + ".GTO", data: f.GTO },
+      { name: base + ".GKO", data: f.GKO },
+      { name: base + ".DRL", data: f.DRL },
+      { name: "Bottom Stiffener.GBR", data: f.STIFF },
+      { name: "README.txt", data: readme }
+    ]), base + "-gerber.zip");
+  });
+
+  // ---------------------------------------------------------------
+  // Export
+  // ---------------------------------------------------------------
+  $("exportBtn").addEventListener("click", function () {
+    var s = current;
+    var holder = document.createElementNS(SVGNS, "svg");
+    drawStripGroup(s, holder);
+    var out = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' +
+      '<svg xmlns="http://www.w3.org/2000/svg"\n' +
+      '     width="' + s.stripLenMm.toFixed(3) + 'mm"\n' +
+      '     height="' + s.stripHeightMm.toFixed(3) + 'mm"\n' +
+      '     viewBox="0 0 ' + (s.stripLenMm * MM).toFixed(3) + ' ' + (s.stripHeightMm * MM).toFixed(3) + '">\n' +
+      holder.innerHTML + '\n</svg>';
+    var blob = new Blob([out], { type: "image/svg+xml;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = "infidex-176v-focusing-scale-band" + s.band + ".svg";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  // ---------------------------------------------------------------
+  // Help panels
+  // ---------------------------------------------------------------
+  (function wireHelp() {
+    var triggers = Array.prototype.slice.call(document.querySelectorAll(".help"));
+
+    function close(t) {
+      t.setAttribute("aria-expanded", "false");
+      $(t.getAttribute("aria-controls")).hidden = true;
+    }
+    function closeAll(except) {
+      triggers.forEach(function (t) { if (t !== except) close(t); });
+    }
+
+    triggers.forEach(function (t) {
+      var panel = $(t.getAttribute("aria-controls"));
+      t.addEventListener("click", function (ev) {
+        ev.stopPropagation();
+        var open = t.getAttribute("aria-expanded") === "true";
+        closeAll(t);
+        t.setAttribute("aria-expanded", String(!open));
+        panel.hidden = open;
+      });
+      panel.addEventListener("click", function (ev) { ev.stopPropagation(); });
+      panel.querySelector(".close").addEventListener("click", function () {
+        close(t);
+        t.focus();
+      });
+    });
+
+    document.addEventListener("click", function () { closeAll(null); });
+    document.addEventListener("keydown", function (ev) {
+      if (ev.key !== "Escape") return;
+      triggers.forEach(function (t) {
+        if (t.getAttribute("aria-expanded") === "true") { close(t); t.focus(); }
+      });
+    });
+  })();
+
+  // ---------------------------------------------------------------
+  // Schedule wiring
+  // ---------------------------------------------------------------
+  ["focal", "spacer", "lead", "rotation", "barrel", "height", "height2", "margin"].forEach(function (id) {
+    $(id).addEventListener("input", generate);
+  });
+  var lensButtons = Array.prototype.slice.call(document.querySelectorAll(".lens button"));
+  function syncLens() {
+    var f = parseFloat($("focal").value);
+    lensButtons.forEach(function (b) { b.setAttribute("aria-pressed", String(parseFloat(b.dataset.focal) === f)); });
+  }
+  lensButtons.forEach(function (b) {
+    b.addEventListener("click", function () { $("focal").value = b.dataset.focal; syncLens(); generate(); });
+  });
+
+  function wireSeg(sel) {
+    var btns = Array.prototype.slice.call(document.querySelectorAll(sel + " button"));
+    btns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        btns.forEach(function (o) { o.setAttribute("aria-pressed", String(o === b)); });
+        generate();
+      });
+    });
+    return btns;
+  }
+  var dirButtons = wireSeg(".dirsel");
+  var tickButtons = wireSeg(".tickssel");
+  var bandButtons = Array.prototype.slice.call(document.querySelectorAll(".bandsel button"));
+  bandButtons.forEach(function (b) {
+    b.addEventListener("click", function () {
+      bandButtons.forEach(function (o) { o.setAttribute("aria-pressed", String(o === b)); });
+      ringAngle = b.dataset.band === "2" ? 360 : 0;   // turn the dial to the band you picked
+      generate();
+    });
+  });
+  $("focal").addEventListener("input", syncLens);
+  $("resetBtn").addEventListener("click", function () {
+    ["focal", "spacer", "lead", "rotation", "barrel", "height", "height2", "margin"].forEach(function (id) {
+      $(id).value = DEFAULTS[id];
+    });
+    bandButtons.forEach(function (b) {
+      b.setAttribute("aria-pressed", String(+b.dataset.band === DEFAULTS.band));
+    });
+    dirButtons.forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.dataset.dir === DEFAULTS.dir));
+    });
+    tickButtons.forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.dataset.ticks === DEFAULTS.ticks));
+    });
+    ringAngle = 0; syncLens(); generate();
+  });
+
+  var resizeTimer = null;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () { if (current) drawTape(current); }, 120);
+  });
+
+  syncLens();
+  generate();
+})();
+</script>
+</body>
+</html>
