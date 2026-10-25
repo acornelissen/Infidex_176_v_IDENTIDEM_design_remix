@@ -15,7 +15,7 @@ The camera is unchanged where it counts: same 3:1 panoramic frame on 35mm film, 
 | | Original | This remix |
 |---|---|---|
 | Body | One piece | Reworked, and supplied two ways: in one piece, or as two halves glued together with a light-tight lip and alignment pegs |
-| Frame counting | Count as you wind | Sprocket-driven gear train and a numbered counter face, starting at 25 |
+| Frame counting | Count as you wind | Sprocket-driven gear train and a numbered counter face, starting at 25, or at 20 with the 20-frame option |
 | Counter dial | None | Two versions: a free-running dial, or one held by a ball plunger for a steadier reading |
 | Rewind knob | Spring detent | Three ball plungers |
 | Take-up coupling | Dog coupling | Inner-ratchet with three ball plungers for wind and rewind, magnets optional |
@@ -41,8 +41,8 @@ Carried over from the original design:
 
 Specific to this remix:
 
-- **Frame counter:** 50:1 spur train, module 0.6, four meshes (12:32, 12:30, 12:30, 12:36), one counter-face turn per 25 frames
-- **Counter face:** starts at 25 as the loading position, then reads 1, 2, 3 and on as you wind; friction-fitted under a thumbscrew, reset by loosening it and turning 25 back to the marker
+- **Frame counter:** 50:1 spur train, module 0.6, four meshes (12:32, 12:30, 12:30, 12:36), one counter-face turn per 25 frames; or 40:1 (12:32, 14:28, 12:30, 12:36), one turn per 20 frames, see [Frame count: 25 or 20](#frame-count-25-or-20)
+- **Counter face:** starts at 25 (20 on the 20-frame face) as the loading position, then reads 1, 2, 3 and on as you wind; friction-fitted under a thumbscrew, reset by loosening it and turning the loading number back to the marker
 - **Counter dial:** simple (free-running) or drag (one extra ball plunger presses on the dial rim), see [Counter dial: simple or drag](#counter-dial-simple-or-drag)
 
 ## Files
@@ -52,7 +52,7 @@ Specific to this remix:
 | `cad/Infidex176V-IDENTIDEM.design-remix.step` | Full assembly, STEP, for any CAD package |
 | `cad/Infidex176V-IDENTIDEM.design-remix.f3d` | Fusion source for the camera |
 | `cad/Infidex176V-IDENTIDEM.design-remix-counter-train.f3d` | Fusion source for the parametric counter gear train |
-| `3mf/Infidex176V-IDENTIDEM.design-remix.3mf` | Print-ready project, all parts laid out across nine plates |
+| `3mf/Infidex176V-IDENTIDEM.design-remix.3mf` | Print-ready project, all parts laid out across 17 plates |
 | `3mf/parts/` | One 3MF per part, for reprinting a single part |
 | `Infidex-Hardware-Map.pdf` | Hardware placement and assembly guide, 7 pages, built from `docs/hardware-map/` |
 | `tools/InfidexCounterTrain/` | Fusion script that rebuilds the counter train from parameters, see [`tools/README.md`](tools/README.md) |
@@ -75,7 +75,7 @@ The counter train gears are the finest parts in the model. Print them with the r
 
 ### Parts
 
-Print the whole camera from the project file in `3mf/`, which has everything arranged across 14 plates with the per-part settings already set. `3mf/parts/` holds the same 34 parts one to a file, plus a two-colour version of each counter face and each knob, each in the orientation it is meant to print in and sitting on the bed, for when you only need to reprint one. Updating an earlier build? [`CHANGELOG.md`](CHANGELOG.md) lists the parts to reprint for each release.
+Print the whole camera from the project file in `3mf/`, which has everything arranged across 17 plates with the per-part settings already set. `3mf/parts/` holds the same 38 parts one to a file, plus a two-colour version of each counter face and each knob, each in the orientation it is meant to print in and sitting on the bed, for when you only need to reprint one. Updating an earlier build? [`CHANGELOG.md`](CHANGELOG.md) lists the parts to reprint for each release.
 
 Some parts are a choice rather than a set. Print one from each of these:
 
@@ -84,8 +84,10 @@ Some parts are a choice rather than a set. Print one from each of these:
 - **Viewfinder:** `viewfinder-var-1` or `viewfinder-var-2`
 - **Focus ring:** `helicoid-focus-ring-ribs` or `helicoid-focus-ring-no-ribs`
 - **Helicoid inner ring:** `helicoid-inner-ring-for-80mm-lens` or `helicoid-inner-ring-for-55mm-lens`, to suit your taking lens
-- **Counter dial:** `simple-cover` with `simple-counter-face`, or `drag-cover` with `drag-counter-face`. Print them as a matched pair; see [Counter dial: simple or drag](#counter-dial-simple-or-drag) to choose. The project file has all four, the covers on plate 7 and the faces on plate 8, so delete the pair you don't want before slicing
-- **Counter face colours:** either face in one colour, or its `-two-colour` file (`simple-counter-face-two-colour`, `drag-counter-face-two-colour`) for markers in a second filament
+- **Counter dial:** `simple-cover` with a simple face, or `drag-cover` with a drag face. Print them as a matched pair; see [Counter dial: simple or drag](#counter-dial-simple-or-drag) to choose
+- **Frame count:** for 25 frames, `counter-coupling-gear` and `counter-idler-1` with `simple-counter-face` or `drag-counter-face`; for 20 frames, `counter-coupling-gear-20` and `counter-idler-1-20` with `simple-counter-face-20` or `drag-counter-face-20`. See [Frame count: 25 or 20](#frame-count-25-or-20). `counter-idler-2` and `counter-gear` are shared and sit on Small parts 2
+- **Counter plates:** the project file gives every counter choice its own plate: the covers on 10 and 11, the 25-frame idlers on 12 and their faces on 13 and 14, the 20-frame idlers on 15 and their faces on 16 and 17. Print the plates for your choice and skip the rest
+- **Counter face colours:** any face in one colour, or its `-two-colour` file (`simple-counter-face-two-colour`, `drag-counter-face-two-colour`, `simple-counter-face-20-two-colour`, `drag-counter-face-20-two-colour`) for markers in a second filament
 - **Knob colours:** `advance-knob` and `rewind-knob` in one colour, or their `-two-colour` files for the direction arrows in a second filament. Load each as one object with two parts and give the `-inlay` part the second filament. The arrows are 1.0 mm deep, so the first five layers change colour at 0.2 mm layer height
 
 ### Lens mount alternatives
@@ -208,17 +210,17 @@ On heads: the knob's seat for S12 is a Ø3.7 × 90° countersink 0.75 mm deep, s
 
 ### Counter train
 
-The four counter gears drop onto printed pins in the body. From the sprocket: idler 1 is `counter-coupling-gear`, idler 2 is `counter-idler-1`, idler 3 is `counter-idler-2`, and the dial wheel is `counter-gear`. The idler bores are 0.2 mm over their pins: Ø3.4 on the Ø3.2 pins, and Ø4.2 over the Ø4.0 foot of the stepped pin under idler 1. If an idler won't drop on or turns stiffly, run a drill of the bore size through it by hand rather than sanding the pin: 3.4 mm, or 4.2 mm for the lower part of idler 1's stepped bore. The idler 1 and 2 pins run up to the top of their gears so they cannot tilt out of mesh, and the idler 3 pin stops level with the body's top face, which is the face the two-piece top half prints on. The top cover sits on the floor of its recess once it is screwed down, and every gear keeps at least 0.3 mm of end float in that position. A 25 mm boss on the body around the dial locates the cover in a 25.2 mm recess, so the cover sits concentric with the dial. The dial wheel is centred on the counter face by its hub, and the face turns in the cover on a close-running step.
+The four counter gears drop onto printed pins in the body. From the sprocket: idler 1 is `counter-coupling-gear`, idler 2 is `counter-idler-1`, idler 3 is `counter-idler-2`, and the dial wheel is `counter-gear`. For 20 frames, `counter-coupling-gear-20` and `counter-idler-1-20` take the place of idlers 1 and 2 on the same pins, with the same bores. The idler bores are 0.2 mm over their pins: Ø3.4 on the Ø3.2 pins, and Ø4.2 over the Ø4.0 foot of the stepped pin under idler 1. If an idler won't drop on or turns stiffly, run a drill of the bore size through it by hand rather than sanding the pin: 3.4 mm, or 4.2 mm for the lower part of idler 1's stepped bore. The idler 1 and 2 pins run up to the top of their gears so they cannot tilt out of mesh, and the idler 3 pin stops level with the body's top face, which is the face the two-piece top half prints on. The top cover sits on the floor of its recess once it is screwed down, and every gear keeps at least 0.3 mm of end float in that position. A 25 mm boss on the body around the dial locates the cover in a 25.2 mm recess, so the cover sits concentric with the dial. The dial wheel is centred on the counter face by its hub, and the face turns in the cover on a close-running step.
 
 Before fitting the counter face, screw the cover down and turn the sprocket by hand. The train should run freely with no tight spots. If it only binds with the cover on, look for sagged bridging on the cover's pocket ceilings and clean it up rather than backing the screws off.
 
 ### Counter face
 
-The face starts at 25 and counts up: 25 is the loading position, then winding on takes you to 1, 2, 3 and so on. There is no zero. Lay the face on the hub with 25 against the marker and finger-tighten S13. The marker is the triangle recessed into the cover beside the dial, in the same place on both covers. The face grips on friction, so to reset it for a new roll you loosen the thumbscrew, turn 25 back to the marker, and tighten again. Don't use thread lock. The head sits in a Ø6.0 × 0.5 mm recess, so a head up to about Ø5.8 sits down in the face.
+The face starts at 25 and counts up: 25 is the loading position, then winding on takes you to 1, 2, 3 and so on. There is no zero. The 20-frame face works the same way from 20. Lay the face on the hub with the loading number against the marker and finger-tighten S13. The marker is the triangle recessed into the cover beside the dial, in the same place on both covers. The face grips on friction, so to reset it for a new roll you loosen the thumbscrew, turn the loading number back to the marker, and tighten again. Don't use thread lock. The head sits in a Ø6.0 × 0.5 mm recess, so a head up to about Ø5.8 sits down in the face.
 
 ![Counter face on the counter gear, in section](docs/hardware-map/img/counter-face.png)
 
-Every frame has its own marker on the rim, 0.9 × 1.7 mm and 0.4 mm deep, with a wider one beside each number, so you can see at a glance when a frame lines up with the marker. Print the face dial-down. In one colour the recesses read on their own, and a little paint or wax crayon wiped across them makes them stand out further. For two colours, open `3mf/parts/simple-counter-face-two-colour.3mf` or `3mf/parts/drag-counter-face-two-colour.3mf`, load it as one object with two parts, and give `counter-face-inlay` the second filament. The inlay is the same for both faces. Only the first two layers change colour.
+Every frame has its own marker on the rim, 0.9 × 1.7 mm and 0.4 mm deep, 14.4° apart on the 25-frame faces and 18° on the 20-frame ones, with a wider one beside each number, so you can see at a glance when a frame lines up with the marker. Print the face dial-down. In one colour the recesses read on their own, and a little paint or wax crayon wiped across them makes them stand out further. For two colours, open `3mf/parts/simple-counter-face-two-colour.3mf` or `3mf/parts/drag-counter-face-two-colour.3mf`, load it as one object with two parts, and give `counter-face-inlay` the second filament (the `-20` files: `simple-counter-face-20-two-colour.3mf`, `drag-counter-face-20-two-colour.3mf` and `counter-face-20-inlay`). Each inlay is shared by the simple and drag face of its count. Only the first two layers change colour.
 
 ### Take-up spool and collar
 
@@ -290,22 +292,36 @@ The counter comes two ways. Pick one pair and print both parts of it; the covers
 | Parts | `simple-cover`, `simple-counter-face` | `drag-cover`, `drag-counter-face` |
 | Extra hardware | None | One more D2×3 ball plunger (P7) |
 | How the dial moves | Turns only with the gear train; its rim rests on the cover under its own weight | A ball plunger in a tower beside the dial presses on the face's plain rim, with a detent flute under every frame. The tower itself stays 0.2 mm clear of the rim |
-| Marker for 25 | Triangle recessed into the cover | The same triangle, exactly five frames round from P7 |
+| Marker for the loading number | Triangle recessed into the cover | The same triangle, 72° round from P7: exactly five frames on a 25-frame face, four on a 20-frame face |
 | Height | Face is the highest point (Z 49.4 in the CAD) | Tower stands 1 mm above the face (Z 50.4) |
 
 **Choose simple** if you want the fewest parts and the lightest wind. The dial is driven only by the gears, so it adds nothing to the effort of winding on, and there is one less plunger to fit. The trade-off is that the four meshes each have a little backlash, so the face can rock a fraction of a frame either way and does not always come to rest in exactly the same place.
 
 **Choose drag** if you want the dial to read the same every time. The plunger's light, constant friction keeps the backlash taken up in one direction, so the face stops where the gears leave it and doesn't flutter when the camera is knocked or carried. A V-flute across the rim under each frame marker gives the ball a seat and a firm click, so the face settles with the number centred on the triangle. The costs are one more plunger, a slightly heavier wind, and the tower standing proud of the dial.
 
-With the drag option, the thumbscrew has to hold the face against the plunger's friction and the pull of each flute as well as the gears. Tighten S13 firmly by hand, then wind through a few frames and check that the face stays with the train rather than slipping on the hub. If it slips, tighten S13 a little more rather than backing off the plunger. Set the face for a new roll as in [Counter face](#counter-face); with 25 on the marker, a flute sits under the ball and the face clicks into it. Print the pair together: the simple face has no flutes, so on the drag cover it drags without clicking, and the drag face needs the drag cover's tower, which sits 0.14 mm nearer the dial than the 2.1.0 one.
+With the drag option, the thumbscrew has to hold the face against the plunger's friction and the pull of each flute as well as the gears. Tighten S13 firmly by hand, then wind through a few frames and check that the face stays with the train rather than slipping on the hub. If it slips, tighten S13 a little more rather than backing off the plunger. Set the face for a new roll as in [Counter face](#counter-face); with the loading number on the marker, a flute sits under the ball and the face clicks into it. Print the pair together: the simple face has no flutes, so on the drag cover it drags without clicking, and the drag face needs the drag cover's tower, which sits 0.14 mm nearer the dial than the 2.1.0 one.
 
 ![Drag option, from above and cut through P7](docs/hardware-map/img/drag-option.png)
+
+## Frame count: 25 or 20
+
+The counter turns once per 25 frames as standard. A roll gives 18 frames, or 19 if you load in darkness, so the 20-frame option turns the dial once per 20 instead: the numbers sit 18° apart rather than 14.4°, which is easier to read, and the roll never runs past the loading number.
+
+| | 25 frames | 20 frames |
+|---|---|---|
+| Idlers 1 and 2 | `counter-coupling-gear`, `counter-idler-1` | `counter-coupling-gear-20`, `counter-idler-1-20` |
+| Shared | `counter-idler-2`, `counter-gear`, the body and both covers | the same |
+| Train | 50:1, mesh 2 at 12:30 | 40:1, mesh 2 at 14:28 on the same 12.6 mm centres |
+| Faces | `simple-counter-face`, `drag-counter-face` | `simple-counter-face-20`, `drag-counter-face-20` |
+| Dial | 25 at loading, then 1 to 24, markers 14.4° apart | 20 at loading, then 1 to 19, markers 18° apart |
+
+Print the idlers and the face of the same count together: a 25-frame face on the 20-frame idlers reads wrong after the first frame. The simple or drag choice is separate, and both covers work with both counts. Switching an existing build means reprinting the two idlers and the face, nothing else.
 
 ## Parametric counter train
 
 `cad/Infidex176V-IDENTIDEM.design-remix-counter-train.f3d` holds the counter gear train as a parametric model, so you can change it without redrawing the gears. The sprocket and dial axes stay fixed where the body needs them; the three idler axes follow from the centre distances. Module, tooth counts, profile shift, backlash, the height of every gear face and the stepped bores are all parameters, and the defaults rebuild the idlers exactly as the main model has them, so a different reduction or a coarser module is a table edit and a rebuild. The sprocket pinion and the dial wheel come out as tooth zones only: `counter-gear`'s hub and face recess belong to the main model, so keep them when you swap in new teeth.
 
-Start from the values in the file if you are only nudging it: the train is 50:1 in four meshes and the gears are already near the limit of what a 0.4 mm nozzle resolves.
+Start from the values in the file if you are only nudging it: the train is 50:1 in four meshes and the gears are already near the limit of what a 0.4 mm nozzle resolves. The 20-frame idlers are this train with `ct_pinion1_teeth` 14 and `ct_wheel2_teeth` 28, which makes it 40:1 with every axis where it was.
 
 `tools/InfidexCounterTrain/` is a Fusion script that builds the same train from a table of `ct_*` user parameters, so you can change module, tooth counts, backlash or the idler positions and rerun it rather than redrawing the gears. It refuses to build a layout that cannot close, that would clash with the sprocket hub or the dial disc, or that would stack two gears too close. The gear maths sits in plain Python next to it with tests you can run outside Fusion. See [`tools/README.md`](tools/README.md).
 
