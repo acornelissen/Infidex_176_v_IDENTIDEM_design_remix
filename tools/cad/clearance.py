@@ -6,11 +6,12 @@ parts that are in the camera together, the volume they share and the smallest ga
 
 Some parts are alternatives, of which a camera has one: a cover (COVERS), an idler set
 (IDLER_SETS) and a counter face (FACES). Alternatives are never checked against each
-other. Each idler set is checked with the shared gears (its train runs
-ratchet-coupling-gear, counter-coupling-gear, idler 1 of the set, idler 2 of the set,
-counter-gear) and against the housings; each face against every cover and against
-counter-gear, which holds it. A new option is a new entry in these lists; options missing
-from the STEP are skipped with a note.
+other. An idler set is the three idlers of one train, coupling gear first, and sets may
+share a part (the 20-frame set keeps counter-idler-2). Each set is checked with the shared
+gears (its train runs ratchet-coupling-gear, the set's three idlers, counter-gear) and
+against the housings; each face against every cover and against counter-gear, which holds
+it. A new option is a new entry in these lists; options missing from the STEP are skipped
+with a note.
 
 Meshing pairs (a pinion driving the next wheel in its train, as in gearcalc) run with
 their teeth interleaved, so they are reported but not judged; their tooth clearance is
@@ -34,12 +35,13 @@ from . import STEP, user_path
 from . import step
 
 # in every camera; ratchet-coupling-gear carries the sprocket pinion (axis 0)
-SPROCKET_END = ["ratchet-coupling-gear", "counter-coupling-gear"]
+SPROCKET_END = ["ratchet-coupling-gear"]
 DIAL = "counter-gear"
 BODY = ["body-solid", "body-top"]   # the one-piece body and its top half, each checked on its own
 # alternatives: a camera has one of each
 COVERS = ["simple-cover", "drag-cover"]
-IDLER_SETS = {"25 frames": ["counter-idler-1", "counter-idler-2"]}
+IDLER_SETS = {"25 frames": ["counter-coupling-gear", "counter-idler-1", "counter-idler-2"],
+              "20 frames": ["counter-coupling-gear-20", "counter-idler-1-20", "counter-idler-2"]}
 FACES = ["simple-counter-face", "drag-counter-face"]
 FIXED = SPROCKET_END + [DIAL] + BODY
 OVERLAP_LIMIT = 1e-3   # mm3
