@@ -29,4 +29,7 @@ placement guide (`Infidex-Hardware-Map.pdf`, built from `docs/hardware-map/`) an
 [IDENTIDEM.design](https://IDENTIDEM.design). The camera design it builds on is Denis Aminev's
 and all design credit for it remains his.
 
+The focusing scale generator in `focusing-scale/` is IDENTIDEM.design's own code and is
+licensed separately under the MIT License (`focusing-scale/LICENSE`).
+
 If you fork or re-mirror this remix, keep both notices intact.

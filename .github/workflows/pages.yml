@@ -1,0 +1,40 @@
+name: pages
+
+# publishes the focusing scale generator (focusing-scale/) to
+# infidex176v-focus-scale.identidem.design; the rest of the repo is not served
+on:
+  push:
+    branches: [main]
+    paths:
+      - "focusing-scale/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: focusing-scale
+      - id: deployment
+        uses: actions/deploy-pages@v4

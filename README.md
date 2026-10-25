@@ -26,7 +26,7 @@ The camera is unchanged where it counts: same 3:1 panoramic frame on 35mm film, 
 
 ## Focusing scale generator
 
-**[infidex176v-focus-scale.identidem.design](https://infidex176v-focus-scale.identidem.design/)** makes a focusing scale for your own lens. Give it the focal length, the helicoid thread lead and your focus ring diameter, and it returns the scale as SVG or Gerber, marked from infinity down to 1.44 m, ready to print as a decal or etch as a plate.
+**[infidex176v-focus-scale.identidem.design](https://infidex176v-focus-scale.identidem.design/)** makes a focusing scale for your own lens. Give it the focal length, the helicoid thread lead and your focus ring diameter, and it returns the scale as SVG or Gerber, marked from infinity down to 1.44 m, ready to print as a decal or etch as a plate. Its source is in [`focusing-scale/`](focusing-scale/).
 
 ## Specifications
 
